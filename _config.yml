@@ -1,0 +1,52 @@
+# ------------------------------------------------
+# 芙婭的房間 · Hexo 主設定
+# 文件: https://hexo.io/zh-tw/docs/configuration
+# ------------------------------------------------
+
+title: 芙婭的房間
+subtitle: FUYA'S LITTLE ROOM
+description: 文字工作室・個人創作誌
+author: 芙婭
+language: zh-TW
+timezone: Asia/Taipei
+
+# 部署好之後改成你的正式網址（GitHub Pages 或自訂網域）
+url: https://floraestudio.github.io/fuya-site
+permalink: ':category/:title/'
+
+# 目錄
+source_dir: source
+public_dir: public
+
+# 文章相關
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+
+# 分類 & 標籤
+default_category: misc
+category_map:
+  企劃: projects
+  轉蛋: gacha
+  委託: commission
+  雜談: misc
+tag_map:
+
+# 日期格式
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: 'mtime'
+
+# 分頁
+per_page: 0        # 首頁自己控制數量，不使用 Hexo 內建分頁
+pagination_dir: page
+
+# 主題
+theme: fuya
+
+# 部署交給 GitHub Actions 處理，這裡不用 hexo-deployer
+deploy: {}

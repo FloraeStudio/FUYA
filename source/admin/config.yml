@@ -1,0 +1,76 @@
+backend:
+  name: github
+  repo: FloraeStudio/fuya-site   # 換成你實際的 repo 路徑
+  branch: main
+  base_url: https://fuya-cms-oauth.vercel.app
+
+media_folder: source/images/uploads
+public_folder: /images/uploads
+
+publish_mode: simple
+locale: zh_Hant
+
+collections:
+  - name: projects
+    label: 企劃
+    label_singular: 一篇企劃
+    folder: source/_posts/projects
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - { label: 分類, name: categories, widget: hidden, default: [企劃] }
+      - label: 狀態
+        name: status
+        widget: select
+        required: false
+        options: [連載中, 已完結, 暫停]
+      - { label: 摘要, name: description, widget: text, required: false }
+      - { label: 封面圖, name: cover, widget: image, required: false }
+      - { label: 內文, name: body, widget: markdown }
+
+  - name: gacha
+    label: 轉蛋
+    label_singular: 一則轉蛋
+    folder: source/_posts/gacha
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - { label: 分類, name: categories, widget: hidden, default: [轉蛋] }
+      - { label: 摘要, name: description, widget: text, required: false }
+      - { label: 封面圖, name: cover, widget: image, required: false }
+      - { label: 內文, name: body, widget: markdown }
+
+  - name: commission
+    label: 委託
+    label_singular: 一則委託公告
+    folder: source/_posts/commission
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - { label: 分類, name: categories, widget: hidden, default: [委託] }
+      - label: 狀態
+        name: status
+        widget: select
+        required: false
+        options: [開放中, 已額滿, 暫停接單]
+      - { label: 摘要, name: description, widget: text, required: false }
+      - { label: 內文, name: body, widget: markdown }
+
+  - name: misc
+    label: 雜談
+    label_singular: 一篇雜談
+    folder: source/_posts/misc
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - { label: 分類, name: categories, widget: hidden, default: [雜談] }
+      - { label: 摘要, name: description, widget: text, required: false }
+      - { label: 內文, name: body, widget: markdown }

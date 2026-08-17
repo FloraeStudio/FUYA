@@ -1,0 +1,22 @@
+{
+  "name": "fuya-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "芙婭的房間 - 個人創作誌",
+  "scripts": {
+    "server": "hexo server",
+    "build": "hexo generate",
+    "clean": "hexo clean",
+    "deploy": "hexo generate"
+  },
+  "dependencies": {
+    "hexo": "^7.3.0",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-index": "^3.0.0",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^6.3.0",
+    "hexo-server": "^3.0.0"
+  }
+}

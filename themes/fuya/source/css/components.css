@@ -1,0 +1,174 @@
+/* ------------------------------------------------
+   components — 個別元件的樣式（顏色、互動、動畫）
+   結構/排版放 layout.css，這裡只管「長什麼樣子」
+------------------------------------------------ */
+
+/* 導覽連結 */
+.navlinks{ display:flex; gap: 28px; }
+.navlinks a{
+  color: var(--mist);
+  font-size: 14.5px;
+  letter-spacing: 1px;
+  position:relative;
+  padding-bottom:4px;
+  transition: color .25s ease;
+}
+.navlinks a::after{
+  content:'';
+  position:absolute; left:0; bottom:0;
+  width:0; height:1px;
+  background: var(--lamp);
+  transition: width .25s ease;
+}
+.navlinks a:hover, .navlinks a.active{ color: var(--paper); }
+.navlinks a:hover::after, .navlinks a.active::after{ width:100%; }
+
+/* Hero 上緣小標籤 */
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 4px;
+  color: var(--mist-dim);
+  text-transform:uppercase;
+  margin-bottom: 16px;
+}
+
+/* 狀態列（現在正在做什麼） */
+.status-line{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--mist-dim);
+  letter-spacing: .5px;
+  padding: 7px 16px;
+  border: 1px solid rgba(169,171,198,0.22);
+  border-radius: 20px;
+}
+.status-line .dot{
+  width:6px; height:6px; border-radius:50%;
+  background: var(--lamp);
+  box-shadow: 0 0 8px 1px rgba(240,182,92,0.7);
+}
+
+/* 星座連接線 */
+.const-lines{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  filter: drop-shadow(0 0 2px rgba(201,191,232,0.2));
+}
+.const-lines polyline{
+  fill:none;
+  stroke: rgba(201,191,232,0.3);
+  stroke-width: .8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 星星本體（五個分類） */
+.star-point{
+  position:absolute;
+  transform: translate(-50%,-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  cursor:pointer;
+}
+.star-glow{
+  width: 7px; height:7px;
+  border-radius: 50%;
+  background: var(--light, var(--lamp));
+  box-shadow:
+    0 0 5px 1.5px var(--light-glow, rgba(240,182,92,0.7)),
+    0 0 16px 5px var(--light-glow-soft, rgba(240,182,92,0.22));
+  animation: twinkle-star 3.6s ease-in-out infinite;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.star-point:nth-child(2) .star-glow{ animation-delay: .4s; }
+.star-point:nth-child(3) .star-glow{ animation-delay: 1.2s; }
+.star-point:nth-child(4) .star-glow{ animation-delay: .8s; }
+.star-point:nth-child(5) .star-glow{ animation-delay: 1.6s; }
+@keyframes twinkle-star{
+  0%,100%{ opacity:.65; transform: scale(1); }
+  50%{ opacity:1; transform: scale(1.35); }
+}
+@media (prefers-reduced-motion: reduce){ .star-glow{ animation:none; opacity:.9; } }
+
+.star-point:hover .star-glow, .star-point:focus-visible .star-glow{
+  transform: scale(1.7);
+  box-shadow:
+    0 0 7px 2px var(--light-glow, rgba(240,182,92,0.9)),
+    0 0 22px 7px var(--light-glow-soft, rgba(240,182,92,0.35));
+}
+
+.star-label h3{
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--paper);
+  margin-top: 14px;
+  transition: color .2s ease;
+}
+.star-point:hover .star-label h3{ color: var(--lamp); }
+.star-label p{
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--mist-dim);
+  max-width: 132px;
+  margin-top: 5px;
+}
+.star-badge{
+  display:inline-block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .5px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid rgba(240,182,92,0.4);
+  color: var(--lamp);
+}
+
+/* 五顆星各自的位置與顏色
+   key 對應 themes/fuya/_config.yml 裡 nav[].key，不要改動 class 名稱 */
+.sp-home  { left: 6.7%;  top: 63.6%; --light: var(--paper); --light-glow: rgba(251,245,231,0.6);  --light-glow-soft: rgba(251,245,231,0.2); }
+.sp-proj  { left: 26.7%; top: 27.3%; --light: var(--lamp);  --light-glow: rgba(240,182,92,0.7);   --light-glow-soft: rgba(240,182,92,0.24); }
+.sp-gacha { left: 50%;   top: 50%;   --light: var(--moon);  --light-glow: rgba(201,191,232,0.7);  --light-glow-soft: rgba(201,191,232,0.24); }
+.sp-comm  { left: 70%;   top: 18.2%; --light: var(--lamp);  --light-glow: rgba(240,182,92,0.9);   --light-glow-soft: rgba(240,182,92,0.3); }
+.sp-misc  { left: 91.1%; top: 59.1%; --light: var(--mist);  --light-glow: rgba(169,171,198,0.5);  --light-glow-soft: rgba(169,171,198,0.18); }
+.sp-comm .star-glow{ width: 9px; height: 9px; }
+
+/* 最近寫下的字 / 分類列表 共用的條列項目 */
+.diary-item{
+  padding: 22px 0;
+  border-bottom: 1px dashed rgba(169,171,198,0.22);
+  display:flex;
+  gap: 22px;
+}
+.diary-item:last-child{ border-bottom:none; }
+.diary-date{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist-dim);
+  width: 60px;
+  flex-shrink:0;
+  padding-top: 3px;
+}
+.diary-body .tag{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--lamp);
+  letter-spacing: 1px;
+}
+.diary-body h3{
+  color: var(--paper);
+  font-size: 17px;
+  font-weight: 400;
+  margin: 6px 0 8px;
+  transition: color .2s ease;
+}
+.diary-item:hover .diary-body h3{ color: var(--lamp); }
+.diary-body p{
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--mist);
+}

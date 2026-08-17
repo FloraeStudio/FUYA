@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= page.title ? page.title + ' — ' + config.title : config.title %></title>
+<meta name="description" content="<%= page.description || config.description %>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="<%- url_for('/css/tokens.css') %>">
+<link rel="stylesheet" href="<%- url_for('/css/base.css') %>">
+<link rel="stylesheet" href="<%- url_for('/css/layout.css') %>">
+<link rel="stylesheet" href="<%- url_for('/css/components.css') %>">
+</head>

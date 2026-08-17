@@ -1,0 +1,26 @@
+/* ------------------------------------------------
+   design tokens — 色票 / 字體
+   改配色只需要動這個檔案
+------------------------------------------------ */
+:root{
+  /* 夜色 */
+  --night: #14172B;
+  --night-deep: #0A0C18;
+
+  /* 強調色 */
+  --lamp: #F0B65C;              /* 燈光暖橙：主要強調、連載中/開放中 */
+  --lamp-soft: rgba(240,182,92,0.16);
+  --moon: #C9BFE8;              /* 月光紫：次要強調、轉蛋 */
+
+  /* 紙與墨 */
+  --paper: #FBF5E7;
+  --ink: #3E3627;
+
+  /* 文字 */
+  --mist: #A9ABC6;
+  --mist-dim: #6E7092;
+
+  /* 字體 */
+  --font-display: 'LXGW WenKai TC', serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}

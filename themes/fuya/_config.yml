@@ -1,0 +1,42 @@
+# ------------------------------------------------
+# fuya 主題設定
+# ------------------------------------------------
+
+# 首頁最近文章列表要顯示幾篇
+recent_count: 6
+
+# 導覽（同時也是首頁星座的五顆星）
+# key   -> 對應 CSS 的 .sp-{key}，不要更動
+# slug  -> 分類頁網址，主頁請留空字串
+# desc  -> 星星旁邊的一句話說明
+# badge -> 選填，星星旁邊的小標籤（例如「開放中」）
+nav:
+  - key: home
+    name: 主頁
+    slug: ''
+    desc: 近況、公告，還有想被你看到的東西。
+  - key: proj
+    name: 企劃
+    slug: projects
+    desc: 正在寫、寫完的故事，都放在這裡。
+    badge: 連載中
+  - key: gacha
+    name: 轉蛋
+    slug: gacha
+    desc: 抽一張角色卡，看看今天遇見誰。
+  - key: comm
+    name: 委託
+    slug: commission
+    desc: 目前開放中，想聊聊嗎？
+    badge: 開放中
+  - key: misc
+    name: 雜談
+    slug: misc
+    desc: 不是故事的故事，隨手寫的碎碎念。
+
+# 分類 slug -> 中文顯示名稱
+categoryLabels:
+  projects: 企劃
+  gacha: 轉蛋
+  commission: 委託
+  misc: 雜談

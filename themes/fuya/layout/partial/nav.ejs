@@ -1,0 +1,14 @@
+<div class="topbar">
+  <a class="brand" href="<%- url_for('/') %>">
+    <span class="moon-ico"></span><%= config.title %>
+  </a>
+  <nav class="navlinks">
+    <% var current = (page.path || '').split('/')[0]; %>
+    <% theme.nav.forEach(function(item){
+         var href = item.slug ? '/' + item.slug + '/' : '/';
+         var active = item.slug === current || (item.slug === '' && !current);
+    %>
+      <a href="<%- url_for(href) %>" class="<%= active ? 'active' : '' %>"><%= item.name %></a>
+    <% }) %>
+  </nav>
+</div>

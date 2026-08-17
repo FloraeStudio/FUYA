@@ -1,0 +1,18 @@
+<section class="hero">
+  <div class="eyebrow">FUYA'S LITTLE ROOM</div>
+
+  <div class="window">
+    <div class="moon-body"></div>
+    <span class="mini-star" style="top:18%; left:22%; animation-delay:.3s;"></span>
+    <span class="mini-star" style="top:28%; left:78%; animation-delay:1.1s;"></span>
+    <span class="mini-star" style="top:75%; left:20%; animation-delay:1.8s;"></span>
+    <span class="mini-star" style="top:80%; left:70%; animation-delay:.7s;"></span>
+  </div>
+
+  <h1>在夢裡，我開始<em>寫字</em>。</h1>
+  <p><%= site.data.site.homepage_intro %></p>
+
+  <% if (site.data.site.status_line) { %>
+    <div class="status-line"><span class="dot"></span><%= site.data.site.status_line %></div>
+  <% } %>
+</section>

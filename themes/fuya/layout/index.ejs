@@ -1,0 +1,45 @@
+<%- partial('partial/head') %>
+<%- partial('partial/header') %>
+
+  <%- partial('partial/hero') %>
+
+  <div class="section-title">— 認出的五顆星 —</div>
+  <div class="constellation">
+    <svg class="const-lines" viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="60,140 240,60 450,110 630,40 820,130"></polyline>
+    </svg>
+
+    <% theme.nav.forEach(function(item){
+         var href = item.slug ? '/' + item.slug + '/' : '/';
+    %>
+      <a class="star-point sp-<%= item.key %>" href="<%- url_for(href) %>">
+        <div class="star-glow"></div>
+        <div class="star-label">
+          <h3><%= item.name %></h3>
+          <p><%= item.desc %></p>
+        </div>
+        <% if (item.badge) { %><span class="star-badge"><%= item.badge %></span><% } %>
+      </a>
+    <% }) %>
+  </div>
+
+  <div class="section-title">— 最近寫下的字 —</div>
+  <div class="diary">
+    <% site.posts.sort('-date').limit(theme.recent_count || 6).each(function(post){ %>
+      <a class="diary-item" href="<%- url_for(post.path) %>">
+        <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+        <div class="diary-body">
+          <% if (post.categories.length) { %>
+            <span class="tag"><%= post.categories.data[0].name %></span>
+          <% } %>
+          <h3><%= post.title %></h3>
+          <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+        </div>
+      </a>
+    <% }) %>
+    <% if (site.posts.length === 0) { %>
+      <p style="color:var(--mist-dim); font-size:13px;">還沒有寫下任何字，去後台開第一篇吧。</p>
+    <% } %>
+  </div>
+
+<%- partial('partial/footer') %>
