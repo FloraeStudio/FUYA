@@ -11,7 +11,7 @@ language: zh-TW
 timezone: Asia/Taipei
 
 # 部署好之後改成你的正式網址（GitHub Pages 或自訂網域）
-url: https://floraestudio.github.io/fuya-site
+url: https://floraestudio.github.io/FUYA
 permalink: ':category/:title/'
 
 # 目錄
