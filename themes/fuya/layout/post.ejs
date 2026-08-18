@@ -1,22 +1,28 @@
 <%- partial('partial/head') %>
-<%- partial('partial/header') %>
+  <%- partial('partial/header') %>
 
-  <div class="post-detail">
-    <div class="eyebrow">
-      <%= date(page.date, 'YYYY.MM.DD') %><% if (page.categories.length) { %> · <%= page.categories.data[0].name %><% } %>
+    <div class="post-detail">
+      <div class="eyebrow">
+        <%= date(page.date, 'YYYY.MM.DD' ) %>
+          <% if (page.categories && page.categories.length) { %> · <%= page.categories.data[0].name %>
+              <% } %>
+      </div>
+
+      <h1 class="post-title">
+        <%= page.title %>
+      </h1>
+
+      <% if (page.status) { %>
+        <span class="star-badge">
+          <%= page.status %>
+        </span>
+        <% } %>
+
+          <div class="post-content">
+            <%- page.content %>
+          </div>
+
+          <a class="back-link" href="<%- url_for('/') %>">← 回到房間</a>
     </div>
 
-    <h1 class="post-title"><%= page.title %></h1>
-
-    <% if (page.status) { %>
-      <span class="star-badge"><%= page.status %></span>
-    <% } %>
-
-    <div class="post-content">
-      <%- page.content %>
-    </div>
-
-    <a class="back-link" href="<%- url_for('/') %>">← 回到房間</a>
-  </div>
-
-<%- partial('partial/footer') %>
+    <%- partial('partial/footer') %>

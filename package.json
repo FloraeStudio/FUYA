@@ -2,7 +2,10 @@
   "name": "fuya-site",
   "version": "1.0.0",
   "private": true,
-  "description": "芙婭的房間 - 個人創作誌",
+  "description": "芙婭 - 個人創作誌",
+  "hexo": {
+    "version": "7.3.0"
+  },
   "scripts": {
     "server": "hexo server",
     "build": "hexo generate",
