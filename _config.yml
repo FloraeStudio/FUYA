@@ -48,5 +48,9 @@ pagination_dir: page
 # 主題
 theme: fuya
 
+# Decap CMS 後台檔案不要被 Hexo 當成頁面處理，直接原樣複製
+skip_render:
+  - admin/**
+
 # 部署交給 GitHub Actions 處理，這裡不用 hexo-deployer
 deploy: {}
