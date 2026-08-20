@@ -48,6 +48,14 @@
   width:6px; height:6px; border-radius:50%;
   background: var(--lamp);
   box-shadow: 0 0 8px 1px rgba(240,182,92,0.7);
+  animation: status-breathe 2.6s ease-in-out infinite;
+}
+@keyframes status-breathe{
+  0%,100%{ opacity:.75; box-shadow: 0 0 8px 1px rgba(240,182,92,0.7); }
+  50%{ opacity:1; box-shadow: 0 0 12px 3px rgba(240,182,92,0.95); }
+}
+@media (prefers-reduced-motion: reduce){
+  .status-line .dot{ animation:none; }
 }
 
 /* 星座連接線 */

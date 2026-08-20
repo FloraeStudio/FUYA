@@ -30,6 +30,23 @@ collections:
       - { label: 封面圖, name: cover, widget: image, required: false }
       - { label: 內文, name: body, widget: markdown }
 
+  - name: site_settings
+    label: 首頁設定
+    files:
+      - name: homepage
+        label: 首頁小狀態
+        file: source/_data/site.yml
+        fields:
+          - label: 首頁介紹
+            name: homepage_intro
+            widget: text
+            hint: 顯示在窗景下方的那段自我介紹
+          - label: 近況小狀態
+            name: status_line
+            widget: string
+            required: false
+            hint: 顯示在介紹文字下方的一小行，例如「現在正在熬夜改〈潮汐紀事〉第七章」。留空就不顯示這一行。
+
   - name: gacha
     label: 轉蛋
     label_singular: 一則轉蛋
