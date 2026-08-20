@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: FloraeStudio/fuya-site   # 換成你實際的 repo 路徑
+  repo: FloraeStudio/FUYA   # 換成實際 repo 路徑
   branch: main
   base_url: https://fuya-cms-oauth.vercel.app
 
