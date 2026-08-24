@@ -46,6 +46,11 @@ categoryLabels:
 # ------------------------------------------------
 # 方案星星：由小到大排列，呼應「委託星最大最亮」的概念
 commission_plans:
+  - key: surprise
+    name: 驚喜包代寫
+    range: 300–1000 字
+    price: NT$150–250
+    note: 丟提示給我，寫完直接給你，不先過稿也不修改。
   - key: short
     name: 小品
     range: 500–1500 字
