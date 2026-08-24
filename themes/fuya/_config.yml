@@ -14,25 +14,25 @@ nav:
   - key: home
     name: 主頁
     slug: ''
-    desc: 
+    desc: 關於芙婭
   - key: proj
     name: 企劃
     slug: projects
-    desc: 
-    badge: 連載中
+    desc: 故事正在發生
+    badge: 規劃中
   - key: gacha
     name: 轉蛋
     slug: gacha
-    desc: 
+    desc: 蘊含了驚喜的文字
   - key: comm
     name: 委託
     slug: commission
-    desc: 
+    desc: 訂製一段專屬故事
     badge: 開放中
   - key: misc
     name: 雜談
     slug: misc
-    desc: 
+    desc: 隨手寫下的文字
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
@@ -47,24 +47,24 @@ categoryLabels:
 # 方案星星：由小到大排列，呼應「委託星最大最亮」的概念
 commission_plans:
   - key: surprise
-    name: 驚喜包代寫
-    range: 300–1000 字
-    price: NT$150–250
-    note: 丟提示給我，寫完直接給你，不先過稿也不修改。
+    name: 驚喜包
+    range: '-'
+    price: NT$0.4/字
+    note: 不提供試稿
   - key: short
-    name: 小品
-    range: 500–1500 字
-    price: NT$300 起
+    name: 短篇小品
+    range: 200-500 字/篇
+    price: NT$200/篇
     note: 情境速寫、短篇對話
   - key: mid
-    name: 短篇
-    range: 1500–4000 字
-    price: NT$800 起
-    note: 完整起承轉合的小故事
+    name: 非商業委託
+    range: 3000 字(含)內
+    price: NT$0.5/字
+    note: 可自帶劇情大綱、特定情節、tag討論
   - key: long
-    name: 長文
-    range: 4000 字以上
-    price: 面議
+    name: 長篇
+    range: 3000 字 +
+    price: NT$0.6/字
     note: 需詳談篇幅與時程
 
 commission_flow:
