@@ -1,28 +1,42 @@
 <%- partial('partial/head') %>
 <%- partial('partial/header') %>
 
+  <%
+    // page.category 是分類「中文名稱」（如「委託」），不是網址 slug，
+    // 這裡對照 _config.yml 的 category_map 轉成 slug 才能跟 theme.categoryLabels / 版型判斷對上
+    var categorySlugMap = { '企劃': 'projects', '轉蛋': 'gacha', '委託': 'commission', '雜談': 'misc' };
+    var categorySlug = page.category ? (categorySlugMap[page.category] || page.category) : null;
+  %>
   <div class="post-detail">
     <div class="eyebrow">
       <% if (page.category) { %>分類<% } else if (page.tag) { %>標籤<% } else { %>總目錄<% } %>
     </div>
     <h1 class="post-title">
-      <%= (page.category && theme.categoryLabels[page.category]) || page.category || page.tag || '所有文章' %>
+      <%= (categorySlug && theme.categoryLabels[categorySlug]) || page.category || page.tag || '所有文章' %>
     </h1>
 
-    <div class="diary" style="margin-top:40px;">
-      <% page.posts.sort('-date').each(function(post){ %>
-        <a class="diary-item" href="<%- url_for(post.path) %>">
-          <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
-          <div class="diary-body">
-            <h3><%= post.title %></h3>
-            <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
-          </div>
-        </a>
-      <% }) %>
-      <% if (page.posts.length === 0) { %>
-        <p style="color:var(--mist-dim); font-size:13px;">這裡還是空的。</p>
-      <% } %>
-    </div>
+    <% if (categorySlug === 'commission') { %>
+      <%- partial('partial/archive-commission') %>
+    <% } else if (categorySlug === 'gacha') { %>
+      <%- partial('partial/archive-gacha') %>
+    <% } else if (categorySlug === 'misc') { %>
+      <%- partial('partial/archive-misc') %>
+    <% } else { %>
+      <div class="diary" style="margin-top:40px;">
+        <% page.posts.sort('-date').each(function(post){ %>
+          <a class="diary-item" href="<%- url_for(post.path) %>">
+            <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+            <div class="diary-body">
+              <h3><%= post.title %></h3>
+              <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+            </div>
+          </a>
+        <% }) %>
+        <% if (page.posts.length === 0) { %>
+          <p style="color:var(--mist-dim); font-size:13px;">這裡還是空的。</p>
+        <% } %>
+      </div>
+    <% } %>
 
     <a class="back-link" href="<%- url_for('/') %>">← 回到房間</a>
   </div>

@@ -1,0 +1,38 @@
+<%
+  var sorted = page.posts.sort('-date');
+  var rules = theme.gacha_rules || [];
+  var ctaUrl = theme.gacha_cta_url;
+  var ctaLabel = theme.gacha_cta_label || '想丟提示給芙婭 →';
+%>
+
+<% if (rules.length) { %>
+<div class="gacha-rules">
+  <% rules.forEach(function(rule, i){ %>
+    <div class="gacha-point">
+      <span class="dot"></span>
+      <div class="step-num"><%= ('0' + (i + 1)).slice(-2) %></div>
+      <p><%= rule %></p>
+    </div>
+  <% }) %>
+</div>
+<% } %>
+
+<% if (ctaUrl) { %>
+<a class="gacha-cta" href="<%= ctaUrl %>" target="_blank" rel="noopener"><%= ctaLabel %></a>
+<% } %>
+
+<div class="section-title" style="margin-top:60px;">拆過的驚喜包 / OPENED</div>
+<div class="diary" style="margin-top:20px;">
+  <% sorted.each(function(post){ %>
+    <a class="diary-item" href="<%- url_for(post.path) %>">
+      <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+      <div class="diary-body">
+        <h3><%= post.title %></h3>
+        <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+      </div>
+    </a>
+  <% }) %>
+  <% if (sorted.length === 0) { %>
+    <p style="color:var(--mist-dim); font-size:13px;">還沒有拆過的驚喜包。</p>
+  <% } %>
+</div>
