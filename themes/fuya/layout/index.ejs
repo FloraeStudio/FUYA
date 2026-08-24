@@ -3,7 +3,7 @@
 
     <%- partial('partial/hero') %>
 
-      <div class="section-title">— 認出的五顆星 —</div>
+      <div class="section-title">— 星譜目錄 —</div>
       <div class="constellation">
         <svg class="const-lines" viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true">
           <polyline points="60,140 240,60 450,110 630,40 820,130"></polyline>
@@ -28,7 +28,7 @@
           <% }) %>
       </div>
 
-      <div class="section-title">— 最近寫下的字 —</div>
+      <div class="section-title">— 最近寫的字 —</div>
       <div class="diary">
         <% site.posts.sort('-date').limit(theme.recent_count || 6).each(function(post){ %>
           <a class="diary-item" href="<%- url_for(post.path) %>">

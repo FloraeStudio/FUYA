@@ -14,25 +14,25 @@ nav:
   - key: home
     name: 主頁
     slug: ''
-    desc: 近況、公告，還有想被你看到的東西。
+    desc: 
   - key: proj
     name: 企劃
     slug: projects
-    desc: 正在寫、寫完的故事，都放在這裡。
+    desc: 
     badge: 連載中
   - key: gacha
     name: 轉蛋
     slug: gacha
-    desc: 抽一張角色卡，看看今天遇見誰。
+    desc: 
   - key: comm
     name: 委託
     slug: commission
-    desc: 目前開放中，想聊聊嗎？
+    desc: 
     badge: 開放中
   - key: misc
     name: 雜談
     slug: misc
-    desc: 不是故事的故事，隨手寫的碎碎念。
+    desc: 
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
