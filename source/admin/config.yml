@@ -40,12 +40,12 @@ collections:
           - label: 首頁介紹
             name: homepage_intro
             widget: text
-            hint: 顯示在窗景下方的那段自我介紹
+            hint: 簡單的介紹文字
           - label: 近況小狀態
             name: status_line
             widget: string
             required: false
-            hint: 顯示在介紹文字下方的一小行，例如「現在正在熬夜改〈潮汐紀事〉第七章」。留空就不顯示這一行。
+            hint: 顯示在介紹文字下方的一小行，可以做為近況小狀態用。留空就不顯示這一行。
 
   - name: gacha
     label: 轉蛋
