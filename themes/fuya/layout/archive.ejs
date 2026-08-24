@@ -1,50 +1,40 @@
 <%
-  var sorted = page.posts.sort('-date');
-  var rules = theme.gacha_rules || [];
-  var ctaUrl = theme.gacha_cta_url;
-  var ctaLabel = theme.gacha_cta_label || '想丟提示給芙婭 →';
-  // 三個點固定排成一個倒三角，呼應首頁星座連線的視覺語言
-  var nodePositions = [
-    { left: '50%', top: '12%' },
-    { left: '88%', top: '82%' },
-    { left: '12%', top: '82%' }
-  ];
+  // 依網址第一段判斷目前是哪個分類頁（企劃/轉蛋/委託/雜談），
+  // 分派到對應的 partial；archives/ 這類非分類頁則用下面的通用列表。
+  var slug = (page.path || '').split('/')[0];
 %>
+<%- partial('partial/head') %>
+  <%- partial('partial/header') %>
 
-<% if (rules.length) { %>
-<div class="gacha-constellation">
-  <svg class="gacha-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-    <polygon points="50,12 88,82 12,82"></polygon>
-    <circle class="gacha-spark" r="1.6">
-      <animateMotion dur="4.5s" repeatCount="indefinite" path="M50,12 L88,82 L12,82 Z"></animateMotion>
-    </circle>
-  </svg>
-  <% rules.forEach(function(rule, i){ var pos = nodePositions[i] || nodePositions[nodePositions.length - 1]; %>
-    <div class="gacha-node" style="left:<%= pos.left %>; top:<%= pos.top %>;">
-      <span class="node-dot"></span>
-      <div class="node-num">0<%= i + 1 %></div>
-      <p><%= rule %></p>
+    <div class="archive-page">
+      <% if (slug === 'gacha') { %>
+        <%- partial('partial/archive-gacha') %>
+      <% } else if (slug === 'commission') { %>
+        <%- partial('partial/archive-commission') %>
+      <% } else if (slug === 'misc') { %>
+        <%- partial('partial/archive-misc') %>
+      <% } else if (slug === 'projects') { %>
+        <%- partial('partial/archive-projects') %>
+      <% } else { %>
+        <%
+          var sorted = page.posts.sort('-date');
+        %>
+        <div class="section-title" style="margin-top:40px;">所有文字 / ALL POSTS</div>
+        <div class="diary" style="margin-top:20px;">
+          <% sorted.each(function(post){ %>
+            <a class="diary-item" href="<%- url_for(post.path) %>">
+              <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+              <div class="diary-body">
+                <h3><%= post.title %></h3>
+                <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+              </div>
+            </a>
+          <% }) %>
+          <% if (sorted.length === 0) { %>
+            <p style="color:var(--mist-dim); font-size:13px;">還沒有寫下任何字。</p>
+          <% } %>
+        </div>
+      <% } %>
     </div>
-  <% }) %>
-</div>
-<% } %>
 
-<% if (ctaUrl) { %>
-<a class="gacha-cta" href="<%= ctaUrl %>" target="_blank" rel="noopener"><%= ctaLabel %></a>
-<% } %>
-
-<div class="section-title" style="margin-top:60px;">拆過的驚喜包 / OPENED</div>
-<div class="diary" style="margin-top:20px;">
-  <% sorted.each(function(post){ %>
-    <a class="diary-item" href="<%- url_for(post.path) %>">
-      <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
-      <div class="diary-body">
-        <h3><%= post.title %></h3>
-        <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
-      </div>
-    </a>
-  <% }) %>
-  <% if (sorted.length === 0) { %>
-    <p style="color:var(--mist-dim); font-size:13px;">還沒有拆過的驚喜包。</p>
-  <% } %>
-</div>
+  <%- partial('partial/footer') %>
