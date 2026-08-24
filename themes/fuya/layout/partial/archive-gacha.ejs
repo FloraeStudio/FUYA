@@ -3,14 +3,26 @@
   var rules = theme.gacha_rules || [];
   var ctaUrl = theme.gacha_cta_url;
   var ctaLabel = theme.gacha_cta_label || '想丟提示給芙婭 →';
+  // 三個點固定排成一個倒三角，呼應首頁星座連線的視覺語言
+  var nodePositions = [
+    { left: '50%', top: '12%' },
+    { left: '88%', top: '82%' },
+    { left: '12%', top: '82%' }
+  ];
 %>
 
 <% if (rules.length) { %>
-<div class="gacha-rules">
-  <% rules.forEach(function(rule, i){ %>
-    <div class="gacha-point">
-      <span class="dot"></span>
-      <div class="step-num"><%= ('0' + (i + 1)).slice(-2) %></div>
+<div class="gacha-constellation">
+  <svg class="gacha-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <polygon points="50,12 88,82 12,82"></polygon>
+    <circle class="gacha-spark" r="1.6">
+      <animateMotion dur="4.5s" repeatCount="indefinite" path="M50,12 L88,82 L12,82 Z"></animateMotion>
+    </circle>
+  </svg>
+  <% rules.forEach(function(rule, i){ var pos = nodePositions[i] || nodePositions[nodePositions.length - 1]; %>
+    <div class="gacha-node" style="left:<%= pos.left %>; top:<%= pos.top %>;">
+      <span class="node-dot"></span>
+      <div class="node-num">0<%= i + 1 %></div>
       <p><%= rule %></p>
     </div>
   <% }) %>

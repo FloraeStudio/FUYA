@@ -4,178 +4,300 @@
 ------------------------------------------------ */
 
 /* 導覽連結 */
-.navlinks{ display:flex; gap: 28px; }
-.navlinks a{
+.navlinks {
+  display: flex;
+  gap: 28px;
+}
+
+.navlinks a {
   color: var(--mist);
   font-size: 14.5px;
   letter-spacing: 1px;
-  position:relative;
-  padding-bottom:4px;
+  position: relative;
+  padding-bottom: 4px;
   transition: color .25s ease;
 }
-.navlinks a::after{
-  content:'';
-  position:absolute; left:0; bottom:0;
-  width:0; height:1px;
+
+.navlinks a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
   background: var(--lamp);
   transition: width .25s ease;
 }
-.navlinks a:hover, .navlinks a.active{ color: var(--paper); }
-.navlinks a:hover::after, .navlinks a.active::after{ width:100%; }
+
+.navlinks a:hover,
+.navlinks a.active {
+  color: var(--paper);
+}
+
+.navlinks a:hover::after,
+.navlinks a.active::after {
+  width: 100%;
+}
 
 /* Hero 上緣小標籤 */
-.eyebrow{
+.eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 4px;
+  font-size: 11px;
+  letter-spacing: 4px;
   color: var(--mist-dim);
-  text-transform:uppercase;
+  text-transform: uppercase;
   margin-bottom: 16px;
 }
 
 /* 狀態列（現在正在做什麼） */
-.status-line{
-  display:inline-flex; align-items:center; gap:8px;
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 28px;
   font-family: var(--font-mono);
   font-size: 11.5px;
   color: var(--mist-dim);
   letter-spacing: .5px;
   padding: 7px 16px;
-  border: 1px solid rgba(169,171,198,0.22);
+  border: 1px solid rgba(169, 171, 198, 0.22);
   border-radius: 20px;
 }
-.status-line .dot{
-  width:6px; height:6px; border-radius:50%;
+
+.status-line .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   background: var(--lamp);
-  box-shadow: 0 0 8px 1px rgba(240,182,92,0.7);
+  box-shadow: 0 0 8px 1px rgba(240, 182, 92, 0.7);
   animation: status-breathe 2.6s ease-in-out infinite;
 }
-@keyframes status-breathe{
-  0%,100%{ opacity:.75; box-shadow: 0 0 8px 1px rgba(240,182,92,0.7); }
-  50%{ opacity:1; box-shadow: 0 0 12px 3px rgba(240,182,92,0.95); }
+
+@keyframes status-breathe {
+
+  0%,
+  100% {
+    opacity: .75;
+    box-shadow: 0 0 8px 1px rgba(240, 182, 92, 0.7);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px 3px rgba(240, 182, 92, 0.95);
+  }
 }
-@media (prefers-reduced-motion: reduce){
-  .status-line .dot{ animation:none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .status-line .dot {
+    animation: none;
+  }
 }
 
 /* 星座連接線 */
-.const-lines{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  filter: drop-shadow(0 0 2px rgba(201,191,232,0.2));
+.const-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 2px rgba(201, 191, 232, 0.2));
 }
-.const-lines polyline{
-  fill:none;
-  stroke: rgba(201,191,232,0.3);
+
+.const-lines polyline {
+  fill: none;
+  stroke: rgba(201, 191, 232, 0.3);
   stroke-width: .8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 /* 星星本體（五個分類） */
-.star-point{
-  position:absolute;
-  transform: translate(-50%,-50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  cursor:pointer;
+.star-point {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
 }
-.star-glow{
-  width: 7px; height:7px;
+
+.star-glow {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--light, var(--lamp));
   box-shadow:
-    0 0 5px 1.5px var(--light-glow, rgba(240,182,92,0.7)),
-    0 0 16px 5px var(--light-glow-soft, rgba(240,182,92,0.22));
+    0 0 5px 1.5px var(--light-glow, rgba(240, 182, 92, 0.7)),
+    0 0 16px 5px var(--light-glow-soft, rgba(240, 182, 92, 0.22));
   animation: twinkle-star 3.6s ease-in-out infinite;
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.star-point:nth-child(2) .star-glow{ animation-delay: .4s; }
-.star-point:nth-child(3) .star-glow{ animation-delay: 1.2s; }
-.star-point:nth-child(4) .star-glow{ animation-delay: .8s; }
-.star-point:nth-child(5) .star-glow{ animation-delay: 1.6s; }
-@keyframes twinkle-star{
-  0%,100%{ opacity:.65; transform: scale(1); }
-  50%{ opacity:1; transform: scale(1.35); }
-}
-@media (prefers-reduced-motion: reduce){ .star-glow{ animation:none; opacity:.9; } }
 
-.star-point:hover .star-glow, .star-point:focus-visible .star-glow{
+.star-point:nth-child(2) .star-glow {
+  animation-delay: .4s;
+}
+
+.star-point:nth-child(3) .star-glow {
+  animation-delay: 1.2s;
+}
+
+.star-point:nth-child(4) .star-glow {
+  animation-delay: .8s;
+}
+
+.star-point:nth-child(5) .star-glow {
+  animation-delay: 1.6s;
+}
+
+@keyframes twinkle-star {
+
+  0%,
+  100% {
+    opacity: .65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-glow {
+    animation: none;
+    opacity: .9;
+  }
+}
+
+.star-point:hover .star-glow,
+.star-point:focus-visible .star-glow {
   transform: scale(1.7);
   box-shadow:
-    0 0 7px 2px var(--light-glow, rgba(240,182,92,0.9)),
-    0 0 22px 7px var(--light-glow-soft, rgba(240,182,92,0.35));
+    0 0 7px 2px var(--light-glow, rgba(240, 182, 92, 0.9)),
+    0 0 22px 7px var(--light-glow-soft, rgba(240, 182, 92, 0.35));
 }
 
-.star-label h3{
+.star-label h3 {
   font-size: 17px;
   font-weight: 400;
   color: var(--paper);
   margin-top: 14px;
   transition: color .2s ease;
 }
-.star-point:hover .star-label h3{ color: var(--lamp); }
-.star-label p{
+
+.star-point:hover .star-label h3 {
+  color: var(--lamp);
+}
+
+.star-label p {
   font-size: 11px;
   line-height: 1.65;
   color: var(--mist-dim);
   max-width: 132px;
   margin-top: 5px;
 }
-.star-badge{
-  display:inline-block;
+
+.star-badge {
+  display: inline-block;
   margin-top: 8px;
   font-family: var(--font-mono);
   font-size: 9.5px;
   letter-spacing: .5px;
   padding: 2px 9px;
   border-radius: 20px;
-  border: 1px solid rgba(240,182,92,0.4);
+  border: 1px solid rgba(240, 182, 92, 0.4);
   color: var(--lamp);
 }
 
 /* 五顆星各自的位置與顏色
    key 對應 themes/fuya/_config.yml 裡 nav[].key，不要改動 class 名稱 */
-.sp-home  { left: 6.7%;  top: 63.6%; --light: var(--paper); --light-glow: rgba(251,245,231,0.6);  --light-glow-soft: rgba(251,245,231,0.2); }
-.sp-proj  { left: 26.7%; top: 27.3%; --light: var(--lamp);  --light-glow: rgba(240,182,92,0.7);   --light-glow-soft: rgba(240,182,92,0.24); }
-.sp-gacha { left: 50%;   top: 50%;   --light: var(--moon);  --light-glow: rgba(201,191,232,0.7);  --light-glow-soft: rgba(201,191,232,0.24); }
-.sp-comm  { left: 70%;   top: 18.2%; --light: var(--lamp);  --light-glow: rgba(240,182,92,0.9);   --light-glow-soft: rgba(240,182,92,0.3); }
-.sp-misc  { left: 91.1%; top: 59.1%; --light: var(--mist);  --light-glow: rgba(169,171,198,0.5);  --light-glow-soft: rgba(169,171,198,0.18); }
-.sp-comm .star-glow{ width: 9px; height: 9px; }
+.sp-home {
+  left: 6.7%;
+  top: 63.6%;
+  --light: var(--paper);
+  --light-glow: rgba(251, 245, 231, 0.6);
+  --light-glow-soft: rgba(251, 245, 231, 0.2);
+}
+
+.sp-proj {
+  left: 26.7%;
+  top: 27.3%;
+  --light: var(--lamp);
+  --light-glow: rgba(240, 182, 92, 0.7);
+  --light-glow-soft: rgba(240, 182, 92, 0.24);
+}
+
+.sp-gacha {
+  left: 50%;
+  top: 50%;
+  --light: var(--moon);
+  --light-glow: rgba(201, 191, 232, 0.7);
+  --light-glow-soft: rgba(201, 191, 232, 0.24);
+}
+
+.sp-comm {
+  left: 70%;
+  top: 18.2%;
+  --light: var(--lamp);
+  --light-glow: rgba(240, 182, 92, 0.9);
+  --light-glow-soft: rgba(240, 182, 92, 0.3);
+}
+
+.sp-misc {
+  left: 91.1%;
+  top: 59.1%;
+  --light: var(--mist);
+  --light-glow: rgba(169, 171, 198, 0.5);
+  --light-glow-soft: rgba(169, 171, 198, 0.18);
+}
+
+.sp-comm .star-glow {
+  width: 9px;
+  height: 9px;
+}
 
 /* 最近寫下的字 / 分類列表 共用的條列項目 */
-.diary-item{
+.diary-item {
   padding: 22px 0;
-  border-bottom: 1px dashed rgba(169,171,198,0.22);
-  display:flex;
+  border-bottom: 1px dashed rgba(169, 171, 198, 0.22);
+  display: flex;
   gap: 22px;
 }
-.diary-item:last-child{ border-bottom:none; }
-.diary-date{
+
+.diary-item:last-child {
+  border-bottom: none;
+}
+
+.diary-date {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--mist-dim);
   width: 60px;
-  flex-shrink:0;
+  flex-shrink: 0;
   padding-top: 3px;
 }
-.diary-body .tag{
+
+.diary-body .tag {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--lamp);
   letter-spacing: 1px;
 }
-.diary-body h3{
+
+.diary-body h3 {
   color: var(--paper);
   font-size: 17px;
   font-weight: 400;
   margin: 6px 0 8px;
   transition: color .2s ease;
 }
-.diary-item:hover .diary-body h3{ color: var(--lamp); }
-.diary-body p{
+
+.diary-item:hover .diary-body h3 {
+  color: var(--lamp);
+}
+
+.diary-body p {
   font-size: 13px;
   line-height: 1.9;
   color: var(--mist);
@@ -184,123 +306,142 @@
 /* ============================================
    委託頁（琥珀色系）— 狀態列、方案星、流程、FAQ
 ============================================ */
-.commission-status{
-  display:inline-flex; align-items:center; gap:9px;
+.commission-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   margin-top: 18px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   color: var(--mist);
   letter-spacing: .5px;
   padding: 8px 18px;
-  border: 1px solid rgba(240,182,92,0.3);
+  border: 1px solid rgba(240, 182, 92, 0.3);
   border-radius: 20px;
-  background: rgba(240,182,92,0.06);
+  background: rgba(240, 182, 92, 0.06);
 }
-.commission-status .dot{
-  width:7px; height:7px; border-radius:50%;
+
+.commission-status .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--lamp);
-  box-shadow: 0 0 8px 1px rgba(240,182,92,0.7);
+  box-shadow: 0 0 8px 1px rgba(240, 182, 92, 0.7);
   animation: status-breathe 2.6s ease-in-out infinite;
 }
-@media (prefers-reduced-motion: reduce){
-  .commission-status .dot{ animation:none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .commission-status .dot {
+    animation: none;
+  }
 }
 
 /* 方案星：由左到右、由小到大，呼應「委託星最大最亮」 */
-.plan-track{
-  position:relative;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
+.plan-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   max-width: 460px;
   margin: 30px auto 10px;
   padding: 30px 10px 0;
 }
-.plan-track::before{
-  content:'';
-  position:absolute;
-  left:9%; right:9%; top:34px;
-  height:1px;
-  background: rgba(240,182,92,0.22);
-  z-index:0;
+
+.plan-track::before {
+  content: '';
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 34px;
+  height: 1px;
+  background: rgba(240, 182, 92, 0.22);
+  z-index: 0;
 }
-.plan-point{
-  position:relative;
-  z-index:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  flex:1;
+
+.plan-point {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
 }
-.plan-point .dot{
-  border-radius:50%;
+
+.plan-point .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   background: var(--lamp);
+  box-shadow: 0 0 6px 1.5px rgba(240, 182, 92, 0.65), 0 0 18px 5px rgba(240, 182, 92, 0.2);
   animation: twinkle-star 3.6s ease-in-out infinite;
 }
-.plan-point[data-tier="surprise"] .dot{
-  width:6px; height:6px;
-  box-shadow: 0 0 4px 1px rgba(240,182,92,0.4), 0 0 10px 3px rgba(240,182,92,0.14);
+
+.plan-point[data-tier="mid"] .dot {
+  animation-delay: .5s;
 }
-.plan-point[data-tier="short"] .dot{
-  width:8px; height:8px;
-  box-shadow: 0 0 5px 1px rgba(240,182,92,0.5), 0 0 14px 4px rgba(240,182,92,0.16);
+
+.plan-point[data-tier="long"] .dot {
+  animation-delay: 1s;
 }
-.plan-point[data-tier="mid"] .dot{
-  width:11px; height:11px;
-  box-shadow: 0 0 6px 1.5px rgba(240,182,92,0.65), 0 0 18px 5px rgba(240,182,92,0.2);
-  animation-delay:.5s;
-}
-.plan-point[data-tier="long"] .dot{
-  width:15px; height:15px;
-  box-shadow: 0 0 8px 2px rgba(240,182,92,0.85), 0 0 24px 7px rgba(240,182,92,0.28);
-  animation-delay:1s;
-}
-.plan-point h4{
+
+.plan-point h4 {
   margin-top: 14px;
   font-size: 15px;
-  font-weight:400;
+  font-weight: 400;
   color: var(--paper);
 }
-.plan-point .plan-range{
+
+.plan-point .plan-range {
   font-family: var(--font-mono);
   font-size: 10.5px;
   color: var(--mist-dim);
-  margin-top:4px;
+  margin-top: 4px;
 }
-.plan-point .plan-price{
+
+.plan-point .plan-price {
   font-size: 13px;
   color: var(--lamp);
-  margin-top:6px;
+  margin-top: 6px;
 }
-.plan-point .plan-note{
+
+.plan-point .plan-note {
   font-size: 11.5px;
   color: var(--mist);
   max-width: 130px;
-  margin-top:6px;
-  line-height:1.6;
+  margin-top: 6px;
+  line-height: 1.6;
 }
 
 /* 流程 / FAQ — 沿用 diary-item 的條列感，拿掉日期欄 */
-.flow-item, .faq-item{
+.flow-item,
+.faq-item {
   padding: 18px 0;
-  border-bottom: 1px dashed rgba(169,171,198,0.18);
+  border-bottom: 1px dashed rgba(169, 171, 198, 0.18);
 }
-.flow-item:last-child, .faq-item:last-child{ border-bottom:none; }
-.flow-item .flow-index{
+
+.flow-item:last-child,
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.flow-item .flow-index {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--lamp);
   letter-spacing: 1px;
   margin-bottom: 4px;
 }
-.faq-item h4{
+
+.faq-item h4 {
   color: var(--paper);
   font-size: 14.5px;
   font-weight: 400;
   margin-bottom: 6px;
 }
-.faq-item p, .flow-item p{
+
+.faq-item p,
+.flow-item p {
   font-size: 13px;
   line-height: 1.9;
   color: var(--mist);
@@ -310,64 +451,89 @@
    轉蛋頁（月光紫色系）— 三點迷你星座 + 循環流動的光點
    （沿用首頁星座連線的視覺語言，縮小版套用在內容區）
 ============================================ */
-.gacha-constellation{
-  position:relative;
+.gacha-constellation {
+  position: relative;
   width: 100%;
   max-width: 380px;
   aspect-ratio: 1 / 0.85;
   margin: 50px auto 30px;
 }
-.gacha-lines{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  overflow:visible;
+
+.gacha-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
-.gacha-lines polygon{
-  fill:none;
-  stroke: rgba(201,191,232,0.32);
+
+.gacha-lines polygon {
+  fill: none;
+  stroke: rgba(201, 191, 232, 0.32);
   stroke-width: .6;
   stroke-linejoin: round;
   stroke-dasharray: 1.4 2.6;
 }
-.gacha-lines .gacha-spark{
+
+.gacha-lines .gacha-spark {
   fill: var(--moon);
-  filter: drop-shadow(0 0 3px rgba(201,191,232,0.95));
-}
-@media (prefers-reduced-motion: reduce){
-  .gacha-lines .gacha-spark{ display:none; }
+  filter: drop-shadow(0 0 3px rgba(201, 191, 232, 0.95));
 }
 
-.gacha-node{
-  position:absolute;
+@media (prefers-reduced-motion: reduce) {
+  .gacha-lines .gacha-spark {
+    display: none;
+  }
+}
+
+.gacha-node {
+  position: absolute;
   transform: translate(-50%, -50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   max-width: 130px;
 }
-.gacha-node .node-dot{
-  width:8px; height:8px; border-radius:50%;
+
+.gacha-node .node-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--moon);
-  box-shadow: 0 0 5px 1.5px rgba(201,191,232,0.65), 0 0 16px 5px rgba(201,191,232,0.22);
+  box-shadow: 0 0 5px 1.5px rgba(201, 191, 232, 0.65), 0 0 16px 5px rgba(201, 191, 232, 0.22);
   animation: twinkle-star 3.6s ease-in-out infinite;
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.gacha-node:nth-of-type(2) .node-dot{ animation-delay:.5s; }
-.gacha-node:nth-of-type(3) .node-dot{ animation-delay:1s; }
-@media (prefers-reduced-motion: reduce){ .gacha-node .node-dot{ animation:none; } }
-.gacha-node:hover .node-dot{
-  transform: scale(1.4);
-  box-shadow: 0 0 7px 2px rgba(201,191,232,0.85), 0 0 20px 6px rgba(201,191,232,0.32);
+
+.gacha-node:nth-of-type(2) .node-dot {
+  animation-delay: .5s;
 }
-.gacha-node .node-num{
+
+.gacha-node:nth-of-type(3) .node-dot {
+  animation-delay: 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gacha-node .node-dot {
+    animation: none;
+  }
+}
+
+.gacha-node:hover .node-dot {
+  transform: scale(1.4);
+  box-shadow: 0 0 7px 2px rgba(201, 191, 232, 0.85), 0 0 20px 6px rgba(201, 191, 232, 0.32);
+}
+
+.gacha-node .node-num {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--moon);
   letter-spacing: 1.5px;
   margin-top: 12px;
 }
-.gacha-node p{
+
+.gacha-node p {
   margin-top: 6px;
   font-size: 12.5px;
   line-height: 1.8;
@@ -375,67 +541,94 @@
 }
 
 /* 手機版：收成直向清單，跟首頁星座收合邏輯一致 */
-@media (max-width: 640px){
-  .gacha-constellation{
+@media (max-width: 640px) {
+  .gacha-constellation {
     aspect-ratio: unset;
-    display:flex; flex-direction:column; align-items:center; gap:28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
     max-width: 300px;
   }
-  .gacha-lines{ display:none; }
-  .gacha-node{ position:static; transform:none; }
+
+  .gacha-lines {
+    display: none;
+  }
+
+  .gacha-node {
+    position: static;
+    transform: none;
+  }
 }
 
-.gacha-cta{
-  display:block;
+.gacha-cta {
+  display: block;
   width: fit-content;
-  text-align:center;
+  text-align: center;
   margin: 10px auto 10px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   letter-spacing: 1px;
   color: var(--moon);
   padding: 10px 22px;
-  border: 1px solid rgba(201,191,232,0.35);
+  border: 1px solid rgba(201, 191, 232, 0.35);
   border-radius: 20px;
   transition: background .2s ease, color .2s ease;
 }
-.gacha-cta:hover{ background: rgba(201,191,232,0.12); color: var(--paper); }
+
+.gacha-cta:hover {
+  background: rgba(201, 191, 232, 0.12);
+  color: var(--paper);
+}
 
 /* ============================================
    雜談頁（霧灰色系）— 按月分組，拿掉光暈只留霧色
 ============================================ */
-.misc-month-label{
+.misc-month-label {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 3px;
   color: var(--mist-dim);
-  text-transform:uppercase;
+  text-transform: uppercase;
   margin: 36px 0 6px;
 }
-.misc-month-label:first-child{ margin-top: 10px; }
-.misc-item{
+
+.misc-month-label:first-child {
+  margin-top: 10px;
+}
+
+.misc-item {
   padding: 16px 0;
-  border-bottom: 1px dashed rgba(169,171,198,0.16);
-  display:flex;
+  border-bottom: 1px dashed rgba(169, 171, 198, 0.16);
+  display: flex;
   gap: 18px;
 }
-.misc-item:last-child{ border-bottom:none; }
-.misc-item .misc-date{
+
+.misc-item:last-child {
+  border-bottom: none;
+}
+
+.misc-item .misc-date {
   font-family: var(--font-mono);
   font-size: 10.5px;
   color: var(--mist-dim);
   width: 44px;
-  flex-shrink:0;
+  flex-shrink: 0;
   padding-top: 2px;
 }
-.misc-item h3{
+
+.misc-item h3 {
   color: var(--mist);
   font-size: 15.5px;
   font-weight: 400;
   transition: color .2s ease;
 }
-.misc-item:hover h3{ color: var(--paper); }
-.misc-item p{
+
+.misc-item:hover h3 {
+  color: var(--paper);
+}
+
+.misc-item p {
   font-size: 12.5px;
   line-height: 1.8;
   color: var(--mist-dim);
