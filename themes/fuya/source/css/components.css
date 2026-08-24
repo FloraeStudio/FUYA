@@ -303,63 +303,89 @@
 }
 
 /* ============================================
-   轉蛋頁（月光紫色系）— 散落不連線的抽選光點
+   轉蛋頁（月光紫色系）— 三點迷你星座 + 循環流動的光點
+   （沿用首頁星座連線的視覺語言，縮小版套用在內容區）
 ============================================ */
-.gacha-rules{
+.gacha-constellation{
   position:relative;
-  max-width: 560px;
-  margin: 45px auto 20px;
-  min-height: 190px;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1 / 0.85;
+  margin: 50px auto 30px;
 }
-.gacha-point{
+.gacha-lines{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  overflow:visible;
+}
+.gacha-lines polygon{
+  fill:none;
+  stroke: rgba(201,191,232,0.32);
+  stroke-width: .6;
+  stroke-linejoin: round;
+  stroke-dasharray: 1.4 2.6;
+}
+.gacha-lines .gacha-spark{
+  fill: var(--moon);
+  filter: drop-shadow(0 0 3px rgba(201,191,232,0.95));
+}
+@media (prefers-reduced-motion: reduce){
+  .gacha-lines .gacha-spark{ display:none; }
+}
+
+.gacha-node{
   position:absolute;
+  transform: translate(-50%, -50%);
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  max-width: 150px;
+  max-width: 130px;
 }
-.gacha-point:nth-child(1){ left: 4%;  top: 2%; }
-.gacha-point:nth-child(2){ left: 58%; top: 34%; }
-.gacha-point:nth-child(3){ left: 18%; top: 70%; }
-.gacha-point .dot{
-  width:7px; height:7px; border-radius:50%;
+.gacha-node .node-dot{
+  width:8px; height:8px; border-radius:50%;
   background: var(--moon);
-  box-shadow: 0 0 5px 1.5px rgba(201,191,232,0.6), 0 0 15px 4px rgba(201,191,232,0.2);
-  animation: twinkle-star 4.2s ease-in-out infinite;
+  box-shadow: 0 0 5px 1.5px rgba(201,191,232,0.65), 0 0 16px 5px rgba(201,191,232,0.22);
+  animation: twinkle-star 3.6s ease-in-out infinite;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-.gacha-point:nth-child(2) .dot{ animation-delay:.6s; }
-.gacha-point:nth-child(3) .dot{ animation-delay:1.3s; }
-.gacha-point .step-num{
+.gacha-node:nth-of-type(2) .node-dot{ animation-delay:.5s; }
+.gacha-node:nth-of-type(3) .node-dot{ animation-delay:1s; }
+@media (prefers-reduced-motion: reduce){ .gacha-node .node-dot{ animation:none; } }
+.gacha-node:hover .node-dot{
+  transform: scale(1.4);
+  box-shadow: 0 0 7px 2px rgba(201,191,232,0.85), 0 0 20px 6px rgba(201,191,232,0.32);
+}
+.gacha-node .node-num{
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--moon);
-  letter-spacing: 1px;
-  margin-top:10px;
+  letter-spacing: 1.5px;
+  margin-top: 12px;
 }
-.gacha-point p{
+.gacha-node p{
   margin-top: 6px;
   font-size: 12.5px;
   line-height: 1.8;
   color: var(--mist);
 }
-@media (prefers-reduced-motion: reduce){ .gacha-point .dot{ animation:none; } }
 
-/* 手機版：散落的點改回直向排列，避免重疊 */
+/* 手機版：收成直向清單，跟首頁星座收合邏輯一致 */
 @media (max-width: 640px){
-  .gacha-rules{
-    position:static;
-    display:flex; flex-direction:column; gap:28px; align-items:center;
-    min-height:0;
+  .gacha-constellation{
+    aspect-ratio: unset;
+    display:flex; flex-direction:column; align-items:center; gap:28px;
+    max-width: 300px;
   }
-  .gacha-point{ position:static !important; max-width:220px; }
+  .gacha-lines{ display:none; }
+  .gacha-node{ position:static; transform:none; }
 }
 
 .gacha-cta{
   display:block;
   width: fit-content;
   text-align:center;
-  margin: 24px auto 10px;
+  margin: 10px auto 10px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   letter-spacing: 1px;
