@@ -14,25 +14,25 @@ nav:
   - key: home
     name: 主頁
     slug: ''
-    desc: 
+    desc: 近況、公告，還有想被你看到的東西。
   - key: proj
     name: 企劃
     slug: projects
-    desc: 
+    desc: 正在寫、寫完的故事，都放在這裡。
     badge: 連載中
   - key: gacha
     name: 轉蛋
     slug: gacha
-    desc: 
+    desc: 抽一張角色卡，看看今天遇見誰。
   - key: comm
     name: 委託
     slug: commission
-    desc: 目前開放中
+    desc: 目前開放中，想聊聊嗎？
     badge: 開放中
   - key: misc
     name: 雜談
     slug: misc
-    desc: 
+    desc: 不是故事的故事，隨手寫的碎碎念。
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
@@ -46,10 +46,15 @@ categoryLabels:
 # ------------------------------------------------
 # 方案星星：由小到大排列，呼應「委託星最大最亮」的概念
 commission_plans:
+  - key: surprise
+    name: 驚喜包代寫
+    range: 300–1000 字
+    price: NT$150–250
+    note: 丟提示給我，寫完直接給你，不先過稿也不修改。
   - key: short
-    name: 驚喜包
+    name: 小品
     range: 500–1500 字
-    price: NT$150 起
+    price: NT$300 起
     note: 情境速寫、短篇對話
   - key: mid
     name: 短篇
