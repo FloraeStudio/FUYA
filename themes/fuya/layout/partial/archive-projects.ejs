@@ -1,25 +1,6 @@
 <% var sorted=page.posts.sort('-date'); %>
-<% var series=theme.project_series || []; %>
 
-  <% if (series.length) { %>
-  <div class="section-title" style="margin-top:40px;">長期在寫的企劃 / SERIES</div>
-  <div class="project-cards">
-    <% series.forEach(function(s){ %>
-      <div class="project-card pc-<%= s.color %>">
-        <div class="pc-top">
-          <span class="pc-dot"></span>
-          <% if (s.badge) { %><span class="pc-badge"><%= s.badge %></span><% } %>
-        </div>
-        <h3><%= s.name %></h3>
-        <% if (s.subtitle) { %><div class="pc-subtitle"><%= s.subtitle %></div><% } %>
-        <% if (s.desc) { %><p><%= s.desc %></p><% } %>
-        <% if (s.status) { %><div class="pc-status"><%= s.status %></div><% } %>
-      </div>
-    <% }) %>
-  </div>
-  <% } %>
-
-  <div class="section-title" style="margin-top:56px;">所有企劃文字 / ENTRIES</div>
+  <div class="section-title" style="margin-top:40px;">進行中的企劃 / PROJECTS</div>
   <div class="diary" style="margin-top:20px;">
     <% sorted.each(function(post){ %>
       <a class="diary-item" href="<%- url_for(post.path) %>">
