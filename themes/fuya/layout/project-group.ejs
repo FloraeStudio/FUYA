@@ -1,5 +1,5 @@
 <%
-  var group = _.find(theme.project_groups, function(g){ return g.key === page.group_key; }) || {};
+  var group = theme.project_groups.find(function(g){ return g.key === page.group_key; }) || {};
   var themeClass = group.theme === 'moon' ? 'pc-moon' : 'pc-lamp';
   var posts = site.posts.filter(function(p){
     return p.categories && p.categories.map(function(c){ return c.name; }).indexOf('企劃') !== -1
