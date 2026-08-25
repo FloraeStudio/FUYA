@@ -5,6 +5,9 @@
     return p.categories && p.categories.map(function(c){ return c.name; }).indexOf('企劃') !== -1
       && p.project_group === page.group_key;
   }).sort('-date');
+
+  var litMonths = {};
+  posts.each(function(post){ litMonths[post.date.format('M')] = true; });
 %>
 <%- partial('partial/head') %>
   <%- partial('partial/header') %>
@@ -17,6 +20,17 @@
         <div class="section-title" style="margin:0;"><%= group.name || page.title %></div>
         <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } %>
       </div>
+
+      <% if (group.visual === 'calendar-scatter') { %>
+        <div class="calendar-scatter" aria-hidden="true">
+          <% for (var m = 1; m <= 12; m++) { %>
+            <div class="cs-month <%= litMonths[m] ? 'lit' : '' %>">
+              <span class="cs-tick"></span>
+              <span class="cs-label"><%= ('0' + m).slice(-2) %></span>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
 
       <% if (group.intro) { %>
         <p class="archive-intro" style="margin-top:14px;"><%= group.intro %></p>

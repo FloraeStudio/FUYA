@@ -104,12 +104,13 @@ project_groups:
   - key: valentines
     name: 十二個情人節
     theme: lamp
-    badge: 連載中
+    badge: 修整中
     intro: 十二段情人節，十二種心動的樣子。
     status: ''
   - key: holidays
     name: 冷門節日企劃
     theme: moon
     badge: 籌備中
-    intro: 那些行事曆上不起眼、卻讓人多看一眼的節日。
+    intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: 尚未開張，敬請期待。
+    visual: calendar-scatter

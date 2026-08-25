@@ -852,3 +852,60 @@
   .pc-row { display: none; }
   .pc-labels { flex-direction: column; gap: 40px; }
 }
+
+/* ============================================
+   冷門節日企劃 — 散落月曆裝飾
+   十二個月份的小刻度，有文章的月份才會發光，
+   呼應「節日散落在行事曆各處」的概念。
+   只有 project_groups 裡設定 visual: calendar-scatter 的企劃會顯示。
+============================================ */
+.calendar-scatter {
+  display: flex;
+  justify-content: space-between;
+  max-width: 420px;
+  margin: 40px auto 0;
+  padding: 0 6px;
+}
+
+.cs-month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cs-tick {
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(169, 171, 198, 0.18);
+}
+
+.cs-month.lit .cs-tick {
+  background: var(--moon);
+  box-shadow: 0 0 6px 1.5px rgba(201, 191, 232, 0.6);
+  animation: twinkle-star 3.6s ease-in-out infinite;
+}
+
+.cs-month:nth-child(3n).lit .cs-tick { animation-delay: .5s; }
+.cs-month:nth-child(3n+1).lit .cs-tick { animation-delay: 1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-month.lit .cs-tick { animation: none; }
+}
+
+.cs-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .5px;
+  color: var(--mist-dim);
+}
+
+.cs-month.lit .cs-label {
+  color: var(--moon);
+}
+
+@media (max-width: 480px) {
+  .calendar-scatter { max-width: 300px; }
+  .cs-label { font-size: 8px; }
+}
