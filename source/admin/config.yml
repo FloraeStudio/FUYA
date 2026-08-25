@@ -21,11 +21,17 @@ collections:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [企劃] }
-      - label: 狀態
+      - label: 是否為連載作品（同人／二創）
+        name: is_series
+        widget: boolean
+        default: false
+        hint: 大部分單篇展示作品請維持「否」。只有連載中的同人／二創才勾選。
+      - label: 作品狀態
         name: status
         widget: select
         required: false
         options: [連載中, 已完結, 暫停]
+        hint: 只有上面勾選為連載作品時才需要填寫。
       - { label: 摘要, name: description, widget: text, required: false }
       - { label: 封面圖, name: cover, widget: image, required: false }
       - { label: 內文, name: body, widget: markdown }
