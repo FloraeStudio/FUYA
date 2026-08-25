@@ -1,0 +1,49 @@
+<%
+  var group = _.find(theme.project_groups, function(g){ return g.key === page.group_key; }) || {};
+  var themeClass = group.theme === 'moon' ? 'pc-moon' : 'pc-lamp';
+  var posts = site.posts.filter(function(p){
+    return p.categories && p.categories.map(function(c){ return c.name; }).indexOf('企劃') !== -1
+      && p.project_group === page.group_key;
+  }).sort('-date');
+%>
+<%- partial('partial/head') %>
+  <%- partial('partial/header') %>
+
+    <div class="archive-page <%= themeClass %>">
+      <a class="pg-back" href="<%- url_for('/projects/') %>">← 回到企劃</a>
+
+      <div class="pg-head">
+        <span class="pc-dot"></span>
+        <div class="section-title" style="margin:0;"><%= group.name || page.title %></div>
+        <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } %>
+      </div>
+
+      <% if (group.intro) { %>
+        <p class="archive-intro" style="margin-top:14px;"><%= group.intro %></p>
+      <% } %>
+      <% if (group.status) { %>
+        <p class="pc-status" style="display:block; text-align:center; margin-top:6px;"><%= group.status %></p>
+      <% } %>
+
+      <div class="diary" style="margin-top:34px;">
+        <% posts.each(function(post){ %>
+          <a class="diary-item" href="<%- url_for(post.path) %>">
+            <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+            <div class="diary-body">
+              <% if (post.is_series && post.status) { %><span class="tag"><%= post.status %></span><% } %>
+              <h3><%= post.title %></h3>
+              <% if (post.description) { %>
+                <p><%= post.description %></p>
+              <% } else { %>
+                <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+              <% } %>
+            </div>
+          </a>
+        <% }) %>
+        <% if (posts.length === 0) { %>
+          <p style="color:var(--mist-dim); font-size:13px; text-align:center;">這裡還沒有收錄的故事，敬請期待。</p>
+        <% } %>
+      </div>
+    </div>
+
+  <%- partial('partial/footer') %>

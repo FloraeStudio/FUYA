@@ -34,6 +34,14 @@ collections:
         required: false
         options: [連載中, 已完結, 暫停]
         hint: 只有上面勾選為連載作品時才需要填寫。
+      - label: 所屬企劃系列
+        name: project_group
+        widget: select
+        required: false
+        options:
+          - { label: 十二個情人節, value: valentines }
+          - { label: 冷門節日企劃, value: holidays }
+        hint: 這篇屬於哪個長期企劃就選哪個，之後會自動出現在對應的企劃內頁。單篇作品不屬於任何系列時留空即可。
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
         name: tags

@@ -829,3 +829,34 @@
   color: var(--mist-dim);
   margin-top: 5px;
 }
+
+/* ============================================
+   企劃子頁（十二個情人節 / 冷門節日企劃）
+   沿用 .project-card 的 --light/--light-glow 換色語言
+============================================ */
+.pg-back {
+  display: inline-block;
+  margin-top: 40px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist-dim);
+  letter-spacing: .5px;
+  transition: color .2s ease;
+}
+
+.pg-back:hover {
+  color: var(--light, var(--lamp));
+}
+
+.pg-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.pc-moon .diary-body .tag,
+.pc-moon .diary-item:hover .diary-body h3 {
+  color: var(--moon);
+}

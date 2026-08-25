@@ -94,3 +94,22 @@ gacha_intro: ''
 
 gacha_cta_url: ''
 gacha_cta_label: ''
+
+# ------------------------------------------------
+# 企劃頁 — 子企劃（兩張大卡片 + 各自內頁共用同一份資料）
+# theme: lamp（琥珀，呼應「開放中／連載中」）或 moon（月光紫，呼應「籌備中」）
+# 這裡的文字之後想改標題、簡介、狀態都直接改這裡即可，不用碰 .ejs
+# ------------------------------------------------
+project_groups:
+  - key: valentines
+    name: 十二個情人節
+    theme: lamp
+    badge: 連載中
+    intro: 十二段情人節，十二種心動的樣子。
+    status: ''
+  - key: holidays
+    name: 冷門節日企劃
+    theme: moon
+    badge: 籌備中
+    intro: 那些行事曆上不起眼、卻讓人多看一眼的節日。
+    status: 尚未開張，敬請期待。
