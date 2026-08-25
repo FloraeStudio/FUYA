@@ -24,30 +24,33 @@
         </span>
         <% } %>
 
-          <% if (page.tags && page.tags.length) { %>
+          <%
+            // 逐一過濾掉空白內容，確保「有欄位但內容是空的」不會留下一個空殼容器。
+            var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
+            var validNotices = (page.notices && page.notices.length) ? page.notices.filter(function(n){ return n && n.text && n.text.trim(); }) : [];
+            var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
+          %>
+
+          <% if (validTags.length) { %>
             <div class="post-tags">
-              <% page.tags.each(function(tag){ %>
+              <% validTags.forEach(function(tag){ %>
                 <a class="tag-pill" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
               <% }) %>
             </div>
           <% } %>
 
-          <% if (page.notices && page.notices.length) { %>
+          <% if (validNotices.length) { %>
             <div class="post-notices">
-              <% page.notices.forEach(function(n){ %>
-                <% if (n.text) { %>
-                  <p>※<%= n.text %></p>
-                <% } %>
+              <% validNotices.forEach(function(n){ %>
+                <p>※<%= n.text %></p>
               <% }) %>
             </div>
           <% } %>
 
-          <% if (page.links && page.links.length) { %>
+          <% if (validLinks.length) { %>
             <div class="post-links">
-              <% page.links.forEach(function(l){ %>
-                <% if (l.url) { %>
-                  <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
-                <% } %>
+              <% validLinks.forEach(function(l){ %>
+                <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
               <% }) %>
             </div>
           <% } %>

@@ -20,7 +20,11 @@
       <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
       <div class="diary-body">
         <h3><%= post.title %></h3>
-        <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+        <% if (post.description) { %>
+          <p><%= post.description %></p>
+        <% } else { %>
+          <p><%= strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+        <% } %>
       </div>
     </a>
   <% }) %>
