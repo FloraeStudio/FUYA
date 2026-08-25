@@ -140,6 +140,7 @@
 /* 星座（五個分類） */
 .constellation {
   position: relative;
+  width: 100%;
   max-width: 900px;
   height: 300px;
   margin: 0 auto;
