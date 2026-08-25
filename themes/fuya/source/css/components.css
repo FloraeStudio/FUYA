@@ -584,6 +584,30 @@
 /* ============================================
    單篇文章 — 提醒標籤 / 相關連結 / 展開全文
 ============================================ */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tag-pill {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: .3px;
+  color: var(--mist);
+  padding: 5px 13px;
+  border: 1px solid rgba(169, 171, 198, 0.3);
+  border-radius: 20px;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.tag-pill:hover {
+  color: var(--paper);
+  border-color: rgba(240, 182, 92, 0.5);
+  background: rgba(240, 182, 92, 0.08);
+}
+
 .post-notices {
   margin: 22px 0;
   padding: 16px 20px;

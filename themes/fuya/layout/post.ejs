@@ -24,6 +24,14 @@
         </span>
         <% } %>
 
+          <% if (page.tags && page.tags.length) { %>
+            <div class="post-tags">
+              <% page.tags.each(function(tag){ %>
+                <a class="tag-pill" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+              <% }) %>
+            </div>
+          <% } %>
+
           <% if (page.notices && page.notices.length) { %>
             <div class="post-notices">
               <% page.notices.forEach(function(n){ %>

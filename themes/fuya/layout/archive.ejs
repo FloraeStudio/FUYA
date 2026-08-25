@@ -18,8 +18,10 @@
       <% } else { %>
         <%
           var sorted = page.posts.sort('-date');
+          // 標籤頁（/tags/xxx/）會有 page.tag，其他（archives/ 之類）沒有，維持原標題。
+          var heading = page.tag ? ('# ' + page.tag) : '所有文字 / ALL POSTS';
         %>
-        <div class="section-title" style="margin-top:40px;">所有文字 / ALL POSTS</div>
+        <div class="section-title" style="margin-top:40px;"><%= heading %></div>
         <div class="diary" style="margin-top:20px;">
           <% sorted.each(function(post){ %>
             <a class="diary-item" href="<%- url_for(post.path) %>">

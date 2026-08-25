@@ -35,13 +35,18 @@ collections:
         options: [連載中, 已完結, 暫停]
         hint: 只有上面勾選為連載作品時才需要填寫。
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開，例如：夢向BG, 教官, 全年齡。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
       - label: 提醒標籤
         name: notices
         widget: list
         required: false
         summary: '{{fields.text}}'
         field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。
+        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -84,13 +89,18 @@ collections:
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [轉蛋] }
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開，例如：夢向BG, 教官, 全年齡。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
       - label: 提醒標籤
         name: notices
         widget: list
         required: false
         summary: '{{fields.text}}'
         field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。
+        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -121,13 +131,18 @@ collections:
         required: false
         options: [開放中, 已額滿, 暫停接單]
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
       - label: 提醒標籤
         name: notices
         widget: list
         required: false
         summary: '{{fields.text}}'
         field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如注意事項、雷區提醒。顯示時會自動加上「※」。
+        hint: 每則一行，例如注意事項、雷區提醒。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -152,13 +167,18 @@ collections:
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [雜談] }
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
       - label: 提醒標籤
         name: notices
         widget: list
         required: false
         summary: '{{fields.text}}'
         field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行。顯示時會自動加上「※」。
+        hint: 每則一行。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
