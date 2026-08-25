@@ -27,7 +27,13 @@
           <%
             // 逐一過濾掉空白內容，確保「有欄位但內容是空的」不會留下一個空殼容器。
             var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
-            var validNotices = (page.notices && page.notices.length) ? page.notices.filter(function(n){ return n && n.text && n.text.trim(); }) : [];
+            // notices 可能是 CMS 產生的 {text: '...'} 物件，也可能是手動編輯 frontmatter 時
+            // 直接寫的純字串陣列 — 兩種格式都要能顯示，取文字時一併處理。
+            var validNotices = (page.notices && page.notices.length)
+              ? page.notices
+                  .map(function(n){ return (typeof n === 'string') ? n : (n && n.text); })
+                  .filter(function(t){ return t && t.trim(); })
+              : [];
             var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
           %>
 
@@ -41,8 +47,8 @@
 
           <% if (validNotices.length) { %>
             <div class="post-notices">
-              <% validNotices.forEach(function(n){ %>
-                <p>※<%= n.text %></p>
+              <% validNotices.forEach(function(text){ %>
+                <p>※<%= text %></p>
               <% }) %>
             </div>
           <% } %>
@@ -55,27 +61,24 @@
             </div>
           <% } %>
 
-          <div class="post-content-wrap">
-            <input type="checkbox" id="post-expand" class="expand-toggle">
-            <div class="post-content" id="post-content-body">
-              <%- page.content %>
-            </div>
-            <label class="expand-fade" for="post-expand" id="post-expand-fade">
-              <span class="expand-btn">展開全文</span>
-            </label>
+          <div class="post-content">
+            <%- page.content %>
           </div>
 
-          <a class="back-link" href="<%- url_for('/') %>">← 回到首頁</a>
+          <%
+            // 回到上一層總覽，而不是一律回首頁：依文章分類對應到 theme.nav
+            // 裡設定好的 slug（跟導覽列/星座共用同一份設定，不用另外維護）。
+            var backHref = '/';
+            var backLabel = '回到首頁';
+            if (catName && theme.nav) {
+              var navEntry = theme.nav.find(function(n){ return n.name === catName; });
+              if (navEntry && navEntry.slug) {
+                backHref = '/' + navEntry.slug + '/';
+                backLabel = '回到' + catName + '總覽';
+              }
+            }
+          %>
+          <a class="back-link" href="<%- url_for(backHref) %>">← <%= backLabel %></a>
     </div>
-
-    <script>
-      (function () {
-        var body = document.getElementById('post-content-body');
-        var fade = document.getElementById('post-expand-fade');
-        if (body && fade && body.scrollHeight <= body.clientHeight + 20) {
-          fade.style.display = 'none';
-        }
-      })();
-    </script>
 
     <%- partial('partial/footer') %>

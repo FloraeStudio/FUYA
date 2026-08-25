@@ -13,6 +13,9 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   position:relative;
+  /* 讓 footer 在內容太短時仍貼齊視窗底部，內容夠長時照常往下推 */
+  display:flex;
+  flex-direction:column;
 }
 
 a{ color:inherit; text-decoration:none; }
