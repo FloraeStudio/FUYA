@@ -304,6 +304,133 @@
 }
 
 /* ============================================
+   企劃頁 — 兩張大卡片
+   沿用 star-glow 的 --light/--light-glow/--light-glow-soft 換色語言，
+   呼吸動畫節奏比照 status-breathe（2.6s），卡片本身用更慢的呼吸避免搶戲
+============================================ */
+.project-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  max-width: 760px;
+  margin: 22px auto 0;
+}
+
+.project-card {
+  position: relative;
+  padding: 26px 24px 24px;
+  border-radius: 14px;
+  border: 1px solid var(--light-glow, rgba(240, 182, 92, 0.3));
+  background: linear-gradient(160deg, var(--light-glow-soft, rgba(240, 182, 92, 0.06)), transparent 72%);
+  animation: card-breathe 5s ease-in-out infinite;
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--light, var(--lamp));
+}
+
+@keyframes card-breathe {
+  0%, 100% { box-shadow: 0 0 14px 0 var(--light-glow-soft, rgba(240, 182, 92, 0.12)); }
+  50% { box-shadow: 0 0 24px 4px var(--light-glow-soft, rgba(240, 182, 92, 0.22)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card { animation: none; }
+}
+
+.pc-lamp {
+  --light: var(--lamp);
+  --light-glow: rgba(240, 182, 92, 0.35);
+  --light-glow-soft: rgba(240, 182, 92, 0.14);
+  --dot-glow-a: rgba(240, 182, 92, 0.7);
+  --dot-glow-b: rgba(240, 182, 92, 0.95);
+}
+
+.pc-moon {
+  --light: var(--moon);
+  --light-glow: rgba(201, 191, 232, 0.35);
+  --light-glow-soft: rgba(201, 191, 232, 0.14);
+  --dot-glow-a: rgba(201, 191, 232, 0.7);
+  --dot-glow-b: rgba(201, 191, 232, 0.95);
+}
+
+.pc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--light, var(--lamp));
+  animation: pc-dot-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes pc-dot-breathe {
+  0%, 100% { opacity: .75; box-shadow: 0 0 8px 1px var(--dot-glow-a, rgba(240, 182, 92, 0.7)); }
+  50% { opacity: 1; box-shadow: 0 0 12px 3px var(--dot-glow-b, rgba(240, 182, 92, 0.95)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-dot { animation: none; opacity: .9; }
+}
+
+.pc-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .5px;
+  color: var(--light, var(--lamp));
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--light-glow, rgba(240, 182, 92, 0.4));
+}
+
+.project-card h3 {
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--paper);
+  margin-bottom: 6px;
+  transition: color .2s ease;
+}
+
+.project-card:hover h3 {
+  color: var(--light, var(--lamp));
+}
+
+.pc-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .5px;
+  color: var(--mist-dim);
+  margin-bottom: 12px;
+}
+
+.project-card p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--mist);
+  margin-bottom: 16px;
+}
+
+.pc-status {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: .5px;
+  color: var(--light, var(--lamp));
+}
+
+@media (max-width: 640px) {
+  .project-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
    委託頁（琥珀色系）— 狀態列、方案星、流程、FAQ
 ============================================ */
 .commission-status {
