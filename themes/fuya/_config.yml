@@ -23,7 +23,7 @@ nav:
   - key: gacha
     name: 轉蛋
     slug: gacha
-    desc: 蘊含了驚喜的文字
+    desc: 蘊含了驚喜的故事
   - key: comm
     name: 委託
     slug: commission
@@ -32,7 +32,7 @@ nav:
   - key: misc
     name: 雜談
     slug: misc
-    desc: 隨手寫下的文字
+    desc: 隨手寫下的文字們
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
