@@ -12,17 +12,59 @@
         <%= page.title %>
       </h1>
 
-      <% if (page.status) { %>
+      <%
+        // 企劃分類的狀態徽章只在勾選「是連載作品」時顯示；
+        // 委託等其他分類的狀態沒有 is_series 這個概念，維持原本行為（有填就顯示）。
+        var catName = (page.categories && page.categories.length) ? page.categories.data[0].name : '';
+        var showStatusBadge = page.status && (catName !== '企劃' || page.is_series);
+      %>
+      <% if (showStatusBadge) { %>
         <span class="star-badge">
           <%= page.status %>
         </span>
         <% } %>
 
-          <div class="post-content">
-            <%- page.content %>
+          <% if (page.notices && page.notices.length) { %>
+            <div class="post-notices">
+              <% page.notices.forEach(function(n){ %>
+                <% if (n.text) { %>
+                  <p>※<%= n.text %></p>
+                <% } %>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <% if (page.links && page.links.length) { %>
+            <div class="post-links">
+              <% page.links.forEach(function(l){ %>
+                <% if (l.url) { %>
+                  <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
+                <% } %>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <div class="post-content-wrap">
+            <input type="checkbox" id="post-expand" class="expand-toggle">
+            <div class="post-content" id="post-content-body">
+              <%- page.content %>
+            </div>
+            <label class="expand-fade" for="post-expand" id="post-expand-fade">
+              <span class="expand-btn">展開全文 ↓</span>
+            </label>
           </div>
 
           <a class="back-link" href="<%- url_for('/') %>">← 回到房間</a>
     </div>
+
+    <script>
+      (function () {
+        var body = document.getElementById('post-content-body');
+        var fade = document.getElementById('post-expand-fade');
+        if (body && fade && body.scrollHeight <= body.clientHeight + 20) {
+          fade.style.display = 'none';
+        }
+      })();
+    </script>
 
     <%- partial('partial/footer') %>

@@ -582,6 +582,96 @@
 }
 
 /* ============================================
+   單篇文章 — 提醒標籤 / 相關連結 / 展開全文
+============================================ */
+.post-notices {
+  margin: 22px 0;
+  padding: 16px 20px;
+  border-left: 2px solid rgba(240, 182, 92, 0.35);
+  background: rgba(240, 182, 92, 0.05);
+}
+
+.post-notices p {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--mist-dim);
+  line-height: 2;
+}
+
+.post-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 26px;
+}
+
+.post-links a {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: .5px;
+  color: var(--moon);
+  padding: 6px 14px;
+  border: 1px solid rgba(201, 191, 232, 0.35);
+  border-radius: 20px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.post-links a:hover {
+  background: rgba(201, 191, 232, 0.12);
+  color: var(--paper);
+}
+
+/* 展開全文：預設截斷，展開後移除高度限制 */
+.post-content-wrap {
+  position: relative;
+}
+
+.expand-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.post-content-wrap .post-content {
+  max-height: 480px;
+  overflow: hidden;
+}
+
+.expand-toggle:checked~.post-content {
+  max-height: none;
+}
+
+.expand-fade {
+  display: flex;
+  justify-content: center;
+  margin-top: -90px;
+  padding-top: 90px;
+  background: linear-gradient(to bottom, transparent, var(--night-deep) 68%);
+  cursor: pointer;
+}
+
+.expand-toggle:checked~.expand-fade {
+  display: none;
+}
+
+.expand-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--lamp);
+  padding: 8px 22px;
+  border: 1px solid rgba(240, 182, 92, 0.35);
+  border-radius: 20px;
+  margin-bottom: 24px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.expand-fade:hover .expand-btn {
+  background: rgba(240, 182, 92, 0.1);
+  color: var(--paper);
+}
+
+/* ============================================
    雜談頁（霧灰色系）— 按月分組，拿掉光暈只留霧色
 ============================================ */
 .misc-month-label {

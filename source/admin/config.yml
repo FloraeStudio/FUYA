@@ -17,6 +17,8 @@ collections:
     folder: source/_posts/projects
     create: true
     slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}{{fields.is_series ? "｜" + fields.status : ""}}'
+    sortableFields: ['title', 'date', 'is_series']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
@@ -33,6 +35,22 @@ collections:
         options: [連載中, 已完結, 暫停]
         hint: 只有上面勾選為連載作品時才需要填寫。
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        summary: '{{fields.text}}'
+        field: { label: 標籤, name: text, widget: string }
+        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如轉蛋台網址、企劃說明文件連結。留空則不顯示這一區。
       - { label: 封面圖, name: cover, widget: image, required: false }
       - { label: 內文, name: body, widget: markdown }
 
@@ -59,11 +77,29 @@ collections:
     folder: source/_posts/gacha
     create: true
     slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [轉蛋] }
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        summary: '{{fields.text}}'
+        field: { label: 標籤, name: text, widget: string }
+        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如轉蛋台網址。留空則不顯示這一區。
       - { label: 封面圖, name: cover, widget: image, required: false }
       - { label: 內文, name: body, widget: markdown }
 
@@ -73,6 +109,8 @@ collections:
     folder: source/_posts/commission
     create: true
     slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}｜{{fields.status}}'
+    sortableFields: ['title', 'date', 'status']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
@@ -83,6 +121,22 @@ collections:
         required: false
         options: [開放中, 已額滿, 暫停接單]
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        summary: '{{fields.text}}'
+        field: { label: 標籤, name: text, widget: string }
+        hint: 每則一行，例如注意事項、雷區提醒。顯示時會自動加上「※」。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如委託單網址、參考範例連結。留空則不顯示這一區。
       - { label: 內文, name: body, widget: markdown }
 
   - name: misc
@@ -91,9 +145,27 @@ collections:
     folder: source/_posts/misc
     create: true
     slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [雜談] }
       - { label: 摘要, name: description, widget: text, required: false }
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        summary: '{{fields.text}}'
+        field: { label: 標籤, name: text, widget: string }
+        hint: 每則一行。顯示時會自動加上「※」。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 留空則不顯示這一區。
       - { label: 內文, name: body, widget: markdown }
