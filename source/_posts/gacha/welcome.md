@@ -5,7 +5,9 @@ categories:
   - 轉蛋
 description: ""
 tags:
-  - 夢向，轉蛋，BG
+  - 夢向
+  - 轉蛋
+  - BG
 notices:
   - 夢向BG
   - 文字轉蛋
