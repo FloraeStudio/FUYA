@@ -1,7 +1,7 @@
 <%
   var sorted = page.posts.sort('-date');
   var latest = sorted.length ? sorted.first() : null;
-  var status = (latest && latest.status) || '洽詢中';
+  var status = (latest && latest.status) || '工作室修整中';
   var plans = theme.commission_plans || [];
   var flow = theme.commission_flow || [];
   var faq = theme.commission_faq || [];

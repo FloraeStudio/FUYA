@@ -151,10 +151,10 @@ collections:
         widget: select
         required: false
         options:
-          - { label: 驚喜包代寫, value: surprise }
-          - { label: 小品, value: short }
-          - { label: 短篇, value: medium }
-          - { label: 長文, value: long }
+          - { label: 驚喜包, value: surprise }
+          - { label: 短篇小品, value: short }
+          - { label: 非商業委託, value: medium }
+          - { label: 長篇, value: long }
         hint: 這篇成品是哪個方案的委託，會顯示為小標籤。不確定或不想顯示就留空。
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
