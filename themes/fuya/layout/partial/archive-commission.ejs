@@ -2,6 +2,11 @@
   status=(site.data.commission && site.data.commission.accepting_status) || '工作室修整中' ; var plans=theme.commission_plans
   || []; var flow=theme.commission_flow || []; var faq=theme.commission_faq || []; %>
 
+  <div class="commission-status" style="margin-top:56px;">
+    <span class="dot"></span>
+    目前狀態：<%= status %>
+  </div>
+
   <div class="section-title" style="margin-top:20px;">作品 / WORKS</div>
   <div class="diary" style="margin-top:20px;">
     <% sorted.each(function(post){ %>
@@ -26,11 +31,6 @@
         <% if (sorted.length===0) { %>
           <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
           <% } %>
-  </div>
-
-  <div class="commission-status" style="margin-top:56px;">
-    <span class="dot"></span>
-    目前狀態：<%= status %>
   </div>
 
   <% if (plans.length) { %>
