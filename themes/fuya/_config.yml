@@ -31,7 +31,7 @@ nav:
   - key: misc
     name: 雜談
     slug: misc
-    desc: 隨手寫下的文字們
+    desc: 隨手寫下的文字
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
