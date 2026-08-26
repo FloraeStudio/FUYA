@@ -106,10 +106,11 @@ project_groups:
     badge: 修整中
     intro: 十二段情人節，十二種心動的樣子。
     status: ''
+    visual: calendar-scatter
   - key: holidays
     name: 冷門節日企劃
     theme: moon
     badge: 籌備中
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: 尚未開張，敬請期待。
-    visual: calendar-scatter
+    visual: firefly-calendar

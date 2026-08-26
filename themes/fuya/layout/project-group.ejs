@@ -13,8 +13,6 @@
   <%- partial('partial/header') %>
 
     <div class="archive-page <%= themeClass %>">
-      <a class="pg-back" href="<%- url_for('/projects/') %>">← 回到企劃</a>
-
       <div class="pg-head">
         <span class="pc-dot"></span>
         <div class="section-title" style="margin:0;"><%= group.name || page.title %></div>
@@ -23,11 +21,22 @@
 
       <% if (group.visual === 'calendar-scatter') { %>
         <div class="calendar-scatter" aria-hidden="true">
+          <svg class="cs-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline points="7,65 15,30 25,50 32,20 42,38 50,15 58,45 67,25 75,55 82,30 88,65 93,40" />
+          </svg>
           <% for (var m = 1; m <= 12; m++) { %>
             <div class="cs-month <%= litMonths[m] ? 'lit' : '' %>">
               <span class="cs-tick"></span>
               <span class="cs-label"><%= ('0' + m).slice(-2) %></span>
             </div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <% if (group.visual === 'firefly-calendar') { %>
+        <div class="firefly-calendar" aria-hidden="true">
+          <% for (var m = 1; m <= 12; m++) { %>
+            <span class="ff-dot <%= litMonths[m] ? 'lit' : '' %>" style="animation-delay: <%= Math.round((m % 5) * 0.6 * 10) / 10 %>s;"></span>
           <% } %>
         </div>
       <% } %>
@@ -58,6 +67,8 @@
           <p style="color:var(--mist-dim); font-size:13px; text-align:center;">故事，未完待續。</p>
         <% } %>
       </div>
+
+      <a class="back-link" href="<%- url_for('/projects/') %>">← 回到企劃</a>
     </div>
 
   <%- partial('partial/footer') %>
