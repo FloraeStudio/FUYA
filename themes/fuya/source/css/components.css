@@ -378,6 +378,7 @@
 ============================================ */
 .commission-status {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   gap: 9px;
   margin-top: 18px;
