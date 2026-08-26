@@ -84,6 +84,19 @@ collections:
             required: false
             hint: 顯示在介紹文字下方的一小行，可以做為近況小狀態用。留空就不顯示這一行。
 
+  - name: commission_settings
+    label: 委託狀態
+    files:
+      - name: status
+        label: 目前接單狀態
+        file: source/_data/commission.yml
+        fields:
+          - label: 接單狀態
+            name: accepting_status
+            widget: select
+            options: [開放中, 已額滿, 暫停接單]
+            hint: 顯示在委託頁最上方的「目前狀態」，跟下面貼的委託成品文章無關，獨立控制。
+
   - name: gacha
     label: 轉蛋
     label_singular: 一則轉蛋
@@ -123,21 +136,26 @@ collections:
 
   - name: commission
     label: 委託
-    label_singular: 一則委託公告
+    label_singular: 一篇委託成品
     folder: source/_posts/commission
     create: true
     slug: '{{slug}}'
-    summary: '{{title}}｜{{fields.date}}｜{{fields.status}}'
-    sortableFields: ['title', 'date', 'status']
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
       - { label: 分類, name: categories, widget: hidden, default: [委託] }
-      - label: 狀態
-        name: status
+      - label: 方案類別
+        name: plan_tier
         widget: select
         required: false
-        options: [開放中, 已額滿, 暫停接單]
+        options:
+          - { label: 驚喜包代寫, value: surprise }
+          - { label: 小品, value: short }
+          - { label: 短篇, value: medium }
+          - { label: 長文, value: long }
+        hint: 這篇成品是哪個方案的委託，會顯示為小標籤。不確定或不想顯示就留空。
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
         name: tags
