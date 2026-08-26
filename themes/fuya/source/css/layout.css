@@ -176,6 +176,17 @@
   margin-bottom: 1.4em;
 }
 
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--paper);
+  line-height: 1.9;
+  margin: 1.6em 0 0.6em;
+}
+
 .post-content img {
   max-width: 100%;
   border-radius: 6px;
