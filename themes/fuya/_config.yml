@@ -18,8 +18,7 @@ nav:
   - key: proj
     name: 企劃
     slug: projects
-    desc: 故事正在發生
-    badge: 規劃中
+    desc: 正在發生的故事
   - key: gacha
     name: 轉蛋
     slug: gacha
