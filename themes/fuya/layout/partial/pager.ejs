@@ -1,0 +1,53 @@
+<%
+  // 用法：partial 呼叫時傳入 pager（分頁物件）跟 light（'moon' 或 'lamp'）兩個參數
+  // pager: Hexo 分頁物件（category_generator per_page > 0 時，page 本身就帶有 total/current/prev/next/base）
+  // light: 'moon' 給轉蛋頁用；不傳或傳其他值一律當作 'lamp'（企劃、委託、雜談共用）
+  var pager = locals.pager;
+  var lightClass = (locals.light === 'moon') ? 'pc-moon' : 'pc-lamp';
+%>
+<% if (pager && pager.total > 1) { %>
+  <%
+    var total = pager.total;
+    var current = pager.current;
+    var pdir = config.pagination_dir || 'page';
+
+    function pageUrl(i) {
+      return i === 1 ? pager.base : pager.base + pdir + '/' + i + '/';
+    }
+
+    // 頭尾各留一個、目前頁左右各留一個，中間跳號的地方收成一個「···」
+    var nodes = [];
+    for (var i = 1; i <= total; i++) {
+      if (i === 1 || i === total || Math.abs(i - current) <= 1) {
+        nodes.push(i);
+      } else if (nodes[nodes.length - 1] !== '...') {
+        nodes.push('...');
+      }
+    }
+  %>
+  <nav class="star-pager <%= lightClass %>" aria-label="分頁">
+    <% if (pager.prev) { %>
+      <a class="sp-arrow" href="<%- url_for(pageUrl(pager.prev)) %>">← 上一頁</a>
+    <% } else { %>
+      <span class="sp-arrow is-disabled">← 上一頁</span>
+    <% } %>
+
+    <div class="sp-track">
+      <% nodes.forEach(function(n){ %>
+        <% if (n === '...') { %>
+          <span class="sp-node sp-ellipsis">···</span>
+        <% } else if (n === current) { %>
+          <span class="sp-node sp-current" aria-current="page"><%= n %></span>
+        <% } else { %>
+          <a class="sp-node" href="<%- url_for(pageUrl(n)) %>"><%= n %></a>
+        <% } %>
+      <% }) %>
+    </div>
+
+    <% if (pager.next) { %>
+      <a class="sp-arrow" href="<%- url_for(pageUrl(pager.next)) %>">下一頁 →</a>
+    <% } else { %>
+      <span class="sp-arrow is-disabled">下一頁 →</span>
+    <% } %>
+  </nav>
+<% } %>

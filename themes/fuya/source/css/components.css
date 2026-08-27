@@ -1027,3 +1027,100 @@
 @media (max-width: 480px) {
   .firefly-calendar { height: 120px; margin: 36px auto 18px; }
 }
+
+/* ============================================
+   星軌分頁 / STAR-TRAIL PAGINATION
+   沿用 .pc-dot 的呼吸動畫、.diary-item 的虛線語彙、
+   .pc-lamp / .pc-moon 的顏色開關機制
+============================================ */
+.star-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 56px;
+  flex-wrap: wrap;
+}
+
+.sp-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.sp-track::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 50%;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(169,171,198,0.28) 0, rgba(169,171,198,0.28) 4px, transparent 4px, transparent 10px);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.sp-node {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist-dim);
+  background: var(--night-deep);
+  border-radius: 50%;
+  transition: color .2s ease;
+}
+
+a.sp-node:hover {
+  color: var(--paper);
+}
+
+.sp-node.sp-current {
+  color: var(--night-deep);
+  background: var(--light, var(--lamp));
+  font-weight: 600;
+  animation: pc-dot-breathe 2.6s ease-in-out infinite;
+}
+
+.sp-node.sp-ellipsis {
+  color: var(--mist-dim);
+  cursor: default;
+  letter-spacing: -1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-node.sp-current { animation: none; }
+}
+
+.sp-arrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--mist-dim);
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+
+a.sp-arrow:hover {
+  color: var(--light, var(--lamp));
+}
+
+.sp-arrow.is-disabled {
+  color: rgba(110,112,146,0.3);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .star-pager { gap: 12px; }
+  .sp-track { gap: 14px; }
+  .sp-node { width: 22px; height: 22px; font-size: 10.5px; }
+  .sp-arrow { font-size: 11px; }
+}

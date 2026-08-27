@@ -33,57 +33,63 @@
           <% } %>
   </div>
 
-  <% if (plans.length) { %>
-    <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
-    <div class="plan-track">
-      <% plans.forEach(function(p){ %>
-        <div class="plan-point" data-tier="<%= p.key %>">
-          <span class="dot"></span>
-          <h4>
-            <%= p.name %>
-          </h4>
-          <div class="plan-range">
-            <%= p.range %>
-          </div>
-          <div class="plan-price">
-            <%= p.price %>
-          </div>
-          <div class="plan-note">
-            <%= p.note %>
-          </div>
-        </div>
-        <% }) %>
-    </div>
-    <% } %>
+  </div>
 
-      <% if (flow.length) { %>
-        <div class="section-title" style="margin-top:60px;">流程 / HOW IT WORKS</div>
-        <div style="margin-top:20px;">
-          <% flow.forEach(function(step, i){ %>
-            <div class="flow-item">
-              <div class="flow-index">
-                <%= ('0' + (i + 1)).slice(-2) %>
+  <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
+
+    <% if (plans.length) { %>
+
+      <% if (plans.length) { %>
+        <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
+        <div class="plan-track">
+          <% plans.forEach(function(p){ %>
+            <div class="plan-point" data-tier="<%= p.key %>">
+              <span class="dot"></span>
+              <h4>
+                <%= p.name %>
+              </h4>
+              <div class="plan-range">
+                <%= p.range %>
               </div>
-              <p>
-                <%= step %>
-              </p>
+              <div class="plan-price">
+                <%= p.price %>
+              </div>
+              <div class="plan-note">
+                <%= p.note %>
+              </div>
             </div>
             <% }) %>
         </div>
         <% } %>
 
-          <% if (faq.length) { %>
-            <div class="section-title" style="margin-top:60px;">常見問題 / FAQ</div>
+          <% if (flow.length) { %>
+            <div class="section-title" style="margin-top:60px;">流程 / HOW IT WORKS</div>
             <div style="margin-top:20px;">
-              <% faq.forEach(function(item){ %>
-                <div class="faq-item">
-                  <h4>
-                    <%= item.q %>
-                  </h4>
+              <% flow.forEach(function(step, i){ %>
+                <div class="flow-item">
+                  <div class="flow-index">
+                    <%= ('0' + (i + 1)).slice(-2) %>
+                  </div>
                   <p>
-                    <%= item.a %>
+                    <%= step %>
                   </p>
                 </div>
                 <% }) %>
             </div>
             <% } %>
+
+              <% if (faq.length) { %>
+                <div class="section-title" style="margin-top:60px;">常見問題 / FAQ</div>
+                <div style="margin-top:20px;">
+                  <% faq.forEach(function(item){ %>
+                    <div class="faq-item">
+                      <h4>
+                        <%= item.q %>
+                      </h4>
+                      <p>
+                        <%= item.a %>
+                      </p>
+                    </div>
+                    <% }) %>
+                </div>
+                <% } %>

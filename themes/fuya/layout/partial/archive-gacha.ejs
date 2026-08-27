@@ -1,34 +1,41 @@
-<%
-  var sorted = page.posts.sort('-date');
-  var intro = theme.gacha_intro;
-  var ctaUrl = theme.gacha_cta_url;
-  var ctaLabel = theme.gacha_cta_label || '想丟提示給芙婭 →';
-%>
+<% var sorted=page.posts.sort('-date'); var intro=theme.gacha_intro; var ctaUrl=theme.gacha_cta_url; var
+  ctaLabel=theme.gacha_cta_label || '想丟提示給芙婭 →' ; %>
 
-<% if (intro) { %>
-<p class="archive-intro"><%= intro %></p>
-<% } %>
+  <% if (intro) { %>
+    <p class="archive-intro">
+      <%= intro %>
+    </p>
+    <% } %>
 
-<% if (ctaUrl) { %>
-<a class="gacha-cta" href="<%= ctaUrl %>" target="_blank" rel="noopener"><%= ctaLabel %></a>
-<% } %>
-
-<div class="section-title" style="margin-top:60px;">那些蘊含了驚喜的故事 / SURPRISES</div>
-<div class="diary" style="margin-top:20px;">
-  <% sorted.each(function(post){ %>
-    <a class="diary-item" href="<%- url_for(post.path) %>">
-      <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
-      <div class="diary-body">
-        <h3><%= post.title %></h3>
-        <% if (post.description) { %>
-          <p><%= post.description %></p>
-        <% } else { %>
-          <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+      <% if (ctaUrl) { %>
+        <a class="gacha-cta" href="<%= ctaUrl %>" target="_blank" rel="noopener">
+          <%= ctaLabel %>
+        </a>
         <% } %>
-      </div>
-    </a>
-  <% }) %>
-  <% if (sorted.length === 0) { %>
-    <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
-  <% } %>
-</div>
+
+          <div class="section-title" style="margin-top:60px;">那些蘊含了驚喜的故事 / SURPRISES</div>
+          <div class="diary" style="margin-top:20px;">
+            <% sorted.each(function(post){ %>
+              <a class="diary-item" href="<%- url_for(post.path) %>">
+                <div class="diary-date">
+                  <%= date(post.date, 'MM.DD' ) %>
+                </div>
+                <div class="diary-body">
+                  <h3>
+                    <%= post.title %>
+                  </h3>
+                  <% if (post.description) { %>
+                    <p>
+                      <%= post.description %>
+                    </p>
+                    <% } else { %>
+                      <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+                      <% } %>
+                </div>
+              </a>
+              <% }) %>
+                <% if (sorted.length===0) { %>
+                  <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
+                  <% } %>
+          </div>
+          <%- partial('partial/pager', { pager: page, light: 'moon' }) %>
