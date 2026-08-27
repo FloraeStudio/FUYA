@@ -17,7 +17,7 @@ collections:
     folder: source/_posts/projects
     create: true
     slug: '{{slug}}'
-    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}{{fields.is_series ? "｜" + fields.status : ""}}'
+    summary: '{{title}}｜{{fields.date}}'
     sortableFields: ['title', 'date', 'is_series', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
@@ -106,7 +106,7 @@ collections:
     folder: source/_posts/gacha
     create: true
     slug: '{{slug}}'
-    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    summary: '{{title}}｜{{fields.date}}'
     sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
@@ -146,7 +146,7 @@ collections:
     folder: source/_posts/commission
     create: true
     slug: '{{slug}}'
-    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    summary: '{{title}}｜{{fields.date}}'
     sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
@@ -195,7 +195,7 @@ collections:
     folder: source/_posts/misc
     create: true
     slug: '{{slug}}'
-    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    summary: '{{title}}｜{{fields.date}}'
     sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
