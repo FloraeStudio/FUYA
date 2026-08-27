@@ -285,6 +285,33 @@
   letter-spacing: 1px;
 }
 
+/* 置頂標記 — 用於分類列表 / 企劃系列內頁 / 首頁「最近寫的字」 */
+.pin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .5px;
+  color: var(--lamp);
+  margin-bottom: 6px;
+}
+
+.pin-badge .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lamp);
+  box-shadow: 0 0 8px 1px rgba(240, 182, 92, 0.7);
+  animation: status-breathe 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin-badge .dot {
+    animation: none;
+  }
+}
+
 .diary-body h3 {
   color: var(--paper);
   font-size: 17px;

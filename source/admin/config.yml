@@ -17,11 +17,16 @@ collections:
     folder: source/_posts/projects
     create: true
     slug: '{{slug}}'
-    summary: '{{title}}｜{{fields.date}}{{fields.is_series ? "｜" + fields.status : ""}}'
-    sortableFields: ['title', 'date', 'is_series']
+    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}{{fields.is_series ? "｜" + fields.status : ""}}'
+    sortableFields: ['title', 'date', 'is_series', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「企劃系列內頁列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
       - { label: 分類, name: categories, widget: hidden, default: [企劃] }
       - label: 是否為連載作品（同人／二創）
         name: is_series
@@ -52,9 +57,7 @@ collections:
         name: notices
         widget: list
         required: false
-        summary: '{{fields.text}}'
-        field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+        hint: 每則一行，直接打字後按「新增」即可，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -103,11 +106,16 @@ collections:
     folder: source/_posts/gacha
     create: true
     slug: '{{slug}}'
-    summary: '{{title}}｜{{fields.date}}'
-    sortableFields: ['title', 'date']
+    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「轉蛋列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
       - { label: 分類, name: categories, widget: hidden, default: [轉蛋] }
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
@@ -119,9 +127,7 @@ collections:
         name: notices
         widget: list
         required: false
-        summary: '{{fields.text}}'
-        field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+        hint: 每則一行，直接打字後按「新增」即可，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -140,11 +146,16 @@ collections:
     folder: source/_posts/commission
     create: true
     slug: '{{slug}}'
-    summary: '{{title}}｜{{fields.date}}'
-    sortableFields: ['title', 'date']
+    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「委託成品列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
       - { label: 分類, name: categories, widget: hidden, default: [委託] }
       - label: 方案類別
         name: plan_tier
@@ -166,9 +177,7 @@ collections:
         name: notices
         widget: list
         required: false
-        summary: '{{fields.text}}'
-        field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行，例如注意事項、雷區提醒。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+        hint: 每則一行，直接打字後按「新增」即可，例如注意事項、雷區提醒。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list
@@ -186,11 +195,16 @@ collections:
     folder: source/_posts/misc
     create: true
     slug: '{{slug}}'
-    summary: '{{title}}｜{{fields.date}}'
-    sortableFields: ['title', 'date']
+    summary: '{{fields.pin ? "📌 " : ""}}{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
     fields:
       - { label: 標題, name: title, widget: string }
       - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「雜談列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
       - { label: 分類, name: categories, widget: hidden, default: [雜談] }
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
@@ -202,9 +216,7 @@ collections:
         name: notices
         widget: list
         required: false
-        summary: '{{fields.text}}'
-        field: { label: 標籤, name: text, widget: string }
-        hint: 每則一行。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+        hint: 每則一行，直接打字後按「新增」即可。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
       - label: 相關連結
         name: links
         widget: list

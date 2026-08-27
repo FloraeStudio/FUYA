@@ -1,13 +1,16 @@
 <%
   var group = theme.project_groups.find(function(g){ return g.key === page.group_key; }) || {};
   var themeClass = group.theme === 'moon' ? 'pc-moon' : 'pc-lamp';
+  // 置頂文章排在最前面（彼此之間仍依日期新到舊），其餘文章維持原本的日期排序。
   var posts = site.posts.filter(function(p){
     return p.categories && p.categories.map(function(c){ return c.name; }).indexOf('企劃') !== -1
       && p.project_group === page.group_key;
-  }).sort('-date');
+  }).sort('-date').toArray().sort(function(a, b){
+    return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
+  });
 
   var litMonths = {};
-  posts.each(function(post){ litMonths[post.date.format('M')] = true; });
+  posts.forEach(function(post){ litMonths[post.date.format('M')] = true; });
 %>
 <%- partial('partial/head') %>
   <%- partial('partial/header') %>
@@ -49,10 +52,11 @@
       <% } %>
 
       <div class="diary" style="margin-top:34px;">
-        <% posts.each(function(post){ %>
+        <% posts.forEach(function(post){ %>
           <a class="diary-item" href="<%- url_for(post.path) %>">
             <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
             <div class="diary-body">
+              <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
               <% if (post.is_series && post.status) { %><span class="tag"><%= post.status %></span><% } %>
               <h3><%= post.title %></h3>
               <% if (post.description) { %>

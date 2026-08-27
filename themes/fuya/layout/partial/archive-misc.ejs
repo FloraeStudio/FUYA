@@ -1,4 +1,9 @@
-<% var sorted=page.posts.sort('-date'); var groups=[]; var lastKey=null; sorted.each(function(post){ var
+<%
+  // 置頂文章排在最前面（仍依各自日期顯示所屬月份），其餘文章維持原本依月份分組的日期排序。
+  var sorted = page.posts.sort('-date').toArray().sort(function(a, b){
+    return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
+  });
+  var groups=[]; var lastKey=null; sorted.forEach(function(post){ var
   key=date(post.date, 'YYYY.MM' ); if (key !==lastKey) { groups.push({ key: key, posts: [] }); lastKey=key; }
   groups[groups.length - 1].posts.push(post); }); %>
 
@@ -16,6 +21,7 @@
                 <%= date(post.date, 'MM.DD' ) %>
               </div>
               <div>
+                <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
                 <h3>
                   <%= post.title %>
                 </h3>

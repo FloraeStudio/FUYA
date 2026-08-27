@@ -47,8 +47,10 @@ per_page: 0        # 首頁自己控制數量，不使用 Hexo 內建分頁
 pagination_dir: page
 
 # 分類頁（企劃/轉蛋/委託/雜談）各自分頁，不受上面 per_page: 0 影響
+# order_by 先看 pin（置頂）再看 date，讓置頂文章一定落在第一頁最前面，不會被分頁擠到後面
 category_generator:
   per_page: 8
+  order_by: '-pin -date'
 
 # Markdown 渲染設定（hexo-renderer-marked）
 # breaks: true 讓「單一換行」也會被當成換行處理，
