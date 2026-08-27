@@ -35,11 +35,20 @@
     <div class="sp-track">
       <% nodes.forEach(function(n){ %>
         <% if (n === '...') { %>
-          <span class="sp-node sp-ellipsis">···</span>
+          <span class="sp-node sp-ellipsis">
+            <span class="sp-dot"></span>
+            <span class="sp-num" aria-hidden="true">···</span>
+          </span>
         <% } else if (n === current) { %>
-          <span class="sp-node sp-current" aria-current="page"><%= n %></span>
+          <span class="sp-node sp-current" aria-current="page">
+            <span class="sp-dot"></span>
+            <span class="sp-num"><%= n %></span>
+          </span>
         <% } else { %>
-          <a class="sp-node" href="<%- url_for(pageUrl(n)) %>"><%= n %></a>
+          <a class="sp-node" href="<%- url_for(pageUrl(n)) %>">
+            <span class="sp-dot"></span>
+            <span class="sp-num"><%= n %></span>
+          </a>
         <% } %>
       <% }) %>
     </div>

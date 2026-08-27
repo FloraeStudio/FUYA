@@ -1037,7 +1037,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 22px;
+  gap: 26px;
   margin-top: 56px;
   flex-wrap: wrap;
 }
@@ -1045,37 +1045,29 @@
 .sp-track {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 22px;
+  align-items: flex-start;
+  gap: 26px;
 }
 
 .sp-track::before {
   content: '';
   position: absolute;
-  left: 4px;
-  right: 4px;
-  top: 50%;
+  left: 3px;
+  right: 3px;
+  top: 3px;
   height: 1px;
-  background-image: linear-gradient(to right, rgba(169,171,198,0.28) 0, rgba(169,171,198,0.28) 4px, transparent 4px, transparent 10px);
-  background-size: 10px 1px;
-  background-repeat: repeat-x;
-  transform: translateY(-50%);
+  background: rgba(169, 171, 198, 0.2);
   z-index: 0;
 }
 
 .sp-node {
   position: relative;
   z-index: 1;
-  width: 24px;
-  height: 24px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  gap: 8px;
   color: var(--mist-dim);
-  background: var(--night-deep);
-  border-radius: 50%;
   transition: color .2s ease;
 }
 
@@ -1083,21 +1075,48 @@ a.sp-node:hover {
   color: var(--paper);
 }
 
-.sp-node.sp-current {
-  color: var(--night-deep);
-  background: var(--light, var(--lamp));
-  font-weight: 600;
-  animation: pc-dot-breathe 2.6s ease-in-out infinite;
+.sp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(169, 171, 198, 0.4);
+  transition: background .2s ease, transform .2s ease;
 }
 
-.sp-node.sp-ellipsis {
-  color: var(--mist-dim);
-  cursor: default;
-  letter-spacing: -1px;
+a.sp-node:hover .sp-dot {
+  background: var(--mist);
+}
+
+.sp-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.sp-node.sp-current .sp-dot {
+  background: var(--light, var(--lamp));
+  transform: scale(1.3);
+  box-shadow:
+    0 0 5px 1.5px var(--dot-glow-a, rgba(240, 182, 92, 0.7)),
+    0 0 14px 4px var(--dot-glow-b, rgba(240, 182, 92, 0.28));
+  animation: twinkle-star 3.6s ease-in-out infinite;
+}
+
+.sp-node.sp-current .sp-num {
+  color: var(--light, var(--lamp));
+  font-weight: 600;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sp-node.sp-current { animation: none; }
+  .sp-node.sp-current .sp-dot { animation: none; }
+}
+
+.sp-node.sp-ellipsis {
+  cursor: default;
+}
+
+.sp-node.sp-ellipsis .sp-dot {
+  transform: scale(.55);
+  opacity: .6;
 }
 
 .sp-arrow {
@@ -1119,8 +1138,7 @@ a.sp-arrow:hover {
 }
 
 @media (max-width: 640px) {
-  .star-pager { gap: 12px; }
-  .sp-track { gap: 14px; }
-  .sp-node { width: 22px; height: 22px; font-size: 10.5px; }
+  .star-pager { gap: 14px; }
+  .sp-track { gap: 18px; }
   .sp-arrow { font-size: 11px; }
 }
