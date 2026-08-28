@@ -110,7 +110,7 @@ project_groups:
   - key: holidays
     name: 冷門節日企劃
     theme: moon
-    badge: 籌備中
+    badge: 進行中
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
-    status: 尚未開張，敬請期待。
+    status: ''
     visual: firefly-calendar
