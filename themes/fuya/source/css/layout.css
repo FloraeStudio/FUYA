@@ -219,25 +219,6 @@
   margin-bottom: 0;
 }
 
-/* 詩句／引詩段落 —— 整段只有斜體（*...*）時自動視為詩句：
-   縮排、字級略小、行距收緊，跟敘述文字自然拉出層次，不需額外標記 */
-.post-content p:has(> em:only-child) {
-  margin-bottom: 0.3em;
-  padding-left: 1.5em;
-  font-size: 14px;
-  line-height: 1.8;
-  color: var(--mist);
-  letter-spacing: 0.2px;
-}
-
-.post-content p:not(:has(> em:only-child)) + p:has(> em:only-child) {
-  margin-top: 1.6em;
-}
-
-.post-content p:has(> em:only-child) + p:not(:has(> em:only-child)) {
-  margin-top: 1.6em;
-}
-
 /* 大分段留白 —— 對應內文連續空 2 行以上（見 scripts/paragraph-gap.js），
    取代手動塞 <br><br><br>，高度固定、不會忽大忽小 */
 .post-content .scene-gap {
