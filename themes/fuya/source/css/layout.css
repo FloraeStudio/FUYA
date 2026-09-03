@@ -192,6 +192,33 @@
   border-radius: 6px;
 }
 
+/* 分隔線 —— 用漸層取代瀏覽器預設的灰色細線 */
+.post-content hr {
+  border: none;
+  height: 1px;
+  width: 120px;
+  margin: 3em auto;
+  background: linear-gradient(90deg, transparent, var(--mist-dim), transparent);
+}
+
+/* 引用 / 篇末祈禱、題辭等 —— 左側細線 + 斜體，取代瀏覽器預設的純內縮 */
+.post-content blockquote {
+  margin: 2em 0;
+  padding: 0.2em 0 0.2em 1.2em;
+  border-left: 2px solid var(--moon);
+  color: var(--mist-dim);
+  font-style: italic;
+  line-height: 1.9;
+}
+
+.post-content blockquote p {
+  margin-bottom: 0.6em;
+}
+
+.post-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 50px;

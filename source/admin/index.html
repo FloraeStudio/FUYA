@@ -59,5 +59,81 @@
 <body>
   <!-- 版本鎖定，之後要升級再手動改這行 -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+    /*
+      自訂編輯器按鈕（對應 _config.yml 已關閉 marked.breaks、
+      layout.css 已補上 hr／blockquote 樣式）：
+      - 小停頓／大停頓：插入固定數量的 <br>，停頓大小不再被 breaks 設定加倍，
+        點幾次都是你自己決定的份量。
+      - 引用／題辭：轉成 markdown 的 `>` 引用語法，對應網站上左側細線＋斜體的樣式。
+      - 分隔線：插入 `---`，對應網站上漸層淡出的分隔線樣式。
+
+      提醒：這幾個按鈕插入的內容跟你手動打字是完全等價的純文字，
+      按鈕只是省去手動輸入、避免手滑打錯數量；
+      重新打開文章時不一定會自動變回「可點擊的卡片」，
+      但插入的 <br>／>／--- 本身在網站上一定會照樣正確顯示。
+    */
+
+    // 小停頓：兩個 <br>，比一般換行稍大的停頓
+    CMS.registerEditorComponent({
+      id: 'pause-small',
+      label: '⏸ 小停頓',
+      fields: [],
+      pattern: /^<br><br>$/,
+      fromBlock: function () { return {}; },
+      toBlock: function () { return '<br><br>'; },
+      toPreview: function () { return '（小停頓）'; }
+    });
+
+    // 大停頓：三個 <br>，較大的戲劇性停頓
+    CMS.registerEditorComponent({
+      id: 'pause-big',
+      label: '⏸⏸ 大停頓',
+      fields: [],
+      pattern: /^<br><br><br>$/,
+      fromBlock: function () { return {}; },
+      toBlock: function () { return '<br><br><br>'; },
+      toPreview: function () { return '（大停頓）'; }
+    });
+
+    // 引用／題辭：多行文字，逐行加上 `> ` 變成 blockquote
+    CMS.registerEditorComponent({
+      id: 'quote-block',
+      label: '❝ 引用／題辭',
+      fields: [
+        { name: 'text', label: '引用內容（可多行）', widget: 'text' }
+      ],
+      pattern: /^((?:>\s?.*\n?)+)$/,
+      fromBlock: function (match) {
+        var text = match[1]
+          .split('\n')
+          .filter(function (line) { return line.length; })
+          .map(function (line) { return line.replace(/^>\s?/, ''); })
+          .join('\n');
+        return { text: text };
+      },
+      toBlock: function (obj) {
+        return (obj.text || '')
+          .split('\n')
+          .map(function (line) { return '> ' + line; })
+          .join('\n');
+      },
+      toPreview: function (obj) {
+        return '<blockquote>' + (obj.text || '').replace(/\n/g, '<br>') + '</blockquote>';
+      }
+    });
+
+    // 分隔線
+    CMS.registerEditorComponent({
+      id: 'divider',
+      label: '─ 分隔線',
+      fields: [],
+      pattern: /^---$/,
+      fromBlock: function () { return {}; },
+      toBlock: function () { return '---'; },
+      toPreview: function () { return '<hr>'; }
+    });
+  </script>
 </body>
 </html>
