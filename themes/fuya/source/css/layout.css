@@ -104,7 +104,7 @@
   line-height: 1.5;
 }
 
-.hero h1 em {
+.hero h3 em {
   font-style: normal;
   color: var(--lamp);
 }
