@@ -1,69 +1,229 @@
-# ------------------------------------------------
-# 芙婭・文字工作室 · Hexo 主設定
-# 文件: https://hexo.io/zh-tw/docs/configuration
-# ------------------------------------------------
+backend:
+  name: github
+  repo: FloraeStudio/FUYA   # 換成實際 repo 路徑
+  branch: main
+  base_url: https://fuya-cms-oauth.vercel.app
 
-title: 芙婭・文字工作室
-subtitle: FUYA'S WRITING STUDIO
-description: 文字工作室・個人創作誌
-author: 芙婭
-language: zh-TW
-timezone: Asia/Taipei
+media_folder: source/images/uploads
+public_folder: /images/uploads
 
-# 部署好之後改成你的正式網址（GitHub Pages 或自訂網域）
-url: https://floraestudio.github.io/FUYA
-permalink: ':category/:name/'
-category_dir: ''
+publish_mode: simple
+locale: zh_Hant
 
-# 目錄
-source_dir: source
-public_dir: public
+collections:
+  - name: projects
+    label: 企劃
+    label_singular: 一篇企劃
+    folder: source/_posts/projects
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'is_series', 'pin']
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「企劃系列內頁列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
+      - { label: 分類, name: categories, widget: hidden, default: [企劃] }
+      - label: 是否為連載作品（同人／二創）
+        name: is_series
+        widget: boolean
+        default: false
+        hint: 大部分單篇展示作品請維持「否」。只有連載中的同人／二創才勾選。
+      - label: 作品狀態
+        name: status
+        widget: select
+        required: false
+        options: [連載中, 已完結, 暫停]
+        hint: 只有上面勾選為連載作品時才需要填寫。
+      - label: 所屬企劃系列
+        name: project_group
+        widget: select
+        required: false
+        options:
+          - { label: 十二個情人節, value: valentines }
+          - { label: 冷門節日企劃, value: holidays }
+        hint: 這篇屬於哪個長期企劃就選哪個，之後會自動出現在對應的企劃內頁。單篇作品不屬於任何系列時留空即可。
+      - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開，例如：夢向BG, 教官, 全年齡。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        hint: 每則一行，直接打字後按「新增」即可，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如轉蛋台網址、企劃說明文件連結。留空則不顯示這一區。
+      - { label: 封面圖, name: cover, widget: image, required: false }
+      - { label: 內文, name: body, widget: markdown }
 
-# 文章相關
-new_post_name: :title.md
-default_layout: post
-titlecase: false
-external_link:
-  enable: true
-  field: site
-  exclude: ''
+  - name: site_settings
+    label: 首頁設定
+    files:
+      - name: homepage
+        label: 首頁小狀態
+        file: source/_data/site.yml
+        fields:
+          - label: 首頁介紹
+            name: homepage_intro
+            widget: text
+            hint: 簡單的介紹文字
+          - label: 近況小狀態
+            name: status_line
+            widget: string
+            required: false
+            hint: 顯示在介紹文字下方的一小行，可以做為近況小狀態用。留空就不顯示這一行。
 
-# 分類 & 標籤
-default_category: misc
-category_map:
-  企劃: projects
-  轉蛋: gacha
-  委託: commission
-  雜談: misc
-tag_map:
+  - name: commission_settings
+    label: 委託狀態
+    files:
+      - name: status
+        label: 目前接單狀態
+        file: source/_data/commission.yml
+        fields:
+          - label: 接單狀態
+            name: accepting_status
+            widget: select
+            options: [開放中, 已額滿, 暫停接單]
+            hint: 顯示在委託頁最上方的「目前狀態」，跟下面貼的委託成品文章無關，獨立控制。
 
-# 日期格式
-date_format: YYYY-MM-DD
-time_format: HH:mm:ss
-updated_option: 'mtime'
+  - name: gacha
+    label: 轉蛋
+    label_singular: 一則轉蛋
+    folder: source/_posts/gacha
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「轉蛋列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
+      - { label: 分類, name: categories, widget: hidden, default: [轉蛋] }
+      - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開，例如：夢向BG, 教官, 全年齡。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        hint: 每則一行，直接打字後按「新增」即可，例如「夢向BG」「角色姓名打碼」。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如轉蛋台網址。留空則不顯示這一區。
+      - { label: 封面圖, name: cover, widget: image, required: false }
+      - { label: 內文, name: body, widget: markdown }
 
-# 分頁
-per_page: 0        # 首頁自己控制數量，不使用 Hexo 內建分頁
-pagination_dir: page
+  - name: commission
+    label: 委託
+    label_singular: 一篇委託成品
+    folder: source/_posts/commission
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「委託成品列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
+      - { label: 分類, name: categories, widget: hidden, default: [委託] }
+      - label: 方案類別
+        name: plan_tier
+        widget: select
+        required: false
+        options:
+          - { label: 驚喜包, value: surprise }
+          - { label: 短篇小品, value: short }
+          - { label: 非商業委託, value: medium }
+          - { label: 長篇, value: long }
+        hint: 這篇成品是哪個方案的委託，會顯示為小標籤。不確定或不想顯示就留空。
+      - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        hint: 每則一行，直接打字後按「新增」即可，例如注意事項、雷區提醒。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 例如委託單網址、參考範例連結。留空則不顯示這一區。
+      - { label: 內文, name: body, widget: markdown }
 
-# 分類頁（企劃/轉蛋/委託/雜談）各自分頁，不受上面 per_page: 0 影響
-# order_by 先看 pin（置頂）再看 date，讓置頂文章一定落在第一頁最前面，不會被分頁擠到後面
-category_generator:
-  per_page: 8
-  order_by: '-pin -date'
-
-# Markdown 渲染設定（hexo-renderer-marked）
-# breaks: true 讓「單一換行」也會被當成換行處理，
-# 否則 markdown 預設規則是要空一行才分段，單純按一次 Enter 會被吃掉。
-marked:
-  breaks: false
-
-# 主題
-theme: fuya
-
-# Decap CMS 後台檔案不要被 Hexo 當成頁面處理，直接原樣複製
-skip_render:
-  - admin/**
-
-# 部署交給 GitHub Actions 處理，這裡不用 hexo-deployer
-deploy: {}
+  - name: misc
+    label: 雜談
+    label_singular: 一篇雜談
+    folder: source/_posts/misc
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}}｜{{fields.date}}'
+    sortableFields: ['title', 'date', 'pin']
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime }
+      - label: 📌 置頂
+        name: pin
+        widget: boolean
+        default: false
+        hint: 開啟後這篇會固定顯示在「雜談列表」與首頁「最近寫的字」的最上方，不受日期影響。用於重要公告或想長期曝光的作品，一般文章不需要開啟。
+      - { label: 分類, name: categories, widget: hidden, default: [雜談] }
+      - { label: 摘要, name: description, widget: text, required: false }
+      - label: 標籤 Hashtags
+        name: tags
+        widget: list
+        required: false
+        hint: 用逗號分開。每個標籤在文章頁會變成可點擊的 # 連結，點下去會列出所有貼過同標籤的文章。
+      - label: 提醒標籤
+        name: notices
+        widget: list
+        required: false
+        hint: 每則一行，直接打字後按「新增」即可。顯示時會自動加上「※」。這裡是給讀者的提醒文字，不是分類用的 hashtag，兩者不同。
+      - label: 相關連結
+        name: links
+        widget: list
+        required: false
+        summary: '{{fields.label}}'
+        fields:
+          - { label: 顯示文字, name: label, widget: string }
+          - { label: 網址, name: url, widget: string }
+        hint: 留空則不顯示這一區。
+      - { label: 內文, name: body, widget: markdown }
