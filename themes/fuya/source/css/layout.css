@@ -238,6 +238,12 @@
   margin-top: 1.6em;
 }
 
+/* 大分段留白 —— 對應內文連續空 2 行以上（見 scripts/paragraph-gap.js），
+   取代手動塞 <br><br><br>，高度固定、不會忽大忽小 */
+.post-content .scene-gap {
+  height: 2.2em;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 50px;
