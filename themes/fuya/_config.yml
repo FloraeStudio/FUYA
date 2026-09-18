@@ -115,8 +115,8 @@ project_groups:
     status: ''
     visual: firefly-calendar
   - key: object-gacha
-    name: 物件轉蛋
+    name: 拾光籤
     theme: moon
     badge: 進行中
-    intro: 有些物件離開了原本的主人，還留在原地。抽到的不是物件本身，是它還沒說完的那段。
+    intro: 物件、記憶、時光。
     status: ''
