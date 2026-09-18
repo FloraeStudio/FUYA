@@ -1,5 +1,5 @@
 ---
-title: 物件轉蛋
+title: 拾光籤
 layout: project-draw
 group_key: object-gacha
 ---
