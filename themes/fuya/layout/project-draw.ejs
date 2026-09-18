@@ -1,0 +1,217 @@
+<%
+  // 跟 project-group.ejs 完全一樣的資料邏輯：找出這個企劃的設定，
+  // 並過濾出分類為「企劃」且 project_group 對應的文章。
+  var group = theme.project_groups.find(function(g){ return g.key === page.group_key; }) || {};
+  var themeClass = group.theme === 'moon' ? 'pc-moon' : 'pc-lamp';
+  var posts = site.posts.filter(function(p){
+    return p.categories && p.categories.map(function(c){ return c.name; }).indexOf('企劃') !== -1
+      && p.project_group === page.group_key;
+  }).sort('-date').toArray().sort(function(a, b){
+    return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
+  });
+
+  var gacha = site.data['object-gacha'] || {};
+  var drawItems = gacha.items || [];
+%>
+<%- partial('partial/head') %>
+  <%- partial('partial/header') %>
+
+    <div class="archive-page <%= themeClass %>">
+      <div class="pg-head">
+        <span class="pc-dot"></span>
+        <div class="section-title" style="margin:0;"><%= group.name || page.title %></div>
+        <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } %>
+      </div>
+
+      <% if (group.intro) { %>
+        <p class="archive-intro" style="margin-top:14px;"><%= group.intro %></p>
+      <% } %>
+      <% if (group.status) { %>
+        <p class="pc-status" style="display:block; text-align:center; margin-top:6px;"><%= group.status %></p>
+      <% } %>
+
+      <!-- ===== 抽籤卡 ===== -->
+      <div class="draw-stage">
+        <div class="draw-card" id="draw-card">
+          <div class="draw-face draw-face-front">
+            <svg class="draw-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="24" cy="24" r="15" stroke="currentColor" stroke-width="1.2"/>
+              <circle cx="24" cy="24" r="2" fill="currentColor"/>
+            </svg>
+            <div class="draw-hint">尚未揭曉</div>
+          </div>
+          <div class="draw-face draw-face-back">
+            <div class="draw-code" id="draw-code">I</div>
+            <span class="draw-orientation" id="draw-orientation">正位</span>
+            <div class="draw-mood" id="draw-mood"></div>
+            <div class="draw-clue" id="draw-clue"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="draw-controls">
+        <button class="gacha-cta solid" id="draw-btn" type="button">抽籤</button>
+        <button class="gacha-cta" id="draw-copy-btn" type="button">複製籤文</button>
+      </div>
+      <p class="draw-pool-note" id="draw-pool-note"></p>
+
+      <% if (gacha.cta_note) { %><p class="archive-intro" style="margin-top:36px;"><%= gacha.cta_note %></p><% } %>
+      <% if (gacha.free_note) { %><p class="pc-status" style="display:block; text-align:center; margin-top:6px;"><%= gacha.free_note %></p><% } %>
+
+      <!-- ===== 這個企劃已經寫出來的故事 ===== -->
+      <% if (posts.length > 0) { %>
+        <div class="section-title">— 已經寫出的故事 —</div>
+      <% } %>
+      <div class="diary" style="margin-top:14px;">
+        <% posts.forEach(function(post){ %>
+          <a class="diary-item" href="<%- url_for(post.path) %>">
+            <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+            <div class="diary-body">
+              <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
+              <% if (post.is_series && post.status) { %><span class="tag"><%= post.status %></span><% } %>
+              <h3><%= post.title %></h3>
+              <% if (post.description) { %>
+                <p><%= post.description %></p>
+              <% } else { %>
+                <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+              <% } %>
+            </div>
+          </a>
+        <% }) %>
+        <% if (posts.length === 0) { %>
+          <p style="color:var(--mist-dim); font-size:13px; text-align:center;">故事，未完待續。</p>
+        <% } %>
+      </div>
+
+      <a class="back-link" href="<%- url_for('/projects/') %>">← 回到企劃</a>
+    </div>
+
+  <%- partial('partial/footer') %>
+
+<script>
+(function(){
+  var items = <%- JSON.stringify(drawItems) %>;
+  if (!items.length) return;
+
+  // 每天最多抽 2 次（本瀏覽器內計算，不是全站共享的次數 —— 細節見交付說明）
+  var DAILY_LIMIT = 2;
+  var STORAGE_KEY = 'fuya-object-gacha-quota';
+
+  var card = document.getElementById('draw-card');
+  var drawBtn = document.getElementById('draw-btn');
+  var copyBtn = document.getElementById('draw-copy-btn');
+  var codeEl = document.getElementById('draw-code');
+  var orientationEl = document.getElementById('draw-orientation');
+  var moodEl = document.getElementById('draw-mood');
+  var clueEl = document.getElementById('draw-clue');
+  var poolNote = document.getElementById('draw-pool-note');
+  var lastResultText = '';
+
+  function toRoman(num){
+    var map = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],
+      [50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+    var res = '';
+    map.forEach(function(pair){
+      while (num >= pair[0]) { res += pair[1]; num -= pair[0]; }
+    });
+    return res;
+  }
+
+  function todayStr(){
+    try {
+      return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei' }).format(new Date());
+    } catch (e) {
+      return new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  function loadQuota(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (raw && raw.date === todayStr()) return raw.count;
+    } catch (e) {}
+    return 0;
+  }
+
+  function saveQuota(count){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: todayStr(), count: count }));
+    } catch (e) {}
+  }
+
+  var drawCount = loadQuota();
+
+  function updateQuotaUI(){
+    var remaining = DAILY_LIMIT - drawCount;
+    if (remaining > 0) {
+      poolNote.textContent = '今日還能抽 ' + remaining + ' 次';
+      poolNote.classList.remove('is-full');
+      drawBtn.disabled = false;
+    } else {
+      poolNote.textContent = '今日已抽滿，明天再來';
+      poolNote.classList.add('is-full');
+      drawBtn.disabled = true;
+    }
+  }
+  updateQuotaUI();
+
+  function drawFace(){
+    var itemIndex = Math.floor(Math.random() * items.length);
+    var item = items[itemIndex];
+    var isUpright = Math.random() < 0.5;
+    var mood = isUpright ? item.upright : item.reversed;
+
+    codeEl.textContent = toRoman(itemIndex + 1);
+    orientationEl.textContent = isUpright ? '正位' : '逆位';
+    orientationEl.className = 'draw-orientation ' + (isUpright ? 'upright' : 'reversed');
+    moodEl.textContent = mood;
+    clueEl.textContent = item.clue;
+    card.classList.add('flipped');
+
+    lastResultText = '【物件轉蛋】' + toRoman(itemIndex + 1) + '　' + (isUpright ? '正位' : '逆位') + '：' + mood + '\n' + item.clue;
+
+    drawCount++;
+    saveQuota(drawCount);
+    updateQuotaUI();
+  }
+
+  drawBtn.addEventListener('click', function(){
+    if (drawCount >= DAILY_LIMIT) return;
+    if (card.classList.contains('flipped')) {
+      card.classList.remove('flipped');
+      setTimeout(drawFace, 350);
+    } else {
+      drawFace();
+    }
+  });
+
+  copyBtn.addEventListener('click', function(){
+    if (!lastResultText) return;
+    function done(){
+      var original = '複製籤文';
+      copyBtn.textContent = '已複製';
+      setTimeout(function(){ copyBtn.textContent = original; }, 1800);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastResultText).then(done).catch(function(){
+        copyBtn.textContent = '請手動複製';
+      });
+    } else {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = lastResultText;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      } catch (e) {
+        copyBtn.textContent = '請手動複製';
+      }
+    }
+  });
+})();
+</script>
