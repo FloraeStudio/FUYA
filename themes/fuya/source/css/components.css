@@ -384,11 +384,12 @@
   color: var(--light, var(--lamp));
 }
 
-/* 企劃內頁外殼（目前完全沒有樣式，套殼後長得跟其他頁面脫節） */
+/* 企劃內頁外殼 */
 .archive-page {
   width: 100%;
   max-width: 620px;
-  margin: 40px auto 0;
+  margin: 52px auto 0;
+  padding: 0 4px;
 }
 
 .pg-head {
@@ -1170,19 +1171,19 @@ a.sp-arrow:hover {
   .sp-arrow { font-size: 11px; }
 }
 /* ============================================
-   物件轉蛋 — 抽籤卡（沿用轉蛋頁的月光紫語彙）
+   物件轉蛋 — 抽籤卡（塔羅牌語彙：雙層卡框、卡背星點、羅馬數字編號）
 ============================================ */
 .draw-stage {
   width: 100%;
-  max-width: 340px;
-  margin: 44px auto 0;
+  max-width: 320px;
+  margin: 48px auto 0;
   perspective: 1200px;
 }
 
 .draw-card {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 5 / 8;
   transform-style: preserve-3d;
   transition: transform .7s cubic-bezier(.2,.8,.2,1);
 }
@@ -1194,12 +1195,23 @@ a.sp-arrow:hover {
   inset: 0;
   backface-visibility: hidden;
   border: 1px solid rgba(201, 191, 232, 0.3);
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 26px;
+  overflow: hidden;
+}
+
+/* 內縮一圈的第二層卡框，做出塔羅牌常見的雙層邊 */
+.draw-face::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(201, 191, 232, 0.22);
+  border-radius: 3px;
+  pointer-events: none;
 }
 
 .draw-face-front {
@@ -1207,11 +1219,29 @@ a.sp-arrow:hover {
   color: var(--moon);
 }
 
-.draw-mark { width: 36px; height: 36px; opacity: .85; margin-bottom: 14px; }
+/* 卡背的滿版星點紋理，襯在圖案跟文字底下 */
+.draw-face-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(201, 191, 232, 0.16) 1px, transparent 1.5px);
+  background-size: 18px 18px;
+  opacity: .6;
+}
+
+.draw-mark {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  opacity: .85;
+  margin-bottom: 14px;
+}
 
 .draw-hint {
+  position: relative;
   font-family: var(--font-mono);
   font-size: 12px;
+  letter-spacing: 1px;
   color: var(--mist-dim);
 }
 
@@ -1223,14 +1253,16 @@ a.sp-arrow:hover {
 }
 
 .draw-code {
+  position: relative;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 22px;
+  letter-spacing: 3px;
   color: var(--moon);
-  letter-spacing: 1px;
   margin-bottom: 14px;
 }
 
 .draw-orientation {
+  position: relative;
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1248,12 +1280,14 @@ a.sp-arrow:hover {
 }
 
 .draw-mood {
+  position: relative;
   font-size: 17px;
   color: var(--paper);
   margin-bottom: 12px;
 }
 
 .draw-clue {
+  position: relative;
   font-size: 14px;
   line-height: 1.9;
   color: var(--mist);
@@ -1264,7 +1298,7 @@ a.sp-arrow:hover {
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 /* 沿用 .gacha-cta 的膠囊語彙；.solid 是實心版本，拿來當主要按鈕 */
@@ -1277,10 +1311,24 @@ a.sp-arrow:hover {
   background: rgba(201, 191, 232, 0.28);
 }
 
+.gacha-cta.solid:disabled {
+  opacity: .4;
+  cursor: default;
+  background: transparent;
+}
+.gacha-cta.solid:disabled:hover {
+  background: transparent;
+}
+
 .draw-pool-note {
   text-align: center;
   margin-top: 14px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--mist-dim);
+}
+
+/* 今日額度已滿時，換成琥珀色提示，跟「已抽完」的節奏做出區隔 */
+.draw-pool-note.is-full {
+  color: var(--lamp);
 }
