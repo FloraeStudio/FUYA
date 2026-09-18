@@ -1169,3 +1169,118 @@ a.sp-arrow:hover {
   .sp-track { gap: 18px; }
   .sp-arrow { font-size: 11px; }
 }
+/* ============================================
+   物件轉蛋 — 抽籤卡（沿用轉蛋頁的月光紫語彙）
+============================================ */
+.draw-stage {
+  width: 100%;
+  max-width: 340px;
+  margin: 44px auto 0;
+  perspective: 1200px;
+}
+
+.draw-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  transform-style: preserve-3d;
+  transition: transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.draw-card.flipped { transform: rotateY(180deg); }
+
+.draw-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border: 1px solid rgba(201, 191, 232, 0.3);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+}
+
+.draw-face-front {
+  background: radial-gradient(circle at 50% 40%, rgba(201, 191, 232, 0.08), transparent 70%), var(--night);
+  color: var(--moon);
+}
+
+.draw-mark { width: 36px; height: 36px; opacity: .85; margin-bottom: 14px; }
+
+.draw-hint {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--mist-dim);
+}
+
+.draw-face-back {
+  background: var(--night);
+  transform: rotateY(180deg);
+  align-items: flex-start;
+  text-align: left;
+}
+
+.draw-code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--moon);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.draw-orientation {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.draw-orientation.upright {
+  color: var(--moon);
+  border: 1px solid rgba(201, 191, 232, 0.5);
+}
+.draw-orientation.reversed {
+  color: var(--mist-dim);
+  border: 1px dashed rgba(169, 171, 198, 0.4);
+}
+
+.draw-mood {
+  font-size: 17px;
+  color: var(--paper);
+  margin-bottom: 12px;
+}
+
+.draw-clue {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--mist);
+}
+
+.draw-controls {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+/* 沿用 .gacha-cta 的膠囊語彙；.solid 是實心版本，拿來當主要按鈕 */
+.gacha-cta.solid {
+  background: rgba(201, 191, 232, 0.16);
+  color: var(--paper);
+  border-color: rgba(201, 191, 232, 0.6);
+}
+.gacha-cta.solid:hover {
+  background: rgba(201, 191, 232, 0.28);
+}
+
+.draw-pool-note {
+  text-align: center;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist-dim);
+}

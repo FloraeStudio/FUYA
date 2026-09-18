@@ -114,3 +114,9 @@ project_groups:
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: ''
     visual: firefly-calendar
+  - key: object-gacha
+    name: 物件轉蛋
+    theme: moon
+    badge: 開放抽選中
+    intro: 有些物件離開了原本的主人，還留在原地。抽到的不是物件本身，是它還沒說完的那段。
+    status: ''
