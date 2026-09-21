@@ -114,7 +114,7 @@ project_groups:
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: ''
     visual: firefly-calendar
-  - key: object-gacha
+  - key: shiguangqian
     name: 拾光籤
     theme: moon
     badge: 進行中

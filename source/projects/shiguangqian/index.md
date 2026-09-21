@@ -1,5 +1,5 @@
 ---
 title: 拾光籤
 layout: project-draw
-group_key: object-gacha
+group_key: shiguangqian
 ---
