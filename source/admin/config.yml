@@ -46,7 +46,7 @@ collections:
         options:
           - { label: 十二個情人節, value: valentines }
           - { label: 冷門節日企劃, value: holidays }
-          - { label: "拾物籤", value: "shiwuqian" }
+          - { label: "拾光籤", value: "shiguangqian" }
         hint: 這篇屬於哪個長期企劃就選哪個，之後會自動出現在對應的企劃內頁。單篇作品不屬於任何系列時留空即可。
       - { label: 摘要, name: description, widget: text, required: false }
       - label: 標籤 Hashtags
