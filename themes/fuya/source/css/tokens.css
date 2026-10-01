@@ -20,6 +20,15 @@
   --mist: #A9ABC6;
   --mist-dim: #6E7092;
 
+  /* 首頁拱形窗 */
+  --frame: #3b3f6e;
+  --frame-deep: #1d2040;
+  --sill: #2b2e56;
+  --glass-top: #171a3d;
+  --glass-mid: #272852;
+  --glass-warm: #4a3a52;
+  --cloud: #3a3a68;
+
   /* 字體 */
   --font-display: 'LXGW WenKai TC', serif;
   --font-mono: 'IBM Plex Mono', monospace;

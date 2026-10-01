@@ -3,40 +3,157 @@
    結構/排版放 layout.css，這裡只管「長什麼樣子」
 ------------------------------------------------ */
 
-/* 導覽連結 */
-.navlinks {
-  display: flex;
-  gap: 28px;
-}
-
-.navlinks a {
-  color: var(--mist);
-  font-size: 14.5px;
-  letter-spacing: 1px;
+/* 導覽 —— 星軌（每個頁面一顆星，細線串起來，目前頁面亮起） */
+.navtrail {
   position: relative;
-  padding-bottom: 4px;
-  transition: color .25s ease;
+  display: flex;
 }
 
-.navlinks a::after {
+.navtrail::before {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
+  top: 11px;
+  left: 30px;
+  right: 30px;
   height: 1px;
-  background: var(--lamp);
-  transition: width .25s ease;
+  background: rgba(201, 191, 232, 0.28);
 }
 
-.navlinks a:hover,
-.navlinks a.active {
+.navtrail a {
+  position: relative;
+  flex: 0 0 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 0 6px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--mist);
+  transition: color .25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nt-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mist-dim);
+  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.navtrail a.active {
   color: var(--paper);
 }
 
-.navlinks a:hover::after,
-.navlinks a.active::after {
-  width: 100%;
+.navtrail a.active .nt-dot {
+  background: var(--lamp);
+  box-shadow:
+    0 0 6px 2px rgba(240, 182, 92, 0.7),
+    0 0 16px 5px rgba(240, 182, 92, 0.25);
+}
+
+.navtrail a:focus-visible {
+  outline: none;
+  color: var(--paper);
+}
+
+.navtrail a:focus-visible .nt-dot {
+  background: var(--lamp);
+  transform: scale(1.5);
+}
+
+/* 桌機：滑過才有反應；手機沒有 hover，只在按下去的瞬間回饋，放開就恢復 */
+@media (hover: hover) and (pointer: fine) {
+  .navtrail a:hover {
+    color: var(--paper);
+  }
+
+  .navtrail a:hover .nt-dot {
+    background: var(--mist);
+    transform: scale(1.5);
+  }
+
+  .navtrail a.active:hover .nt-dot {
+    background: var(--lamp);
+  }
+}
+
+@media (hover: none) {
+  .navtrail a:active {
+    color: var(--paper);
+  }
+
+  .navtrail a:active .nt-dot {
+    transform: scale(1.5);
+  }
+}
+
+@media (max-width: 640px) {
+  .navtrail {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .navtrail::before {
+    left: 10%;
+    right: 10%;
+  }
+
+  .navtrail a {
+    flex: 1 1 0;
+    font-size: 13.5px;
+  }
+}
+
+/* 首頁拱形窗 —— 夜空、月亮、雲，窗台上一盞暖燈 */
+.hero-window {
+  display: block;
+  width: 240px;
+  max-width: 62vw;
+  height: auto;
+  margin: 4px auto 22px;
+  overflow: visible;
+}
+
+.hw-s-top { stop-color: var(--glass-top); }
+.hw-s-mid { stop-color: var(--glass-mid); }
+.hw-s-warm { stop-color: var(--glass-warm); }
+.hw-s-lamp { stop-color: var(--lamp); }
+
+.hw-frame-out { fill: var(--frame-deep); stroke: var(--frame); stroke-width: 2; }
+.hw-frame-line { fill: none; stroke: var(--frame); stroke-width: 1.5; }
+.hw-bar { stroke: var(--frame-deep); stroke-width: 4; fill: none; }
+.hw-sill { fill: var(--sill); }
+.hw-sill-under { fill: var(--frame-deep); }
+
+.hw-moon { fill: var(--lamp); }
+.hw-moon-halo { fill: var(--lamp); }
+.hw-crater { fill: #e3a447; }
+.hw-star { fill: var(--moon); }
+.hw-cloud { fill: var(--cloud); }
+.hw-lamp { fill: var(--lamp); }
+.hw-lamp-base { fill: var(--mist-dim); }
+.hw-cup { fill: var(--mist-dim); }
+.hw-cup-handle { fill: none; stroke: var(--mist-dim); stroke-width: 2; }
+.hw-steam { fill: none; stroke: var(--moon); stroke-width: 1.2; opacity: .45; }
+
+.hw-cloud-drift { animation: hw-drift 18s ease-in-out infinite alternate; }
+.hw-twinkle { animation: hw-twinkle 3.4s ease-in-out infinite; }
+
+@keyframes hw-drift {
+  from { transform: translateX(-10px); }
+  to { transform: translateX(14px); }
+}
+
+@keyframes hw-twinkle {
+  0%, 100% { opacity: .3; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hw-cloud-drift, .hw-twinkle { animation: none; }
 }
 
 /* Hero 上緣小標籤 */
@@ -170,12 +287,29 @@
   }
 }
 
-.star-point:hover .star-glow,
 .star-point:focus-visible .star-glow {
   transform: scale(1.7);
   box-shadow:
     0 0 7px 2px var(--light-glow, rgba(240, 182, 92, 0.9)),
     0 0 22px 7px var(--light-glow-soft, rgba(240, 182, 92, 0.35));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .star-point:hover .star-glow {
+    transform: scale(1.7);
+    box-shadow:
+      0 0 7px 2px var(--light-glow, rgba(240, 182, 92, 0.9)),
+      0 0 22px 7px var(--light-glow-soft, rgba(240, 182, 92, 0.35));
+  }
+}
+
+@media (hover: none) {
+  .star-point:active .star-glow {
+    transform: scale(1.7);
+    box-shadow:
+      0 0 7px 2px var(--light-glow, rgba(240, 182, 92, 0.9)),
+      0 0 22px 7px var(--light-glow-soft, rgba(240, 182, 92, 0.35));
+  }
 }
 
 .star-label h3 {
@@ -186,8 +320,16 @@
   transition: color .2s ease;
 }
 
-.star-point:hover .star-label h3 {
-  color: var(--lamp);
+@media (hover: hover) and (pointer: fine) {
+  .star-point:hover .star-label h3 {
+    color: var(--lamp);
+  }
+}
+
+@media (hover: none) {
+  .star-point:active .star-label h3 {
+    color: var(--lamp);
+  }
 }
 
 .star-label p {
@@ -320,8 +462,16 @@
   transition: color .2s ease;
 }
 
-.diary-item:hover .diary-body h3 {
-  color: var(--lamp);
+@media (hover: hover) and (pointer: fine) {
+  .diary-item:hover .diary-body h3 {
+    color: var(--lamp);
+  }
+}
+
+@media (hover: none) {
+  .diary-item:active .diary-body h3 {
+    color: var(--lamp);
+  }
 }
 
 .diary-body p {
@@ -619,9 +769,18 @@
   }
 }
 
-.gacha-node:hover .node-dot {
-  transform: scale(1.4);
-  box-shadow: 0 0 7px 2px rgba(201, 191, 232, 0.85), 0 0 20px 6px rgba(201, 191, 232, 0.32);
+@media (hover: hover) and (pointer: fine) {
+  .gacha-node:hover .node-dot {
+    transform: scale(1.4);
+    box-shadow: 0 0 7px 2px rgba(201, 191, 232, 0.85), 0 0 20px 6px rgba(201, 191, 232, 0.32);
+  }
+}
+
+@media (hover: none) {
+  .gacha-node:active .node-dot {
+    transform: scale(1.4);
+    box-shadow: 0 0 7px 2px rgba(201, 191, 232, 0.85), 0 0 20px 6px rgba(201, 191, 232, 0.32);
+  }
 }
 
 .gacha-node .node-num {
@@ -675,9 +834,18 @@
   transition: background .2s ease, color .2s ease;
 }
 
-.gacha-cta:hover {
-  background: rgba(201, 191, 232, 0.12);
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  .gacha-cta:hover {
+    background: rgba(201, 191, 232, 0.12);
+    color: var(--paper);
+  }
+}
+
+@media (hover: none) {
+  .gacha-cta:active {
+    background: rgba(201, 191, 232, 0.12);
+    color: var(--paper);
+  }
 }
 
 /* ============================================
@@ -701,10 +869,20 @@
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 
-.tag-pill:hover {
-  color: var(--paper);
-  border-color: rgba(240, 182, 92, 0.5);
-  background: rgba(240, 182, 92, 0.08);
+@media (hover: hover) and (pointer: fine) {
+  .tag-pill:hover {
+    color: var(--paper);
+    border-color: rgba(240, 182, 92, 0.5);
+    background: rgba(240, 182, 92, 0.08);
+  }
+}
+
+@media (hover: none) {
+  .tag-pill:active {
+    color: var(--paper);
+    border-color: rgba(240, 182, 92, 0.5);
+    background: rgba(240, 182, 92, 0.08);
+  }
 }
 
 .post-notices {
@@ -743,9 +921,18 @@
   transition: background .2s ease, color .2s ease;
 }
 
-.post-links a:hover {
-  background: rgba(201, 191, 232, 0.12);
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  .post-links a:hover {
+    background: rgba(201, 191, 232, 0.12);
+    color: var(--paper);
+  }
+}
+
+@media (hover: none) {
+  .post-links a:active {
+    background: rgba(201, 191, 232, 0.12);
+    color: var(--paper);
+  }
 }
 
 /* ============================================
@@ -791,8 +978,16 @@
   transition: color .2s ease;
 }
 
-.misc-item:hover h3 {
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  .misc-item:hover h3 {
+    color: var(--paper);
+  }
+}
+
+@media (hover: none) {
+  .misc-item:active h3 {
+    color: var(--paper);
+  }
 }
 
 .misc-item p {
@@ -869,8 +1064,16 @@
   transition: transform .25s ease;
 }
 
-.project-item:hover .pi-body {
-  transform: translateX(2px);
+@media (hover: hover) and (pointer: fine) {
+  .project-item:hover .pi-body {
+    transform: translateX(2px);
+  }
+}
+
+@media (hover: none) {
+  .project-item:active .pi-body {
+    transform: translateX(2px);
+  }
 }
 
 .pi-head {
@@ -888,8 +1091,16 @@
   transition: color .2s ease;
 }
 
-.project-item:hover .pi-head h3 {
-  color: var(--light, var(--lamp));
+@media (hover: hover) and (pointer: fine) {
+  .project-item:hover .pi-head h3 {
+    color: var(--light, var(--lamp));
+  }
+}
+
+@media (hover: none) {
+  .project-item:active .pi-head h3 {
+    color: var(--light, var(--lamp));
+  }
 }
 
 .pi-body p {
@@ -1105,8 +1316,16 @@
   transition: color .2s ease;
 }
 
-a.sp-node:hover {
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  a.sp-node:hover {
+    color: var(--paper);
+  }
+}
+
+@media (hover: none) {
+  a.sp-node:active {
+    color: var(--paper);
+  }
 }
 
 .sp-dot {
@@ -1117,8 +1336,16 @@ a.sp-node:hover {
   transition: background .2s ease, transform .2s ease;
 }
 
-a.sp-node:hover .sp-dot {
-  background: var(--mist);
+@media (hover: hover) and (pointer: fine) {
+  a.sp-node:hover .sp-dot {
+    background: var(--mist);
+  }
+}
+
+@media (hover: none) {
+  a.sp-node:active .sp-dot {
+    background: var(--mist);
+  }
 }
 
 .sp-num {
@@ -1162,8 +1389,16 @@ a.sp-node:hover .sp-dot {
   transition: color .2s ease;
 }
 
-a.sp-arrow:hover {
-  color: var(--light, var(--lamp));
+@media (hover: hover) and (pointer: fine) {
+  a.sp-arrow:hover {
+    color: var(--light, var(--lamp));
+  }
+}
+
+@media (hover: none) {
+  a.sp-arrow:active {
+    color: var(--light, var(--lamp));
+  }
 }
 
 .sp-arrow.is-disabled {
@@ -1313,8 +1548,16 @@ a.sp-arrow:hover {
   color: var(--paper);
   border-color: rgba(201, 191, 232, 0.6);
 }
-.gacha-cta.solid:hover {
-  background: rgba(201, 191, 232, 0.28);
+@media (hover: hover) and (pointer: fine) {
+  .gacha-cta.solid:hover {
+    background: rgba(201, 191, 232, 0.28);
+  }
+}
+
+@media (hover: none) {
+  .gacha-cta.solid:active {
+    background: rgba(201, 191, 232, 0.28);
+  }
 }
 
 .gacha-cta.solid:disabled {
@@ -1322,8 +1565,10 @@ a.sp-arrow:hover {
   cursor: default;
   background: transparent;
 }
-.gacha-cta.solid:disabled:hover {
-  background: transparent;
+@media (hover: hover) and (pointer: fine) {
+  .gacha-cta.solid:disabled:hover {
+    background: transparent;
+  }
 }
 
 .draw-pool-note {

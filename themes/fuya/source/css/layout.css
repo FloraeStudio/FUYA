@@ -46,57 +46,6 @@
   position: relative;
 }
 
-.window {
-  width: 132px;
-  height: 132px;
-  margin: 0 auto 30px;
-  position: relative;
-  border: 2px solid rgba(201, 191, 232, 0.35);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at 50% 45%, rgba(240, 182, 92, 0.22), transparent 70%);
-}
-
-.window::before,
-.window::after {
-  content: '';
-  position: absolute;
-  background: rgba(201, 191, 232, 0.25);
-}
-
-.window::before {
-  width: 100%;
-  height: 1px;
-  top: 50%;
-  left: 0;
-}
-
-.window::after {
-  height: 100%;
-  width: 1px;
-  left: 50%;
-  top: 0;
-}
-
-.moon-body {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--lamp);
-  box-shadow: 0 0 26px 4px rgba(240, 182, 92, 0.45);
-}
-
-.window .mini-star {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--moon);
-  animation: twinkle 3.2s ease-in-out infinite;
-}
-
 .hero h1 {
   font-weight: 700;
   font-size: 46px;
@@ -235,8 +184,16 @@
   transition: color .2s ease;
 }
 
-.back-link:hover {
-  color: var(--lamp);
+@media (hover: hover) and (pointer: fine) {
+  .back-link:hover {
+    color: var(--lamp);
+  }
+}
+
+@media (hover: none) {
+  .back-link:active {
+    color: var(--lamp);
+  }
 }
 
 footer {
@@ -253,14 +210,13 @@ footer {
 @media (max-width: 640px) {
   .topbar {
     flex-direction: column;
-    gap: 18px;
-    padding-bottom: 40px;
+    align-items: center;
+    gap: 10px;
+    padding: 22px 0 34px;
   }
 
-  .navlinks {
-    gap: 18px;
-    flex-wrap: wrap;
-    justify-content: center;
+  .brand {
+    font-size: 17px;
   }
 
   .hero h1 {

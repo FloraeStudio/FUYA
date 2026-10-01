@@ -1,13 +1,60 @@
 <section class="hero">
   <div class="eyebrow">FUYA'S WRITING STUDIO</div>
 
-  <div class="window">
-    <div class="moon-body"></div>
-    <span class="mini-star" style="top:18%; left:22%; animation-delay:.3s;"></span>
-    <span class="mini-star" style="top:28%; left:78%; animation-delay:1.1s;"></span>
-    <span class="mini-star" style="top:75%; left:20%; animation-delay:1.8s;"></span>
-    <span class="mini-star" style="top:80%; left:70%; animation-delay:.7s;"></span>
-  </div>
+  <svg class="hero-window" viewBox="0 0 300 380" role="img" aria-label="夜裡的拱形窗，窗外有月亮與雲，窗台上亮著一盞燈">
+    <defs>
+      <linearGradient id="hw-glass" x1="0" y1="0" x2="0" y2="1">
+        <stop class="hw-s-top" offset="0"/>
+        <stop class="hw-s-mid" offset="0.6"/>
+        <stop class="hw-s-warm" offset="1"/>
+      </linearGradient>
+      <radialGradient id="hw-spill" cx="0.5" cy="0.5" r="0.5">
+        <stop class="hw-s-lamp" offset="0" stop-opacity="0.38"/>
+        <stop class="hw-s-lamp" offset="1" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="hw-arch"><path d="M60 300V140A90 90 0 0 1 240 140V300Z"/></clipPath>
+    </defs>
+
+    <ellipse cx="150" cy="330" rx="150" ry="46" fill="url(#hw-spill)"/>
+    <path class="hw-frame-out" d="M52 304V140A98 98 0 0 1 248 140V304Z"/>
+    <path d="M60 300V140A90 90 0 0 1 240 140V300Z" fill="url(#hw-glass)"/>
+
+    <g clip-path="url(#hw-arch)">
+      <circle class="hw-moon-halo" cx="188" cy="118" r="46" opacity="0.07"/>
+      <circle class="hw-moon-halo" cx="188" cy="118" r="33" opacity="0.14"/>
+      <circle class="hw-moon" cx="188" cy="118" r="22"/>
+      <circle class="hw-crater" cx="181" cy="112" r="5" opacity="0.55"/>
+      <circle class="hw-crater" cx="194" cy="126" r="3" opacity="0.45"/>
+
+      <circle class="hw-star hw-twinkle" cx="92" cy="92" r="1.6"/>
+      <circle class="hw-star hw-twinkle" cx="128" cy="62" r="1.2" style="animation-delay:1s"/>
+      <circle class="hw-star hw-twinkle" cx="112" cy="150" r="1.4" style="animation-delay:2s"/>
+      <circle class="hw-star hw-twinkle" cx="222" cy="170" r="1.2" style="animation-delay:.5s"/>
+
+      <g class="hw-cloud-drift hw-cloud" opacity="0.8">
+        <ellipse cx="120" cy="212" rx="38" ry="9"/>
+        <ellipse cx="146" cy="205" rx="22" ry="9"/>
+        <ellipse cx="190" cy="240" rx="34" ry="8" opacity="0.7"/>
+      </g>
+      <rect x="60" y="262" width="180" height="38" fill="var(--lamp)" opacity="0.1"/>
+    </g>
+
+    <path class="hw-bar" d="M150 44V300"/>
+    <path class="hw-bar" d="M60 196H240"/>
+    <path class="hw-frame-line" d="M60 300V140A90 90 0 0 1 240 140V300Z"/>
+
+    <rect class="hw-sill" x="40" y="300" width="220" height="12" rx="2"/>
+    <rect class="hw-sill-under" x="34" y="312" width="232" height="6" rx="2"/>
+
+    <rect class="hw-lamp-base" x="198" y="290" width="14" height="10"/>
+    <rect class="hw-lamp-base" x="203" y="276" width="4" height="14"/>
+    <path class="hw-lamp" d="M190 276L196 252H214L220 276Z"/>
+    <ellipse class="hw-lamp" cx="205" cy="264" rx="22" ry="16" opacity="0.18"/>
+
+    <path class="hw-cup" d="M78 300V284Q78 280 82 280H98Q102 280 102 284V300Z"/>
+    <path class="hw-cup-handle" d="M102 286Q110 286 110 292Q110 298 102 297"/>
+    <path class="hw-steam" d="M86 272Q84 266 88 262M94 272Q92 266 96 262"/>
+  </svg>
 
   <h3>在這裡，慢慢寫一些溫柔的<em>故事</em>。</h3>
   <p><%= site.data.site.homepage_intro %></p>
