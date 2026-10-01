@@ -414,14 +414,34 @@
 
 /* 最近寫下的字 / 分類列表 共用的條列項目 */
 .diary-item {
-  padding: 22px 0;
-  border-bottom: 1px dashed rgba(169, 171, 198, 0.22);
+  padding: 20px 22px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: rgba(201, 191, 232, 0.03);
+  border: 1px solid rgba(169, 171, 198, 0.12);
   display: flex;
   gap: 22px;
+  transition: border-color .25s ease, background-color .25s ease, transform .25s ease, box-shadow .25s ease;
 }
 
 .diary-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .diary-item:hover {
+    border-color: rgba(240, 182, 92, 0.32);
+    background: rgba(201, 191, 232, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px -16px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media (hover: none) {
+  .diary-item:active {
+    border-color: rgba(240, 182, 92, 0.32);
+    background: rgba(201, 191, 232, 0.05);
+  }
 }
 
 .diary-date {
@@ -491,6 +511,10 @@
   font-size: 13px;
   line-height: 1.9;
   color: var(--mist);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ============================================
@@ -977,14 +1001,33 @@
 }
 
 .misc-item {
-  padding: 16px 0;
-  border-bottom: 1px dashed rgba(169, 171, 198, 0.16);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: rgba(201, 191, 232, 0.025);
+  border: 1px solid rgba(169, 171, 198, 0.1);
   display: flex;
   gap: 18px;
+  transition: border-color .25s ease, background-color .25s ease, transform .25s ease;
 }
 
 .misc-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .misc-item:hover {
+    border-color: rgba(240, 182, 92, 0.28);
+    background: rgba(201, 191, 232, 0.045);
+    transform: translateY(-1px);
+  }
+}
+
+@media (hover: none) {
+  .misc-item:active {
+    border-color: rgba(240, 182, 92, 0.28);
+    background: rgba(201, 191, 232, 0.045);
+  }
 }
 
 .misc-item .misc-date {
@@ -1020,6 +1063,10 @@
   line-height: 1.8;
   color: var(--mist-dim);
   margin-top: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ============================================
