@@ -2,13 +2,13 @@
   <a class="brand" href="<%- url_for('/') %>">
     <span class="moon-ico"></span><%= config.title %>
   </a>
-  <nav class="navtrail" aria-label="主選單">
+  <nav class="navlinks" aria-label="主選單">
     <% var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = ''; %>
     <% theme.nav.forEach(function(item){
          var href = item.slug ? '/' + item.slug + '/' : '/';
          var active = item.slug === current || (item.slug === '' && !current);
     %>
-      <a href="<%- url_for(href) %>" class="<%= active ? 'active' : '' %>"<%- active ? ' aria-current="page"' : '' %>><i class="nt-dot" aria-hidden="true"></i><span><%= item.name %></span></a>
+      <a href="<%- url_for(href) %>" class="<%= active ? 'active' : '' %>"<%- active ? ' aria-current="page"' : '' %>><%= item.name %></a>
     <% }) %>
   </nav>
 </div>

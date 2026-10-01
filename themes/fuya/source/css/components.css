@@ -3,108 +3,35 @@
    結構/排版放 layout.css，這裡只管「長什麼樣子」
 ------------------------------------------------ */
 
-/* 導覽 —— 星軌（每個頁面一顆星，細線串起來，目前頁面亮起） */
-.navtrail {
-  position: relative;
+/* 導覽連結 —— 用與品牌名呼應的間隔點，目前頁面亮燈 */
+.navlinks {
   display: flex;
-}
-
-.navtrail::before {
-  content: '';
-  position: absolute;
-  top: 11px;
-  left: 30px;
-  right: 30px;
-  height: 1px;
-  background: rgba(201, 191, 232, 0.28);
-}
-
-.navtrail a {
-  position: relative;
-  flex: 0 0 60px;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 9px;
-  padding: 8px 0 6px;
-  font-size: 14px;
-  letter-spacing: 1px;
+  gap: 18px;
+}
+
+.navlinks a {
+  position: relative;
   color: var(--mist);
-  transition: color .25s ease;
-  -webkit-tap-highlight-color: transparent;
+  font-size: 14.5px;
+  letter-spacing: 1.5px;
+  transition: color .25s ease, text-shadow .25s ease;
 }
 
-.nt-dot {
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--mist-dim);
-  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+.navlinks a:not(:last-child)::after {
+  content: '·';
+  position: absolute;
+  right: -11px;
+  color: var(--mist-dim);
 }
 
-.navtrail a.active {
+.navlinks a:hover {
   color: var(--paper);
 }
 
-.navtrail a.active .nt-dot {
-  background: var(--lamp);
-  box-shadow:
-    0 0 6px 2px rgba(240, 182, 92, 0.7),
-    0 0 16px 5px rgba(240, 182, 92, 0.25);
-}
-
-.navtrail a:focus-visible {
-  outline: none;
-  color: var(--paper);
-}
-
-.navtrail a:focus-visible .nt-dot {
-  background: var(--lamp);
-  transform: scale(1.5);
-}
-
-/* 桌機：滑過才有反應；手機沒有 hover，只在按下去的瞬間回饋，放開就恢復 */
-@media (hover: hover) and (pointer: fine) {
-  .navtrail a:hover {
-    color: var(--paper);
-  }
-
-  .navtrail a:hover .nt-dot {
-    background: var(--mist);
-    transform: scale(1.5);
-  }
-
-  .navtrail a.active:hover .nt-dot {
-    background: var(--lamp);
-  }
-}
-
-@media (hover: none) {
-  .navtrail a:active {
-    color: var(--paper);
-  }
-
-  .navtrail a:active .nt-dot {
-    transform: scale(1.5);
-  }
-}
-
-@media (max-width: 640px) {
-  .navtrail {
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .navtrail::before {
-    left: 10%;
-    right: 10%;
-  }
-
-  .navtrail a {
-    flex: 1 1 0;
-    font-size: 13.5px;
-  }
+.navlinks a.active {
+  color: var(--lamp);
+  text-shadow: 0 0 10px rgba(240, 182, 92, 0.45);
 }
 
 /* 首頁拱形窗 —— 夜空、月亮、雲，窗台上一盞暖燈 */
@@ -117,43 +44,129 @@
   overflow: visible;
 }
 
-.hw-s-top { stop-color: var(--glass-top); }
-.hw-s-mid { stop-color: var(--glass-mid); }
-.hw-s-warm { stop-color: var(--glass-warm); }
-.hw-s-lamp { stop-color: var(--lamp); }
+.hw-s-top {
+  stop-color: var(--glass-top);
+}
 
-.hw-frame-out { fill: var(--frame-deep); stroke: var(--frame); stroke-width: 2; }
-.hw-frame-line { fill: none; stroke: var(--frame); stroke-width: 1.5; }
-.hw-bar { stroke: var(--frame-deep); stroke-width: 4; fill: none; }
-.hw-sill { fill: var(--sill); }
-.hw-sill-under { fill: var(--frame-deep); }
+.hw-s-mid {
+  stop-color: var(--glass-mid);
+}
 
-.hw-moon { fill: var(--lamp); }
-.hw-moon-halo { fill: var(--lamp); }
-.hw-crater { fill: #e3a447; }
-.hw-star { fill: var(--moon); }
-.hw-cloud { fill: var(--cloud); }
-.hw-lamp { fill: var(--lamp); }
-.hw-lamp-base { fill: var(--mist-dim); }
-.hw-cup { fill: var(--mist-dim); }
-.hw-cup-handle { fill: none; stroke: var(--mist-dim); stroke-width: 2; }
-.hw-steam { fill: none; stroke: var(--moon); stroke-width: 1.2; opacity: .45; }
+.hw-s-warm {
+  stop-color: var(--glass-warm);
+}
 
-.hw-cloud-drift { animation: hw-drift 18s ease-in-out infinite alternate; }
-.hw-twinkle { animation: hw-twinkle 3.4s ease-in-out infinite; }
+.hw-s-lamp {
+  stop-color: var(--lamp);
+}
+
+.hw-frame-out {
+  fill: var(--frame-deep);
+  stroke: var(--frame);
+  stroke-width: 2;
+}
+
+.hw-frame-line {
+  fill: none;
+  stroke: var(--frame);
+  stroke-width: 1.5;
+}
+
+.hw-bar {
+  stroke: var(--frame-deep);
+  stroke-width: 4;
+  fill: none;
+}
+
+.hw-sill {
+  fill: var(--sill);
+}
+
+.hw-sill-under {
+  fill: var(--frame-deep);
+}
+
+.hw-moon {
+  fill: var(--lamp);
+}
+
+.hw-moon-halo {
+  fill: var(--lamp);
+}
+
+.hw-crater {
+  fill: #e3a447;
+}
+
+.hw-star {
+  fill: var(--moon);
+}
+
+.hw-cloud {
+  fill: var(--cloud);
+}
+
+.hw-lamp {
+  fill: var(--lamp);
+}
+
+.hw-lamp-base {
+  fill: var(--mist-dim);
+}
+
+.hw-cup {
+  fill: var(--mist-dim);
+}
+
+.hw-cup-handle {
+  fill: none;
+  stroke: var(--mist-dim);
+  stroke-width: 2;
+}
+
+.hw-steam {
+  fill: none;
+  stroke: var(--moon);
+  stroke-width: 1.2;
+  opacity: .45;
+}
+
+.hw-cloud-drift {
+  animation: hw-drift 18s ease-in-out infinite alternate;
+}
+
+.hw-twinkle {
+  animation: hw-twinkle 3.4s ease-in-out infinite;
+}
 
 @keyframes hw-drift {
-  from { transform: translateX(-10px); }
-  to { transform: translateX(14px); }
+  from {
+    transform: translateX(-10px);
+  }
+
+  to {
+    transform: translateX(14px);
+  }
 }
 
 @keyframes hw-twinkle {
-  0%, 100% { opacity: .3; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: .3;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hw-cloud-drift, .hw-twinkle { animation: none; }
+
+  .hw-cloud-drift,
+  .hw-twinkle {
+    animation: none;
+  }
 }
 
 /* Hero 上緣小標籤 */
@@ -509,12 +522,24 @@
 }
 
 @keyframes pc-dot-breathe {
-  0%, 100% { opacity: .75; box-shadow: 0 0 8px 1px var(--dot-glow-a, rgba(240, 182, 92, 0.7)); }
-  50% { opacity: 1; box-shadow: 0 0 12px 3px var(--dot-glow-b, rgba(240, 182, 92, 0.95)); }
+
+  0%,
+  100% {
+    opacity: .75;
+    box-shadow: 0 0 8px 1px var(--dot-glow-a, rgba(240, 182, 92, 0.7));
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px 3px var(--dot-glow-b, rgba(240, 182, 92, 0.95));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pc-dot { animation: none; opacity: .9; }
+  .pc-dot {
+    animation: none;
+    opacity: .9;
+  }
 }
 
 .pc-badge {
@@ -899,7 +924,7 @@
   line-height: 1.5;
 }
 
-.post-notices p + p {
+.post-notices p+p {
   margin-top: 6px;
 }
 
@@ -1047,7 +1072,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pi-dot { animation: none; }
+  .pi-dot {
+    animation: none;
+  }
 }
 
 .pi-line {
@@ -1154,18 +1181,65 @@
 }
 
 /* 十二個月份的散落位置，模擬星座的不規則感 */
-.cs-month:nth-child(2)  { left: 7%;  top: 65%; }
-.cs-month:nth-child(3)  { left: 15%; top: 30%; }
-.cs-month:nth-child(4)  { left: 25%; top: 50%; }
-.cs-month:nth-child(5)  { left: 32%; top: 20%; }
-.cs-month:nth-child(6)  { left: 42%; top: 38%; }
-.cs-month:nth-child(7)  { left: 50%; top: 15%; }
-.cs-month:nth-child(8)  { left: 58%; top: 45%; }
-.cs-month:nth-child(9)  { left: 67%; top: 25%; }
-.cs-month:nth-child(10) { left: 75%; top: 55%; }
-.cs-month:nth-child(11) { left: 82%; top: 30%; }
-.cs-month:nth-child(12) { left: 88%; top: 65%; }
-.cs-month:nth-child(13) { left: 93%; top: 40%; }
+.cs-month:nth-child(2) {
+  left: 7%;
+  top: 65%;
+}
+
+.cs-month:nth-child(3) {
+  left: 15%;
+  top: 30%;
+}
+
+.cs-month:nth-child(4) {
+  left: 25%;
+  top: 50%;
+}
+
+.cs-month:nth-child(5) {
+  left: 32%;
+  top: 20%;
+}
+
+.cs-month:nth-child(6) {
+  left: 42%;
+  top: 38%;
+}
+
+.cs-month:nth-child(7) {
+  left: 50%;
+  top: 15%;
+}
+
+.cs-month:nth-child(8) {
+  left: 58%;
+  top: 45%;
+}
+
+.cs-month:nth-child(9) {
+  left: 67%;
+  top: 25%;
+}
+
+.cs-month:nth-child(10) {
+  left: 75%;
+  top: 55%;
+}
+
+.cs-month:nth-child(11) {
+  left: 82%;
+  top: 30%;
+}
+
+.cs-month:nth-child(12) {
+  left: 88%;
+  top: 65%;
+}
+
+.cs-month:nth-child(13) {
+  left: 93%;
+  top: 40%;
+}
 
 .cs-tick {
   width: 6px;
@@ -1183,12 +1257,22 @@
   animation: twinkle-star 3.6s ease-in-out infinite;
 }
 
-.cs-month:nth-child(3n).lit .cs-tick { animation-delay: .5s; }
-.cs-month:nth-child(3n+1).lit .cs-tick { animation-delay: 1s; }
-.cs-month:nth-child(3n+2).lit .cs-tick { animation-delay: 1.5s; }
+.cs-month:nth-child(3n).lit .cs-tick {
+  animation-delay: .5s;
+}
+
+.cs-month:nth-child(3n+1).lit .cs-tick {
+  animation-delay: 1s;
+}
+
+.cs-month:nth-child(3n+2).lit .cs-tick {
+  animation-delay: 1.5s;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .cs-month.lit .cs-tick { animation: none; }
+  .cs-month.lit .cs-tick {
+    animation: none;
+  }
 }
 
 .cs-label {
@@ -1203,8 +1287,14 @@
 }
 
 @media (max-width: 480px) {
-  .calendar-scatter { height: 140px; margin: 36px auto 14px; }
-  .cs-label { font-size: 8px; }
+  .calendar-scatter {
+    height: 140px;
+    margin: 36px auto 14px;
+  }
+
+  .cs-label {
+    font-size: 8px;
+  }
 }
 
 /* ============================================
@@ -1234,18 +1324,65 @@
 }
 
 /* 十二個散落座標，故意避開整齊的行列 */
-.ff-dot:nth-child(1)  { left: 10%; top: 60%; }
-.ff-dot:nth-child(2)  { left: 22%; top: 20%; }
-.ff-dot:nth-child(3)  { left: 30%; top: 72%; }
-.ff-dot:nth-child(4)  { left: 42%; top: 35%; }
-.ff-dot:nth-child(5)  { left: 48%; top: 82%; }
-.ff-dot:nth-child(6)  { left: 55%; top: 14%; }
-.ff-dot:nth-child(7)  { left: 63%; top: 55%; }
-.ff-dot:nth-child(8)  { left: 70%; top: 28%; }
-.ff-dot:nth-child(9)  { left: 78%; top: 70%; }
-.ff-dot:nth-child(10) { left: 85%; top: 18%; }
-.ff-dot:nth-child(11) { left: 91%; top: 48%; }
-.ff-dot:nth-child(12) { left: 96%; top: 80%; }
+.ff-dot:nth-child(1) {
+  left: 10%;
+  top: 60%;
+}
+
+.ff-dot:nth-child(2) {
+  left: 22%;
+  top: 20%;
+}
+
+.ff-dot:nth-child(3) {
+  left: 30%;
+  top: 72%;
+}
+
+.ff-dot:nth-child(4) {
+  left: 42%;
+  top: 35%;
+}
+
+.ff-dot:nth-child(5) {
+  left: 48%;
+  top: 82%;
+}
+
+.ff-dot:nth-child(6) {
+  left: 55%;
+  top: 14%;
+}
+
+.ff-dot:nth-child(7) {
+  left: 63%;
+  top: 55%;
+}
+
+.ff-dot:nth-child(8) {
+  left: 70%;
+  top: 28%;
+}
+
+.ff-dot:nth-child(9) {
+  left: 78%;
+  top: 70%;
+}
+
+.ff-dot:nth-child(10) {
+  left: 85%;
+  top: 18%;
+}
+
+.ff-dot:nth-child(11) {
+  left: 91%;
+  top: 48%;
+}
+
+.ff-dot:nth-child(12) {
+  left: 96%;
+  top: 80%;
+}
 
 .ff-dot.lit {
   background: var(--light, var(--moon));
@@ -1256,21 +1393,40 @@
 }
 
 @keyframes ff-drift {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-  50% { transform: translate(-50%, -50%) translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-4px);
+  }
 }
 
 @keyframes ff-flicker {
-  0%, 100% { opacity: .7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: .7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ff-dot { animation: none; }
+  .ff-dot {
+    animation: none;
+  }
 }
 
 @media (max-width: 480px) {
-  .firefly-calendar { height: 120px; margin: 36px auto 18px; }
+  .firefly-calendar {
+    height: 120px;
+    margin: 36px auto 18px;
+  }
 }
 
 /* ============================================
@@ -1368,7 +1524,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sp-node.sp-current .sp-dot { animation: none; }
+  .sp-node.sp-current .sp-dot {
+    animation: none;
+  }
 }
 
 .sp-node.sp-ellipsis {
@@ -1402,15 +1560,24 @@
 }
 
 .sp-arrow.is-disabled {
-  color: rgba(110,112,146,0.3);
+  color: rgba(110, 112, 146, 0.3);
   pointer-events: none;
 }
 
 @media (max-width: 640px) {
-  .star-pager { gap: 14px; }
-  .sp-track { gap: 18px; }
-  .sp-arrow { font-size: 11px; }
+  .star-pager {
+    gap: 14px;
+  }
+
+  .sp-track {
+    gap: 18px;
+  }
+
+  .sp-arrow {
+    font-size: 11px;
+  }
 }
+
 /* ============================================
    物件轉蛋 — 抽籤卡（塔羅牌語彙：雙層卡框、卡背星點、羅馬數字編號）
 ============================================ */
@@ -1426,10 +1593,12 @@
   width: 100%;
   aspect-ratio: 5 / 8;
   transform-style: preserve-3d;
-  transition: transform .7s cubic-bezier(.2,.8,.2,1);
+  transition: transform .7s cubic-bezier(.2, .8, .2, 1);
 }
 
-.draw-card.flipped { transform: rotateY(180deg); }
+.draw-card.flipped {
+  transform: rotateY(180deg);
+}
 
 .draw-face {
   position: absolute;
@@ -1511,10 +1680,12 @@
   border-radius: 12px;
   margin-bottom: 16px;
 }
+
 .draw-orientation.upright {
   color: var(--moon);
   border: 1px solid rgba(201, 191, 232, 0.5);
 }
+
 .draw-orientation.reversed {
   color: var(--mist-dim);
   border: 1px dashed rgba(169, 171, 198, 0.4);
@@ -1548,6 +1719,7 @@
   color: var(--paper);
   border-color: rgba(201, 191, 232, 0.6);
 }
+
 @media (hover: hover) and (pointer: fine) {
   .gacha-cta.solid:hover {
     background: rgba(201, 191, 232, 0.28);
@@ -1565,6 +1737,7 @@
   cursor: default;
   background: transparent;
 }
+
 @media (hover: hover) and (pointer: fine) {
   .gacha-cta.solid:disabled:hover {
     background: transparent;
