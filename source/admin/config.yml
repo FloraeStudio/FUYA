@@ -89,10 +89,10 @@ collections:
             hint: 顯示在介紹文字下方的一小行，可以做為近況小狀態用。留空就不顯示這一行。
 
   - name: commission_settings
-    label: 委託狀態
+    label: 委託狀態與排程
     files:
       - name: status
-        label: 目前接單狀態
+        label: 接單狀態與排程
         file: source/_data/commission.yml
         fields:
           - label: 接單狀態
@@ -100,6 +100,57 @@ collections:
             widget: select
             options: [開放中, 已額滿, 暫停接單]
             hint: 顯示在委託頁最上方的「目前狀態」，跟下面貼的委託成品文章無關，獨立控制。
+          - label: 本月名額（總數）
+            name: slots_total
+            widget: number
+            value_type: int
+            min: 0
+            max: 12
+            default: 4
+            hint: 設 0 就不顯示名額標籤。
+          - label: 本月名額（還剩幾個）
+            name: slots_open
+            widget: number
+            value_type: int
+            min: 0
+            max: 12
+            default: 4
+            hint: 亮燈的點數 = 還能接幾個。
+          - label: 預估排單等待
+            name: wait_estimate
+            widget: string
+            required: false
+            hint: 例如「約 3 週」。留空就不顯示這個標籤。
+          - label: 排程中的委託
+            name: schedule
+            widget: list
+            required: false
+            summary: '{{fields.id}}｜{{fields.type}}｜交件 {{fields.end}}'
+            hint: 這裡的內容會公開顯示在委託頁的月曆上。只填單號或代稱，不要放委託人的名字、帳號或聯絡方式。
+            fields:
+              - { label: 單號或代稱, name: id, widget: string, hint: '公開顯示。例如 K-0917' }
+              - label: 方案
+                name: type
+                widget: select
+                options:
+                  - { label: 驚喜包, value: surprise }
+                  - { label: 短篇小品, value: short }
+                  - { label: 非商業委託, value: medium }
+                  - { label: 長篇, value: long }
+              - { label: 開始日, name: start, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
+              - { label: 預計交件日, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
+              - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後橫條會變淡，仍留在月曆上。' }
+              - { label: 公開顯示, name: public, widget: boolean, default: true, hint: '關閉後這一筆完全不會出現在網站上。' }
+              - { label: 公開備註, name: note, widget: string, required: false, hint: '手機版會顯示在這一筆下方，例如「撰寫中」。' }
+          - label: 月曆備註與休息日
+            name: marks
+            widget: list
+            required: false
+            summary: '{{fields.date}}｜{{fields.text}}'
+            fields:
+              - { label: 日期, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
+              - { label: 文字, name: text, widget: string, required: false, hint: '顯示在那一格裡，例如「休息」「11 月名額開放」。' }
+              - { label: 休息日, name: rest, widget: boolean, default: false, hint: '開啟後那一格底色會稍微暗一點。' }
 
   - name: gacha
     label: 轉蛋

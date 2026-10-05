@@ -3,94 +3,129 @@
   var sorted = page.posts.sort('-date').toArray().sort(function(a, b){
     return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
   });
-  var status=(site.data.commission && site.data.commission.accepting_status) || '工作室修整中' ; var plans=theme.commission_plans
-  || []; var flow=theme.commission_flow || []; var faq=theme.commission_faq || []; %>
 
-  <div class="commission-status" style="margin-top:56px;">
-    <span class="dot"></span>
-    目前狀態：<%= status %>
+  var cm = site.data.commission || {};
+  var status = cm.accepting_status || '工作室修整中';
+  var plans = theme.commission_plans || [];
+  var flow = theme.commission_flow || [];
+  var faq = theme.commission_faq || [];
+
+  // 名額：slots_open 是「還能接幾個」，亮燈數 = 剩餘名額
+  var slotsTotal = parseInt(cm.slots_total, 10) || 0;
+  var slotsOpen = Math.max(0, Math.min(slotsTotal, parseInt(cm.slots_open, 10) || 0));
+  var waitText = cm.wait_estimate || '';
+  var isOpen = status === '開放中';
+
+  // 日期統一轉成 YYYY-MM-DD 字串（YAML 可能把它讀成 Date）
+  function d10(v){
+    if (!v) return '';
+    return (v instanceof Date ? v.toISOString() : String(v)).slice(0, 10);
+  }
+
+  // 只輸出「可公開」的欄位；public: false 的整筆不會進到網頁原始碼
+  var schedule = (cm.schedule || [])
+    .filter(function(e){ return e && e.public !== false && d10(e.start) && d10(e.end); })
+    .map(function(e){
+      return { id: e.id || '', type: e.type || '', start: d10(e.start), end: d10(e.end), done: !!e.done, note: e.note || '' };
+    });
+  var marks = (cm.marks || [])
+    .filter(function(m){ return m && d10(m.date); })
+    .map(function(m){ return { date: d10(m.date), text: m.text || '', rest: !!m.rest }; });
+  var types = plans.map(function(p){ return { key: p.key, name: p.name }; });
+  var payload = JSON.stringify({ schedule: schedule, marks: marks, types: types }).replace(/</g, '\\u003c');
+%>
+<link rel="stylesheet" href="<%- url_for('/css/commission.css') %>">
+
+<div class="cm-chips">
+  <span class="cm-chip"><span class="cm-chip-dot<%= isOpen ? '' : ' off' %>"></span>目前狀態：<%= status %></span>
+  <% if (slotsTotal > 0) { %>
+    <span class="cm-chip">
+      本月名額
+      <span class="cm-slots" aria-hidden="true"><% for (var s = 0; s < slotsTotal; s++) { %><i class="<%= s < slotsOpen ? '' : 'e' %>"></i><% } %></span>
+      剩 <%= slotsOpen %> / <%= slotsTotal %>
+    </span>
+  <% } %>
+  <% if (waitText) { %><span class="cm-chip">預估排單等待：<%= waitText %></span><% } %>
+</div>
+
+<% if (plans.length) { %>
+  <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
+  <p class="cm-hint" id="cm-hint" hidden>點一個方案，下面月曆會標出同類型的委託</p>
+  <div class="cm-menu" id="cm-menu">
+    <% plans.forEach(function(p){ %>
+      <button type="button" class="cm-it" data-t="<%= p.key %>" aria-pressed="false">
+        <span class="cm-top">
+          <span class="cm-nm"><%= p.name %></span>
+          <span class="cm-ld"></span>
+          <span class="cm-pr"><%= String(p.price).replace('/', ' / ') %></span>
+        </span>
+        <span class="cm-ds">
+          <% if (p.range && String(p.range).trim() !== '-') { %><span class="cm-rg"><%= p.range %></span><% } %>
+          <%= p.note %>
+        </span>
+      </button>
+    <% }) %>
   </div>
+<% } %>
 
-  <div class="section-title" style="margin-top:20px;">作品 / WORKS</div>
-  <div class="diary" style="margin-top:20px;">
-    <% sorted.forEach(function(post){ %>
-      <a class="diary-item" href="<%- url_for(post.path) %>">
-        <div class="diary-date">
-          <%= date(post.date, 'MM.DD' ) %>
-        </div>
-        <div class="diary-body">
-          <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
-          <h3>
-            <%= post.title %>
-          </h3>
-          <% if (post.description) { %>
-            <p>
-              <%= post.description %>
-            </p>
-            <% } else { %>
-              <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
-              <% } %>
-        </div>
-      </a>
-      <% }) %>
-        <% if (sorted.length===0) { %>
-          <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
-          <% } %>
+<div class="section-title" style="margin-top:56px;">排程 / SCHEDULE</div>
+<div class="cm-cal" id="cm" data-empty="<%= schedule.length === 0 ? '1' : '0' %>">
+  <div class="cm-mh">
+    <button type="button" class="cm-nav" id="cm-prev" aria-label="上個月">‹</button>
+    <span class="cm-title" id="cm-title"></span>
+    <button type="button" class="cm-nav" id="cm-next" aria-label="下個月">›</button>
   </div>
+  <div class="cm-wd" aria-hidden="true"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
+  <div class="cm-grid" id="cm-grid"></div>
+  <div class="cm-list" id="cm-list"></div>
+  <p class="cm-foot" id="cm-foot">橫條右端亮起的星點，是預計交件日</p>
+</div>
+<script type="application/json" id="cm-data"><%- payload %></script>
+<script src="<%- url_for('/js/commission-calendar.js') %>" defer></script>
 
-  <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
-
-    <% if (plans.length) { %>
-      <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
-      <div class="plan-track">
-        <% plans.forEach(function(p){ %>
-          <div class="plan-point" data-tier="<%= p.key %>">
-            <span class="dot"></span>
-            <h4>
-              <%= p.name %>
-            </h4>
-            <div class="plan-range">
-              <%= p.range %>
-            </div>
-            <div class="plan-price">
-              <%= p.price %>
-            </div>
-            <div class="plan-note">
-              <%= p.note %>
-            </div>
-          </div>
-          <% }) %>
+<% if (flow.length) { %>
+  <div class="section-title" style="margin-top:60px;">流程 / HOW IT WORKS</div>
+  <div style="margin-top:20px;">
+    <% flow.forEach(function(step, i){ %>
+      <div class="flow-item">
+        <div class="flow-index"><%= ('0' + (i + 1)).slice(-2) %></div>
+        <p><%= step %></p>
       </div>
-      <% } %>
+    <% }) %>
+  </div>
+<% } %>
 
-        <% if (flow.length) { %>
-          <div class="section-title" style="margin-top:60px;">流程 / HOW IT WORKS</div>
-          <div style="margin-top:20px;">
-            <% flow.forEach(function(step, i){ %>
-              <div class="flow-item">
-                <div class="flow-index">
-                  <%= ('0' + (i + 1)).slice(-2) %>
-                </div>
-                <p>
-                  <%= step %>
-                </p>
-              </div>
-              <% }) %>
-          </div>
-          <% } %>
+<% if (faq.length) { %>
+  <div class="section-title" style="margin-top:60px;">常見問題 / FAQ</div>
+  <div style="margin-top:20px;">
+    <% faq.forEach(function(item){ %>
+      <div class="faq-item">
+        <h4><%= item.q %></h4>
+        <p><%= item.a %></p>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
 
-            <% if (faq.length) { %>
-              <div class="section-title" style="margin-top:60px;">常見問題 / FAQ</div>
-              <div style="margin-top:20px;">
-                <% faq.forEach(function(item){ %>
-                  <div class="faq-item">
-                    <h4>
-                      <%= item.q %>
-                    </h4>
-                    <p>
-                      <%= item.a %>
-                    </p>
-                  </div>
-                  <% }) %>
-              </div>
-              <% } %>
+<div class="section-title" style="margin-top:60px;">作品 / WORKS</div>
+<div class="diary" style="margin-top:20px;">
+  <% sorted.forEach(function(post){ %>
+    <a class="diary-item" href="<%- url_for(post.path) %>">
+      <div class="diary-date"><%= date(post.date, 'MM.DD') %></div>
+      <div class="diary-body">
+        <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
+        <h3><%= post.title %></h3>
+        <% if (post.description) { %>
+          <p><%= post.description %></p>
+        <% } else { %>
+          <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+        <% } %>
+      </div>
+    </a>
+  <% }) %>
+  <% if (sorted.length === 0) { %>
+    <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
+  <% } %>
+</div>
+
+<%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
