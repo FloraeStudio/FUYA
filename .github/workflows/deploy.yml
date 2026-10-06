@@ -31,6 +31,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # 從後台抓最新文章寫進 source/_posts/。連不上後台時會沿用 repo 裡的文章繼續建置。
+      - name: Pull posts from admin
+        run: node tools/fetch-posts.js
+
       - name: Build site
         run: npm run build
 

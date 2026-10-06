@@ -10,7 +10,8 @@
     "server": "hexo server",
     "build": "hexo generate",
     "clean": "hexo clean",
-    "deploy": "hexo generate"
+    "deploy": "hexo generate",
+    "pull-posts": "node tools/fetch-posts.js"
   },
   "dependencies": {
     "hexo": "^7.3.0",
