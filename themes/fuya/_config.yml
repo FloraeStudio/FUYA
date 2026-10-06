@@ -45,6 +45,11 @@ categoryLabels:
 # ------------------------------------------------
 # 方案星星：由小到大排列，呼應「委託星最大最亮」的概念
 commission_plans:
+  - key: egg
+    name: 轉蛋台
+    range: -
+    price: -
+    note: 可在長期台排單
   - key: surprise
     name: 驚喜包
     range: '-'

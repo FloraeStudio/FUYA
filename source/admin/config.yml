@@ -82,6 +82,7 @@ collections:
                   - { label: 短篇小品, value: short }
                   - { label: 非商業委託, value: medium }
                   - { label: 長篇, value: long }
+                  - { label: 轉蛋台, value: egg }
               - { label: 開始日, name: start, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
               - { label: 預計交件日, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
               - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後橫條會變淡，仍留在月曆上。' }

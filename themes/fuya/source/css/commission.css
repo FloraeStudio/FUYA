@@ -9,12 +9,14 @@
   --t-short: #C9BFE8;   /* = --moon */
   --t-medium: #E3A6B1;
   --t-long: #F0B65C;    /* = --lamp */
+  --t-egg: #A8C9A0;
 }
 
 [data-t="surprise"] { --c: var(--t-surprise); --cb: rgba(143, 184, 196, 0.26); --cg: rgba(143, 184, 196, 0.7); }
 [data-t="short"]    { --c: var(--t-short);    --cb: rgba(201, 191, 232, 0.26); --cg: rgba(201, 191, 232, 0.7); }
 [data-t="medium"]   { --c: var(--t-medium);   --cb: rgba(227, 166, 177, 0.26); --cg: rgba(227, 166, 177, 0.7); }
 [data-t="long"]     { --c: var(--t-long);     --cb: rgba(240, 182, 92, 0.26);  --cg: rgba(240, 182, 92, 0.7); }
+[data-t="egg"]      { --c: var(--t-egg);    --cb: rgba(168, 201, 160, 0.26); --cg: rgba(168, 201, 160, 0.7); }
 
 /* ---------- 頂部狀態標籤 ---------- */
 .cm-chips {
