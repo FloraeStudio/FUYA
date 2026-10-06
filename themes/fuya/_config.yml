@@ -47,8 +47,8 @@ categoryLabels:
 commission_plans:
   - key: egg
     name: 轉蛋台
-    range: -
-    price: -
+    range: '-'
+    price: '-'
     note: 可在長期台排單
   - key: surprise
     name: 驚喜包
