@@ -19,8 +19,9 @@
   var typeName = {};
   (data.types || []).forEach(function (t) { typeName[t.key] = t.name; });
 
-  var hasAny = data.schedule.length > 0;
-  if (hint && hasAny) hint.hidden = false;
+  var hasAny = false;
+  var events = [];
+  var marksByDay = {};
 
   var now = new Date();
   var todayNum = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000;
@@ -40,16 +41,20 @@
     });
   }
 
-  var events = data.schedule.map(function (e) {
-    return { id: e.id, type: e.type, s: toNum(e.start), e: toNum(e.end), done: e.done, note: e.note };
-  }).filter(function (e) { return e.e >= e.s; })
-    .sort(function (a, b) { return a.s - b.s || (b.e - b.s) - (a.e - a.s); });
-
-  var marksByDay = {};
-  data.marks.forEach(function (m) {
-    var n = toNum(m.date);
-    (marksByDay[n] = marksByDay[n] || []).push(m);
-  });
+  function setData(d) {
+    data = d;
+    hasAny = data.schedule.length > 0;
+    if (hint) hint.hidden = !hasAny;
+    events = data.schedule.map(function (e) {
+      return { id: e.id, type: e.type, s: toNum(e.start), e: toNum(e.end), done: e.done, note: e.note };
+    }).filter(function (e) { return e.e >= e.s; })
+      .sort(function (a, b) { return a.s - b.s || (b.e - b.s) - (a.e - a.s); });
+    marksByDay = {};
+    data.marks.forEach(function (m) {
+      var n = toNum(m.date);
+      (marksByDay[n] = marksByDay[n] || []).push(m);
+    });
+  }
 
   function weekSegments(ws) {
     // 這一週與哪些委託重疊，並分配不重疊的橫排（lane）
@@ -104,7 +109,7 @@
         var ms = marksByDay[dn] || [];
         var isRest = ms.some(function (x) { return x.rest; });
         if (isRest) cls += ' r';
-        var txt = ms.map(function (x) { return x.text; }).filter(Boolean).join('、');
+        var txt = ms.map(function (x) { return x.text; }).filter(Boolean).join('、') || (isRest ? '休息' : '');
         if (inMonth && ms.length) weekMarks.push({ dn: dn, text: txt, rest: isRest });
         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() + '</span>' +
           (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') + '</div>';
@@ -186,5 +191,36 @@
     });
   }
 
+  function renderChips(st) {
+    var box = document.getElementById('cm-chips');
+    if (!box || !st) return;
+    var open = st.accepting_status === '開放中';
+    var total = parseInt(st.slots_total, 10) || 0;
+    var left = Math.max(0, Math.min(total, parseInt(st.slots_open, 10) || 0));
+    var h = '<span class="cm-chip"><span class="cm-chip-dot' + (open ? '' : ' off') + '"></span>目前狀態：' + esc(st.accepting_status) + '</span>';
+    if (total > 0) {
+      var dots = '';
+      for (var i = 0; i < total; i++) dots += '<i class="' + (i < left ? '' : 'e') + '"></i>';
+      h += '<span class="cm-chip">本月名額 <span class="cm-slots" aria-hidden="true">' + dots + '</span> 剩 ' + left + ' / ' + total + '</span>';
+    }
+    if (st.wait_estimate) h += '<span class="cm-chip">預估排單等待：' + esc(st.wait_estimate) + '</span>';
+    box.innerHTML = h;
+  }
+
+  setData(data);
   render();
+
+  // 有設定後台網址時，改讀即時資料；讀不到就維持頁面內建立的版本，月曆不會壞掉。
+  var apiBase = (root.getAttribute('data-api') || '').replace(/\/+$/, '');
+  if (apiBase && window.fetch) {
+    fetch(apiBase + '/api/public', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
+      .then(function (d) {
+        if (!d || !Array.isArray(d.schedule) || !Array.isArray(d.marks)) throw new Error('bad shape');
+        setData({ schedule: d.schedule, marks: d.marks, types: data.types });
+        renderChips(d.settings);
+        render();
+      })
+      .catch(function () { /* 後台暫時連不上：保留原本的資料 */ });
+  }
 })();

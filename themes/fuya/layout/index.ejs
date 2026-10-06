@@ -3,31 +3,6 @@
 
     <%- partial('partial/hero') %>
 
-      <div class="section-title">— 星譜目錄 —</div>
-      <div class="constellation">
-        <svg class="const-lines" viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true">
-          <polyline points="60,140 240,60 450,110 630,40 820,130"></polyline>
-        </svg>
-
-        <% theme.nav.forEach(function(item){ var href=item.slug ? '/' + item.slug + '/' : '/' ; %>
-          <a class="star-point sp-<%= item.key %>" href="<%- url_for(href) %>">
-            <div class="star-glow"></div>
-            <div class="star-label">
-              <h3>
-                <%= item.name %>
-              </h3>
-              <p>
-                <%= item.desc %>
-              </p>
-            </div>
-            <% if (item.badge) { %><span class="star-badge">
-                <%= item.badge %>
-              </span>
-              <% } %>
-          </a>
-          <% }) %>
-      </div>
-
       <div class="section-title">— 最近寫的字 —</div>
       <%
         // 置頂文章一律排在最前面（彼此之間仍依日期新到舊），其餘文章維持原本的日期排序，

@@ -100,6 +100,11 @@ collections:
             widget: select
             options: [開放中, 已額滿, 暫停接單]
             hint: 顯示在委託頁最上方的「目前狀態」，跟下面貼的委託成品文章無關，獨立控制。
+          - label: 後台網址
+            name: api_url
+            widget: string
+            required: false
+            hint: 委託後台的網址（例如 https://fuya-admin.vercel.app，結尾不用加斜線）。填了以後月曆與狀態會即時讀後台；留空或後台連不上時，會改顯示下面手動填的內容。
           - label: 本月名額（總數）
             name: slots_total
             widget: number
