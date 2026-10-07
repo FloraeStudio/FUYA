@@ -58,7 +58,6 @@
     deliveriesOf(d).forEach(function (e) {
       if (!e || !e.date) return;
       var n = toNum(e.date);
-      if (e.done && n < todayNum - 14) return;
       hasAny = true;
       (byDay[n] = byDay[n] || []).push({ id: e.id, type: e.type, note: e.note || '', done: !!e.done, n: n });
     });
@@ -70,7 +69,7 @@
   }
 
   function markHtml(ev) {
-    return '<div class="cm-mk" data-t="' + esc(ev.type) + '"><span>' + esc(typeName[ev.type] || '') + '</span></div>';
+    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '"><span>' + esc(typeName[ev.type] || '') + '</span></div>';
   }
 
   function render() {
