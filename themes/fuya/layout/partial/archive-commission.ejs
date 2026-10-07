@@ -57,7 +57,7 @@
 
 <% if (plans.length) { %>
   <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
-  <p class="cm-hint" id="cm-hint" hidden>點一個方案，下面的交稿排程會標出同類型的委託</p>
+  <p class="cm-hint" id="cm-hint" hidden>點一個方案，下面月曆會標出同類型的委託</p>
   <div class="cm-menu" id="cm-menu">
     <% plans.forEach(function(p){ %>
       <button type="button" class="cm-it" data-t="<%= p.key %>" aria-pressed="false">
@@ -75,10 +75,17 @@
   </div>
 <% } %>
 
-<div class="section-title" style="margin-top:56px;">交稿排程 / DELIVERIES</div>
+<div class="section-title" style="margin-top:56px;">排程 / SCHEDULE</div>
 <div class="cm-cal" id="cm" data-api="<%= cm.api_url || '' %>">
-  <div class="cm-dl" id="cm-dl"></div>
-  <p class="cm-foot" id="cm-foot">日期是預計交稿日，實際可能提早或稍晚</p>
+  <div class="cm-mh">
+    <button type="button" class="cm-nav" id="cm-prev" aria-label="上個月">‹</button>
+    <span class="cm-title" id="cm-title"></span>
+    <button type="button" class="cm-nav" id="cm-next" aria-label="下個月">›</button>
+  </div>
+  <div class="cm-wd" aria-hidden="true"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
+  <div class="cm-grid" id="cm-grid"></div>
+  <div class="cm-list" id="cm-list"></div>
+  <p class="cm-foot" id="cm-foot">星點旁的名稱，是那天預計交稿的委託</p>
 </div>
 <script type="application/json" id="cm-data"><%- payload %></script>
 <script src="<%- url_for('/js/commission-calendar.js') %>" defer></script>
