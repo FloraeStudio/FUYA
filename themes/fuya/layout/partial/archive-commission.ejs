@@ -35,7 +35,7 @@
     .map(function(m){ return { date: d10(m.date), text: m.text || '', rest: !!m.rest }; });
   var types = plans.map(function(p){ return { key: p.key, name: p.name }; });
   // 牌單（commission_plans）沒有列出、但後台排程可以選的類型，月曆也要認得名稱
-  var extraTypes = { egg: '轉蛋台' };
+  var extraTypes = { egg: '轉蛋' };
   Object.keys(extraTypes).forEach(function(k){
     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
   });
