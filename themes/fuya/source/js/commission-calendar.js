@@ -113,10 +113,10 @@
             '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span></div>';
         });
 
-        cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() + '</span>' +
+        cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() +
+          (isRest ? '<i class="moon" role="img" aria-label="休息日"></i>' : '') + '</span>' +
           marks +
-          (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') +
-          (isRest ? '<span class="moon" role="img" aria-label="休息日"></span>' : '') + '</div>';
+          (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') + '</div>';
       }
 
       gridHtml += '<div class="cm-wk"><div class="cm-row">' + cells + '</div></div>';
