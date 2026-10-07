@@ -70,7 +70,7 @@
   }
 
   function markHtml(ev) {
-    return '<i class="cm-mk" data-t="' + esc(ev.type) + '" title="' + esc(typeName[ev.type] || '') + '"></i>';
+    return '<div class="cm-mk" data-t="' + esc(ev.type) + '"><span>' + esc(typeName[ev.type] || '') + '</span></div>';
   }
 
   function render() {
@@ -114,7 +114,7 @@
         });
 
         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() + '</span>' +
-          (marks ? '<div class="cm-dots">' + marks + '</div>' : '') +
+          marks +
           (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') +
           (isRest ? '<span class="moon" role="img" aria-label="休息日"></span>' : '') + '</div>';
       }
@@ -134,7 +134,7 @@
     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
     if (foot) {
       foot.textContent = hasAny
-        ? (monthHasEvent ? '預計交稿的委託' : '這個月沒有預計交稿的委託')
+        ? (monthHasEvent ? '星點是那天預計交稿的委託' : '這個月沒有預計交稿的委託')
         : '目前沒有排程中的委託';
     }
     applyFilter();
