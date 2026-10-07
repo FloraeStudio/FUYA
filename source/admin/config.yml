@@ -44,7 +44,7 @@ collections:
             name: api_url
             widget: string
             required: false
-            hint: 委託後台的網址（例如 https://fuya-admin.vercel.app，結尾不用加斜線）。填了以後月曆與狀態會即時讀後台；留空或後台連不上時，會改顯示下面手動填的內容。
+            hint: 委託後台的網址（例如 https://fuya-admin.vercel.app，結尾不用加斜線）。填了以後交稿排程與狀態會即時讀後台；留空或後台連不上時，會改顯示下面手動填的內容。
           - label: 本月名額（總數）
             name: slots_total
             widget: number
@@ -70,8 +70,8 @@ collections:
             name: schedule
             widget: list
             required: false
-            summary: '{{fields.id}}｜{{fields.type}}｜交件 {{fields.end}}'
-            hint: 這裡的內容會公開顯示在委託頁的月曆上。只填單號或代稱，不要放委託人的名字、帳號或聯絡方式。
+            summary: '{{fields.id}}｜{{fields.type}}｜交稿 {{fields.end}}'
+            hint: 這裡的內容會公開顯示在委託頁的交稿排程上。只填單號或代稱，不要放委託人的名字、帳號或聯絡方式。
             fields:
               - { label: 單號或代稱, name: id, widget: string, hint: '公開顯示。例如 K-0917' }
               - label: 方案
@@ -84,10 +84,10 @@ collections:
                   - { label: 長篇, value: long }
                   - { label: 轉蛋台, value: egg }
               - { label: 開始日, name: start, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
-              - { label: 預計交件日, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
-              - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後橫條會變淡，仍留在月曆上。' }
+              - { label: 預計交稿日, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: '你自己安排的交稿日期，交稿排程顯示這個日期。' }
+              - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後這一筆會標示「已完成」，再留 14 天就自動從交稿排程消失。' }
               - { label: 公開顯示, name: public, widget: boolean, default: true, hint: '關閉後這一筆完全不會出現在網站上。' }
-              - { label: 公開備註, name: note, widget: string, required: false, hint: '手機版會顯示在這一筆下方，例如「撰寫中」。' }
+              - { label: 公開備註, name: note, widget: string, required: false, hint: '顯示在這一筆下方，例如「撰寫中」。' }
           - label: 月曆備註與休息日
             name: marks
             widget: list
@@ -95,5 +95,5 @@ collections:
             summary: '{{fields.date}}｜{{fields.text}}'
             fields:
               - { label: 日期, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
-              - { label: 文字, name: text, widget: string, required: false, hint: '顯示在那一格裡，例如「休息」「11 月名額開放」。' }
-              - { label: 休息日, name: rest, widget: boolean, default: false, hint: '開啟後那一格底色會稍微暗一點。' }
+              - { label: 文字, name: text, widget: string, required: false, hint: '顯示在交稿排程裡那一天，例如「休息」「11 月名額開放」。' }
+              - { label: 休息日, name: rest, widget: boolean, default: false, hint: '開啟後會以淡色的休息日顯示在排程裡。' }

@@ -1,9 +1,9 @@
 /* ============================================
-   委託頁 — 狀態標籤、方案菜單、排程月曆
+   委託頁 — 狀態標籤、方案菜單、交稿排程
    這個檔案獨立存在，不會動到 components.css
 ============================================ */
 
-/* 四種方案各自的顏色：方案菜單的星點／價格、月曆的橫條共用 */
+/* 四種方案各自的顏色：方案菜單的星點／價格、交稿排程的星點共用 */
 :root {
   --t-surprise: #8FB8C4;
   --t-short: #C9BFE8;   /* = --moon */
@@ -183,273 +183,158 @@
   .cm-it:hover .cm-nm { color: var(--c); }
 }
 
-/* ---------- 排程月曆 ---------- */
+/* ---------- 交稿排程 ---------- */
 .cm-cal {
-  max-width: 760px;
-  margin: 26px auto 0;
+  max-width: 520px;
+  margin: 30px auto 0;
 }
 
-.cm-mh {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 12px;
-  color: var(--paper);
-  font-size: 15px;
-}
+.cm-mo { position: relative; padding-left: 26px; margin-bottom: 34px; }
+.cm-mo:last-child { margin-bottom: 0; }
 
-.cm-nav {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  font-family: var(--font-mono);
-  font-size: 18px;
-  line-height: 1;
-  color: var(--mist-dim);
-  background: none;
-  border: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.cm-nav:focus-visible { outline: none; color: var(--lamp); }
-
-@media (hover: hover) and (pointer: fine) {
-  .cm-nav:hover { color: var(--lamp); }
-}
-
-@media (hover: none) {
-  .cm-nav:active { color: var(--lamp); }
-}
-
-.cm-wd {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 6px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
-}
-
-.cm-grid {
-  border: 1px solid rgba(201, 191, 232, 0.14);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.cm-wk {
-  position: relative;
-  border-top: 1px solid rgba(201, 191, 232, 0.1);
-}
-
-.cm-wk:first-child { border-top: 0; }
-
-.cm-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  min-height: inherit;
-}
-
-.cm-c {
-  position: relative;
-  padding: 6px 8px;
-  border-left: 1px solid rgba(201, 191, 232, 0.08);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
-}
-
-.cm-c:first-child { border-left: 0; }
-.cm-c.o { color: #3b3f6e; }
-.cm-c.r { background: rgba(10, 12, 24, 0.55); }
-
-.cm-c.t .n { color: var(--lamp); }
-
-.cm-c.t .n::after {
+/* 和方案菜單同一條細線 */
+.cm-mo::before {
   content: '';
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  margin-left: 5px;
-  vertical-align: middle;
-  border-radius: 50%;
-  background: var(--lamp);
-  box-shadow: 0 0 6px 1px rgba(240, 182, 92, 0.7);
+  position: absolute;
+  left: 3px;
+  top: 14px;
+  bottom: 8px;
+  width: 1px;
+  background: rgba(201, 191, 232, 0.22);
 }
 
-.cm-c .tx {
-  position: absolute;
-  left: 8px;
-  right: 6px;
-  bottom: 6px;
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  line-height: 1.4;
+.cm-mo-h {
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
   color: var(--mist-dim);
 }
 
-.cm-bars {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 28px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: 22px;
-  row-gap: 4px;
-  padding: 0 3px;
-  pointer-events: none;
-}
-
-.cm-bar {
+.cm-dr {
   position: relative;
   display: flex;
-  align-items: center;
-  min-width: 0;
-  padding: 0 22px 0 9px;
-  border-radius: 6px;
-  font-size: 11.5px;
-  color: var(--paper);
-  white-space: nowrap;
-  background: var(--cb, rgba(169, 171, 198, 0.2));
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 20px;
   transition: opacity .2s ease;
 }
 
-.cm-bar .lb {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.cm-dr:last-child { margin-bottom: 0; }
 
-.cm-bar i {
+.cm-dr::before {
+  content: '';
   position: absolute;
-  right: 8px;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  margin-top: -3px;
+  left: -26px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--c, var(--mist));
-  box-shadow: 0 0 6px 2px var(--cg, rgba(169, 171, 198, 0.5));
+  box-shadow:
+    0 0 6px 1.5px var(--cg, rgba(169, 171, 198, 0.5)),
+    0 0 16px 5px var(--cb, rgba(169, 171, 198, 0.2));
 }
 
-.cm-bar.done { opacity: .45; }
+.cm-dd {
+  flex: none;
+  width: 84px;
+  white-space: nowrap;
+}
 
-.cm-cal.f .cm-bar,
-.cm-cal.f .cm-li { opacity: .2; }
+.cm-dd b {
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: .5px;
+  color: var(--paper);
+}
 
-.cm-cal.f .cm-bar.on,
-.cm-cal.f .cm-li.on { opacity: 1; }
+.cm-dd small {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist-dim);
+}
+
+.cm-dtx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 10px;
+}
+
+.cm-dnm {
+  font-size: 15px;
+  letter-spacing: .5px;
+  color: var(--paper);
+}
+
+.cm-dnm em {
+  margin-left: 10px;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--c, var(--mist));
+}
+
+.cm-dtx .cm-ld { min-width: 16px; }
+
+.cm-dwh {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mist);
+  white-space: nowrap;
+}
+
+.cm-dnote {
+  flex-basis: 100%;
+  margin-top: 3px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--mist-dim);
+}
+
+/* 休息日與備註：空心的點，字比較淡 */
+.cm-dr.m::before {
+  background: transparent;
+  border: 1px solid var(--mist-dim);
+  box-shadow: none;
+}
+
+.cm-dr.m .cm-dnm { font-size: 13px; color: var(--mist-dim); }
+.cm-dr.m.rest .cm-dnm { color: var(--mist); }
+.cm-dr.m .cm-dd b { font-size: 15px; color: var(--mist); }
+
+.cm-dr.done { opacity: .5; }
+.cm-dr.done .cm-dnm { text-decoration: none; }
+
+.cm-cal.f .cm-dr[data-t] { opacity: .25; }
+.cm-cal.f .cm-dr[data-t].on { opacity: 1; }
 
 .cm-foot {
-  margin: 12px 0 0;
+  margin: 26px 0 0;
   text-align: center;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--mist-dim);
 }
 
-/* ---------- 手機：月曆改成週列表 ---------- */
-.cm-list { display: none; }
+.cm-none {
+  padding: 22px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--mist-dim);
+}
 
 @media (max-width: 640px) {
-  .cm-wd,
-  .cm-grid { display: none; }
-
-  .cm-list {
-    display: block;
-    border: 1px solid rgba(201, 191, 232, 0.14);
-    border-radius: 10px;
-  }
-
-  .cm-lw {
-    padding: 14px 16px 12px;
-    border-top: 1px solid rgba(201, 191, 232, 0.1);
-  }
-
-  .cm-lw:first-child { border-top: 0; }
-
-  .cm-lw-h {
-    margin-bottom: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: var(--mist-dim);
-  }
-
-  .cm-li {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    column-gap: 10px;
-    padding: 7px 0;
-    transition: opacity .2s ease;
-  }
-
-  .cm-li.done { opacity: .45; }
-
-  .cm-li-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--c, var(--mist));
-    box-shadow: 0 0 6px 1.5px var(--cg, rgba(169, 171, 198, 0.5));
-    transform: translateY(-1px);
-  }
-
-  .cm-li-nm {
-    font-size: 14px;
-    color: var(--paper);
-  }
-
-  .cm-li-nm em {
-    margin-left: 8px;
-    font-style: normal;
-    font-size: 12px;
-    color: var(--mist);
-  }
-
-  .cm-li-d {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--mist);
-  }
-
-  .cm-li-note {
-    grid-column: 2 / 4;
-    margin-top: 2px;
-    font-size: 12px;
-    line-height: 1.7;
-    color: var(--mist-dim);
-  }
-
-  .cm-lm {
-    padding: 4px 0;
-    font-size: 12.5px;
-    color: var(--mist-dim);
-  }
-
-  .cm-lm span {
-    margin-right: 10px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-  }
-
-  .cm-lm.rest { color: var(--mist); }
-
-  .cm-none {
-    padding: 22px 16px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--mist-dim);
-  }
-
   .cm-chips { margin-top: 44px; }
+  .cm-dr { gap: 12px; }
+  .cm-dd { width: 74px; }
+  .cm-dd small { margin-left: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cm-it,
-  .cm-bar,
-  .cm-li { transition: none; }
+  .cm-dr { transition: none; }
 }

@@ -22,12 +22,14 @@
     return (v instanceof Date ? v.toISOString() : String(v)).slice(0, 10);
   }
 
-  // 只輸出「可公開」的欄位；public: false 的整筆不會進到網頁原始碼
-  var schedule = (cm.schedule || [])
-    .filter(function(e){ return e && e.public !== false && d10(e.start) && d10(e.end); })
+  // 只輸出「可公開」的欄位；public: false 的整筆不會進到網頁原始碼。
+  // 交稿排程：一筆一個日期（預計交稿日）。已完成的也帶出去，由前端只保留最近 14 天。
+  var deliveries = (cm.schedule || [])
+    .filter(function(e){ return e && e.public !== false && d10(e.end); })
     .map(function(e){
-      return { id: e.id || '', type: e.type || '', start: d10(e.start), end: d10(e.end), done: !!e.done, note: e.note || '' };
-    });
+      return { id: e.id || '', type: e.type || '', date: d10(e.end), note: e.note || '', done: !!e.done };
+    })
+    .sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
   var marks = (cm.marks || [])
     .filter(function(m){ return m && d10(m.date); })
     .map(function(m){ return { date: d10(m.date), text: m.text || '', rest: !!m.rest }; });
@@ -37,7 +39,7 @@
   Object.keys(extraTypes).forEach(function(k){
     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
   });
-  var payload = JSON.stringify({ schedule: schedule, marks: marks, types: types }).replace(/</g, '\\u003c');
+  var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types }).replace(/</g, '\\u003c');
 %>
 <link rel="stylesheet" href="<%- url_for('/css/commission.css') %>">
 
@@ -55,7 +57,7 @@
 
 <% if (plans.length) { %>
   <div class="section-title" style="margin-top:56px;">方案 / PLANS</div>
-  <p class="cm-hint" id="cm-hint" hidden>點一個方案，下面月曆會標出同類型的委託</p>
+  <p class="cm-hint" id="cm-hint" hidden>點一個方案，下面的交稿排程會標出同類型的委託</p>
   <div class="cm-menu" id="cm-menu">
     <% plans.forEach(function(p){ %>
       <button type="button" class="cm-it" data-t="<%= p.key %>" aria-pressed="false">
@@ -73,17 +75,10 @@
   </div>
 <% } %>
 
-<div class="section-title" style="margin-top:56px;">排程 / SCHEDULE</div>
+<div class="section-title" style="margin-top:56px;">交稿排程 / DELIVERIES</div>
 <div class="cm-cal" id="cm" data-api="<%= cm.api_url || '' %>">
-  <div class="cm-mh">
-    <button type="button" class="cm-nav" id="cm-prev" aria-label="上個月">‹</button>
-    <span class="cm-title" id="cm-title"></span>
-    <button type="button" class="cm-nav" id="cm-next" aria-label="下個月">›</button>
-  </div>
-  <div class="cm-wd" aria-hidden="true"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
-  <div class="cm-grid" id="cm-grid"></div>
-  <div class="cm-list" id="cm-list"></div>
-  <p class="cm-foot" id="cm-foot">橫條右端亮起的星點，是預計交件日</p>
+  <div class="cm-dl" id="cm-dl"></div>
+  <p class="cm-foot" id="cm-foot">日期是預計交稿日，實際可能提早或稍晚</p>
 </div>
 <script type="application/json" id="cm-data"><%- payload %></script>
 <script src="<%- url_for('/js/commission-calendar.js') %>" defer></script>
