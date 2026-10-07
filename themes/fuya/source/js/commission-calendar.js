@@ -70,8 +70,7 @@
   }
 
   function markHtml(ev) {
-    var tip = ev.id + (typeName[ev.type] ? ' ' + typeName[ev.type] : '') + (ev.done ? '（已完成）' : '') + (ev.note ? '：' + ev.note : '');
-    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '" title="' + esc(tip) + '"><span>' + esc(ev.id) + '</span></div>';
+    return '<i class="cm-mk" data-t="' + esc(ev.type) + '" title="' + esc(typeName[ev.type] || '') + '"></i>';
   }
 
   function render() {
@@ -101,7 +100,7 @@
         var ms = marksByDay[dn] || [];
         var isRest = ms.some(function (x) { return x.rest; });
         if (isRest) cls += ' r';
-        var txt = ms.map(function (x) { return x.text; }).filter(Boolean).join('、') || (isRest ? '休息' : '');
+        var txt = ms.map(function (x) { return x.text; }).filter(Boolean).join('、');
         if (inMonth && ms.length) weekMarks.push({ dn: dn, text: txt, rest: isRest });
 
         var evs = inMonth ? (byDay[dn] || []) : [];
@@ -110,14 +109,14 @@
           monthHasEvent = true;
           marks += markHtml(ev);
           listItems += '<div class="cm-li' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' +
-            '<span class="cm-li-dot"></span><span class="cm-li-nm">' + esc(ev.id) +
-            (typeName[ev.type] ? '<em>' + esc(typeName[ev.type]) + '</em>' : '') + '</span>' +
-            '<span class="cm-li-d">' + md(ev.n) + (ev.done ? ' 已完成' : ' 交稿') + '</span>' +
-            (ev.note ? '<span class="cm-li-note">' + esc(ev.note) + '</span>' : '') + '</div>';
+            '<span class="cm-li-dot"></span><span class="cm-li-nm">' + esc(typeName[ev.type] || '') + '</span>' +
+            '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span></div>';
         });
 
         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() + '</span>' +
-          marks + (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') + '</div>';
+          (marks ? '<div class="cm-dots">' + marks + '</div>' : '') +
+          (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') +
+          (isRest ? '<span class="moon" role="img" aria-label="休息日"></span>' : '') + '</div>';
       }
 
       gridHtml += '<div class="cm-wk"><div class="cm-row">' + cells + '</div></div>';
@@ -135,7 +134,7 @@
     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
     if (foot) {
       foot.textContent = hasAny
-        ? (monthHasEvent ? '星點旁的名稱，是那天預計交稿的委託' : '這個月沒有預計交稿的委託')
+        ? (monthHasEvent ? '預計交稿的委託' : '這個月沒有預計交稿的委託')
         : '目前沒有排程中的委託';
     }
     applyFilter();
