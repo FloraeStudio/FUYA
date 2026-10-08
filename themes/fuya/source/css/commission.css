@@ -6,17 +6,44 @@
 /* 四種方案各自的顏色：方案菜單的星點／價格、月曆上的交稿標記共用 */
 :root {
   --t-surprise: #8FB8C4;
-  --t-short: #C9BFE8;   /* = --moon */
+  --t-short: #C9BFE8;
+  /* = --moon */
   --t-medium: #E3A6B1;
-  --t-long: #F0B65C;    /* = --lamp */
+  --t-long: #F0B65C;
+  /* = --lamp */
   --t-egg: #A8C9A0;
+  --moon-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M8.6 1.2A5 5 0 1 0 10.8 8 4.2 4.2 0 0 1 8.6 1.2Z' fill='%23C9BFE8'/%3E%3C/svg%3E");
 }
 
-[data-t="surprise"] { --c: var(--t-surprise); --cb: rgba(143, 184, 196, 0.26); --cg: rgba(143, 184, 196, 0.7); }
-[data-t="short"]    { --c: var(--t-short);    --cb: rgba(201, 191, 232, 0.26); --cg: rgba(201, 191, 232, 0.7); }
-[data-t="medium"]   { --c: var(--t-medium);   --cb: rgba(227, 166, 177, 0.26); --cg: rgba(227, 166, 177, 0.7); }
-[data-t="long"]     { --c: var(--t-long);     --cb: rgba(240, 182, 92, 0.26);  --cg: rgba(240, 182, 92, 0.7); }
-[data-t="egg"]      { --c: var(--t-egg);    --cb: rgba(168, 201, 160, 0.26); --cg: rgba(168, 201, 160, 0.7); }
+[data-t="surprise"] {
+  --c: var(--t-surprise);
+  --cb: rgba(143, 184, 196, 0.26);
+  --cg: rgba(143, 184, 196, 0.7);
+}
+
+[data-t="short"] {
+  --c: var(--t-short);
+  --cb: rgba(201, 191, 232, 0.26);
+  --cg: rgba(201, 191, 232, 0.7);
+}
+
+[data-t="medium"] {
+  --c: var(--t-medium);
+  --cb: rgba(227, 166, 177, 0.26);
+  --cg: rgba(227, 166, 177, 0.7);
+}
+
+[data-t="long"] {
+  --c: var(--t-long);
+  --cb: rgba(240, 182, 92, 0.26);
+  --cg: rgba(240, 182, 92, 0.7);
+}
+
+[data-t="egg"] {
+  --c: var(--t-egg);
+  --cb: rgba(168, 201, 160, 0.26);
+  --cg: rgba(168, 201, 160, 0.7);
+}
 
 /* ---------- 頂部狀態標籤 ---------- */
 .cm-chips {
@@ -115,7 +142,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.cm-it:last-child { margin-bottom: 0; }
+.cm-it:last-child {
+  margin-bottom: 0;
+}
 
 .cm-it::before {
   content: '';
@@ -171,16 +200,31 @@
   color: var(--mist-dim);
 }
 
-.cm-it:focus-visible { outline: none; }
-.cm-it:focus-visible .cm-nm { color: var(--c); }
+.cm-it:focus-visible {
+  outline: none;
+}
 
-.cm-menu.f .cm-it { opacity: .35; }
-.cm-menu.f .cm-it.on { opacity: 1; }
-.cm-it.on .cm-nm { color: var(--c); }
+.cm-it:focus-visible .cm-nm {
+  color: var(--c);
+}
+
+.cm-menu.f .cm-it {
+  opacity: .35;
+}
+
+.cm-menu.f .cm-it.on {
+  opacity: 1;
+}
+
+.cm-it.on .cm-nm {
+  color: var(--c);
+}
 
 /* 只有真的有滑鼠的裝置才有 hover；手機點一下是切換，不會卡住 */
 @media (hover: hover) and (pointer: fine) {
-  .cm-it:hover .cm-nm { color: var(--c); }
+  .cm-it:hover .cm-nm {
+    color: var(--c);
+  }
 }
 
 /* ---------- 排程月曆 ---------- */
@@ -213,19 +257,26 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.cm-nav:focus-visible { outline: none; color: var(--lamp); }
+.cm-nav:focus-visible {
+  outline: none;
+  color: var(--lamp);
+}
 
 @media (hover: hover) and (pointer: fine) {
-  .cm-nav:hover { color: var(--lamp); }
+  .cm-nav:hover {
+    color: var(--lamp);
+  }
 }
 
 @media (hover: none) {
-  .cm-nav:active { color: var(--lamp); }
+  .cm-nav:active {
+    color: var(--lamp);
+  }
 }
 
 .cm-wd {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   margin-bottom: 6px;
   text-align: center;
   font-family: var(--font-mono);
@@ -244,11 +295,13 @@
   border-top: 1px solid rgba(201, 191, 232, 0.1);
 }
 
-.cm-wk:first-child { border-top: 0; }
+.cm-wk:first-child {
+  border-top: 0;
+}
 
 .cm-row {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   min-height: inherit;
 }
 
@@ -257,6 +310,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  min-width: 0;
   min-height: 96px;
   padding: 6px 8px 8px;
   border-left: 1px solid rgba(201, 191, 232, 0.08);
@@ -265,11 +319,21 @@
   color: var(--mist-dim);
 }
 
-.cm-c:first-child { border-left: 0; }
-.cm-c.o { color: #3b3f6e; }
-.cm-c.r { background: rgba(10, 12, 24, 0.55); }
+.cm-c:first-child {
+  border-left: 0;
+}
 
-.cm-c.t .n { color: var(--lamp); }
+.cm-c.o {
+  color: #3b3f6e;
+}
+
+.cm-c.r {
+  background: rgba(10, 12, 24, 0.55);
+}
+
+.cm-c.t .n {
+  color: var(--lamp);
+}
 
 .cm-c.t .n::after {
   content: '';
@@ -292,32 +356,45 @@
 }
 
 .cm-cal.f .cm-mk,
-.cm-cal.f .cm-li { opacity: .2; }
+.cm-cal.f .cm-li {
+  opacity: .2;
+}
 
 .cm-cal.f .cm-mk.on,
-.cm-cal.f .cm-li.on { opacity: 1; }
+.cm-cal.f .cm-li.on {
+  opacity: 1;
+}
 
 
-/* 預計交稿日的標記：星點 + 你設定的名稱，直接放在那一天的格子裡 */
+/* 預計交稿日的標記：依方案上色的小膠囊，裡面是星點 + 方案名稱 */
 .cm-mk {
   display: flex;
   align-items: center;
+  align-self: flex-start;
   gap: 6px;
   min-width: 0;
-  font-size: 12px;
-  line-height: 1.35;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 2px 9px 2px 8px;
+  border-radius: 999px;
+  background: var(--cb, rgba(169, 171, 198, 0.16));
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: .5px;
   color: var(--paper);
+  color: color-mix(in srgb, var(--c, #A9ABC6) 62%, var(--paper));
   transition: opacity .2s ease;
 }
 
 .cm-mk::before {
   content: '';
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--c, var(--mist));
-  box-shadow: 0 0 6px 2px var(--cg, rgba(169, 171, 198, 0.5));
+  box-shadow: 0 0 5px 1px var(--cg, rgba(169, 171, 198, 0.5));
 }
 
 .cm-mk span {
@@ -327,23 +404,41 @@
   white-space: nowrap;
 }
 
-.cm-mk.done { opacity: .45; }
-.cm-mk.done span { text-decoration: line-through; text-decoration-color: rgba(169, 171, 198, .5); }
+.cm-mk.done {
+  opacity: .45;
+}
+
+/* 休息日的彎月記號 */
+.cm-c .moon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  vertical-align: -1px;
+  background: var(--moon-icon) no-repeat center / contain;
+  opacity: .85;
+}
 
 .cm-foot {
-  margin: 12px 0 0;
+  margin: 18px 0 0;
   text-align: center;
   font-family: var(--font-mono);
   font-size: 11px;
+  letter-spacing: 1.5px;
   color: var(--mist-dim);
 }
 
 /* ---------- 手機：月曆改成週列表 ---------- */
-.cm-list { display: none; }
+.cm-list {
+  display: none;
+}
 
 @media (max-width: 640px) {
+
   .cm-wd,
-  .cm-grid { display: none; }
+  .cm-grid {
+    display: none;
+  }
 
   .cm-list {
     display: block;
@@ -356,7 +451,9 @@
     border-top: 1px solid rgba(201, 191, 232, 0.1);
   }
 
-  .cm-lw:first-child { border-top: 0; }
+  .cm-lw:first-child {
+    border-top: 0;
+  }
 
   .cm-lw-h {
     margin-bottom: 8px;
@@ -375,7 +472,9 @@
     transition: opacity .2s ease;
   }
 
-  .cm-li.done { opacity: .45; }
+  .cm-li.done {
+    opacity: .45;
+  }
 
   .cm-li-dot {
     width: 7px;
@@ -391,12 +490,6 @@
     color: var(--paper);
   }
 
-  .cm-li-nm em {
-    margin-left: 8px;
-    font-style: normal;
-    font-size: 12px;
-    color: var(--mist);
-  }
 
   .cm-li-d {
     font-family: var(--font-mono);
@@ -404,13 +497,6 @@
     color: var(--mist);
   }
 
-  .cm-li-note {
-    grid-column: 2 / 4;
-    margin-top: 2px;
-    font-size: 12px;
-    line-height: 1.7;
-    color: var(--mist-dim);
-  }
 
   .cm-lm {
     padding: 4px 0;
@@ -424,7 +510,19 @@
     font-size: 11px;
   }
 
-  .cm-lm.rest { color: var(--mist); }
+  .cm-lm.rest {
+    color: var(--mist);
+  }
+
+  .cm-lm.rest::after {
+    content: '';
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-left: 8px;
+    vertical-align: -2px;
+    background: var(--moon-icon) no-repeat center / contain;
+  }
 
   .cm-none {
     padding: 22px 16px;
@@ -433,11 +531,16 @@
     color: var(--mist-dim);
   }
 
-  .cm-chips { margin-top: 44px; }
+  .cm-chips {
+    margin-top: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .cm-it,
   .cm-mk,
-  .cm-li { transition: none; }
+  .cm-li {
+    transition: none;
+  }
 }
