@@ -70,7 +70,7 @@ collections:
             name: schedule
             widget: list
             required: false
-            summary: '{{fields.id}}｜{{fields.type}}｜交稿 {{fields.end}}'
+            summary: '{{fields.id}}｜{{fields.type}}｜DDL {{fields.end}}'
             hint: 這裡的內容會公開顯示在委託頁的交稿排程上。只填單號或代稱，不要放委託人的名字、帳號或聯絡方式。
             fields:
               - { label: 單號或代稱, name: id, widget: string, hint: '公開顯示。例如 K-0917' }
@@ -84,7 +84,8 @@ collections:
                   - { label: 長篇, value: long }
                   - { label: 轉蛋台, value: egg }
               - { label: 開始日, name: start, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
-              - { label: 預計交稿日, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: '你自己安排的交稿日期，交稿排程顯示這個日期。' }
+              - { label: DDL（工期結束日）, name: end, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: '開始日加工期算出來的期限。' }
+              - { label: 預計交稿日, name: deliver_on, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: '你自己安排的交稿日期，月曆會在這一天標出這筆委託；留空就標在 DDL。與工期無關。' }
               - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後這一筆會標示「已完成」，再留 14 天就自動從交稿排程消失。' }
               - { label: 公開顯示, name: public, widget: boolean, default: true, hint: '關閉後這一筆完全不會出現在網站上。' }
               - { label: 公開備註, name: note, widget: string, required: false, hint: '顯示在這一筆下方，例如「撰寫中」。' }

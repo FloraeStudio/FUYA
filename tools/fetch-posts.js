@@ -36,17 +36,18 @@ function taipeiIso(iso) {
   return d.replace('Z', '+08:00');
 }
 
-function frontMatter(p) {
+// cat：這一份文章要放進哪個分類。一篇文章如果設了「同時顯示在」，每個分類各產生一份（內容相同，只有分類不同）。
+function frontMatter(p, cat) {
   const m = p.meta || {};
   const L = ['---', 'title: ' + q(p.title), 'date: ' + taipeiIso(p.date)];
   if (p.pin) L.push('pin: true');
-  L.push('categories:', '  - ' + p.category);
-  if (p.category === '企劃') {
+  L.push('categories:', '  - ' + cat);
+  if (cat === '企劃') {
     L.push('is_series: ' + (m.is_series ? 'true' : 'false'));
     if (m.status) L.push('status: ' + q(m.status));
     if (m.project_group) L.push('project_group: ' + q(m.project_group));
   }
-  if (m.plan_tier) L.push('plan_tier: ' + q(m.plan_tier));
+  if (cat === '委託' && m.plan_tier) L.push('plan_tier: ' + q(m.plan_tier));
   if (m.description) L.push('description: ' + q(m.description));
   if (m.tags && m.tags.length) L.push('tags:', ...m.tags.map((t) => '  - ' + q(t)));
   if (m.notices && m.notices.length) L.push('notices:', ...m.notices.map((t) => '  - ' + q(t)));
@@ -88,12 +89,15 @@ function bail(msg, hard) {
   const files = [];
   const seen = new Set();
   for (const p of data.posts) {
-    const folder = FOLDERS[p.category];
-    if (!folder) { console.warn('！略過未知分類：' + p.category + '／' + p.title); continue; }
-    const key = folder + '/' + p.slug;
-    if (seen.has(key) || /[\/\\]|^\./.test(p.slug)) { console.warn('！略過重複或不合法的網址名稱：' + key); continue; }
-    seen.add(key);
-    files.push({ folder, name: p.slug + '.md', text: frontMatter(p) + '\n' + p.body.replace(/\r\n/g, '\n') + '\n' });
+    const cats = [...new Set([p.category, ...((p.meta && p.meta.also_in) || [])])];
+    for (const cat of cats) {
+      const folder = FOLDERS[cat];
+      if (!folder) { console.warn('！略過未知分類：' + cat + '／' + p.title); continue; }
+      const key = folder + '/' + p.slug;
+      if (seen.has(key) || /[\/\\]|^\./.test(p.slug)) { console.warn('！略過重複或不合法的網址名稱：' + key); continue; }
+      seen.add(key);
+      files.push({ folder, name: p.slug + '.md', text: frontMatter(p, cat) + '\n' + p.body.replace(/\r\n/g, '\n') + '\n' });
+    }
   }
 
   // 固定順序寫入：Hexo 依檔案處理順序建立標籤，順序固定才能讓每次建置的標籤排列一致

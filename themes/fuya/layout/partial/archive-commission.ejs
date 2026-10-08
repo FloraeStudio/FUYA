@@ -23,11 +23,11 @@
   }
 
   // 只輸出「可公開」的欄位；public: false 的整筆不會進到網頁原始碼。
-  // 交稿排程：一筆一個日期（預計交稿日）。已完成的也帶出去，由前端只保留最近 14 天。
+  // 月曆標記：一筆一個日期（你自己安排的預計交稿日，沒填就用 DDL）。已完成的也帶出去，由前端只保留最近 14 天。
   var deliveries = (cm.schedule || [])
-    .filter(function(e){ return e && e.public !== false && d10(e.deliver_on || e.end); })
+    .filter(function(e){ return e && e.public !== false && (d10(e.deliver_on) || d10(e.end)); })
     .map(function(e){
-     return { type: e.type || '', date: d10(e.deliver_on || e.end), done: !!e.done };
+      return { id: e.id || '', type: e.type || '', date: d10(e.deliver_on) || d10(e.end), note: e.note || '', done: !!e.done };
     })
     .sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
   var marks = (cm.marks || [])
@@ -35,7 +35,7 @@
     .map(function(m){ return { date: d10(m.date), text: m.text || '', rest: !!m.rest }; });
   var types = plans.map(function(p){ return { key: p.key, name: p.name }; });
   // 牌單（commission_plans）沒有列出、但後台排程可以選的類型，月曆也要認得名稱
-  var extraTypes = { egg: '轉蛋' };
+  var extraTypes = { egg: '轉蛋台' };
   Object.keys(extraTypes).forEach(function(k){
     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
   });
@@ -85,7 +85,7 @@
   <div class="cm-wd" aria-hidden="true"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
   <div class="cm-grid" id="cm-grid"></div>
   <div class="cm-list" id="cm-list"></div>
-  <p class="cm-foot" id="cm-foot">星點是那天預計交稿的委託</p>
+  <p class="cm-foot" id="cm-foot">星點旁的名稱，是那天預計交稿的委託</p>
 </div>
 <script type="application/json" id="cm-data"><%- payload %></script>
 <script src="<%- url_for('/js/commission-calendar.js') %>" defer></script>
