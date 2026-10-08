@@ -108,7 +108,7 @@ project_groups:
   - key: valentines
     name: 十二個情人節
     theme: lamp
-    badge: 修整中
+    badge: 暫停中
     intro: 十二段情人節，十二種心動的樣子。
     status: ''
     visual: calendar-scatter
