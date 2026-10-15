@@ -22,26 +22,65 @@
         <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } %>
       </div>
 
-      <% if (group.visual === 'calendar-scatter') { %>
-        <div class="calendar-scatter" aria-hidden="true">
-          <svg class="cs-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <polyline points="7,65 15,30 25,50 32,20 42,38 50,15 58,45 67,25 75,55 82,30 88,65 93,40" />
-          </svg>
-          <% for (var m = 1; m <= 12; m++) { %>
-            <div class="cs-month <%= litMonths[m] ? 'lit' : '' %>">
-              <span class="cs-tick"></span>
-              <span class="cs-label"><%= ('0' + m).slice(-2) %></span>
-            </div>
-          <% } %>
-        </div>
+      <% if (group.visual === 'letter') { %>
+        <svg class="pg-scene" viewBox="0 0 600 260" aria-hidden="true">
+          <defs>
+            <radialGradient id="ps-glow" cx="300" cy="104" r="100" gradientUnits="userSpaceOnUse">
+              <stop offset="0" class="ps-glow-stop" stop-opacity=".34"/><stop offset="1" class="ps-glow-stop" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="300" cy="104" r="100" fill="url(#ps-glow)"/>
+          <line class="ps-ground" x1="180" y1="216" x2="420" y2="216"/>
+          <polygon class="ps-paper-faint" points="220,132 300,76 380,132"/>
+          <rect class="ps-letter" x="246" y="94" width="108" height="78" rx="2"/>
+          <g class="ps-letter-lines"><line x1="262" y1="112" x2="322" y2="112"/><line x1="262" y1="124" x2="338" y2="124"/><line x1="262" y1="136" x2="310" y2="136"/></g>
+          <polygon class="ps-pocket" points="220,132 300,178 380,132 380,216 220,216"/>
+          <circle class="ps-halo" cx="300" cy="194" r="12"/><circle class="ps-acc" cx="300" cy="194" r="5"/>
+          <path class="ps-trail" d="M300 90 C296 74 304 62 300 50"/>
+          <g class="ps-acc ps-twinkle">
+            <path d="M300 30Q300 40 309 40Q300 40 300 49Q300 40 291 40Q300 40 300 31Z"/>
+            <path style="animation-delay:.8s" d="M262 57Q262 62 267 62Q262 62 262 67Q262 62 257 62Q262 62 262 57Z"/>
+            <path style="animation-delay:1.6s" d="M342 50Q342 56 348 56Q342 56 342 62Q342 56 336 56Q342 56 342 50Z"/>
+            <path style="animation-delay:2.4s" d="M284 18Q284 22 288 22Q284 22 284 26Q284 22 280 22Q284 22 284 18Z"/>
+            <circle cx="326" cy="28" r="1.8"/>
+          </g>
+          <g class="ps-stray"><circle cx="60" cy="60" r="1.2"/><circle cx="110" cy="150" r="1"/><circle cx="150" cy="40" r="1.3"/><circle cx="480" cy="50" r="1.3"/><circle cx="530" cy="140" r="1"/><circle cx="450" cy="190" r="1.2"/><circle cx="90" cy="214" r="1"/><circle cx="520" cy="214" r="1.2"/><circle cx="40" cy="120" r="1"/><circle cx="560" cy="70" r="1"/></g>
+        </svg>
       <% } %>
 
-      <% if (group.visual === 'firefly-calendar') { %>
-        <div class="firefly-calendar" aria-hidden="true">
-          <% for (var m = 1; m <= 12; m++) { %>
-            <span class="ff-dot <%= litMonths[m] ? 'lit' : '' %>" style="animation-delay: <%= Math.round((m % 5) * 0.6 * 10) / 10 %>s;"></span>
-          <% } %>
-        </div>
+      <% if (group.visual === 'desk') { %>
+        <svg class="pg-scene" viewBox="0 0 600 260" aria-hidden="true">
+          <defs>
+            <linearGradient id="ps-beam" x1="226" y1="146" x2="330" y2="206" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#F0B65C" stop-opacity=".26"/><stop offset="1" stop-color="#F0B65C" stop-opacity="0"/>
+            </linearGradient>
+            <pattern id="ps-days" x="306" y="141" width="12" height="14" patternUnits="userSpaceOnUse">
+              <circle cx="6" cy="7" r="1.1" fill="rgba(251,245,231,.35)"/>
+            </pattern>
+          </defs>
+          <polygon points="216,150 236,142 400,206 250,206" fill="url(#ps-beam)"/>
+          <line class="ps-ground" x1="110" y1="206" x2="500" y2="206"/>
+          <ellipse class="ps-lamp-base" cx="170" cy="204" rx="22" ry="3.5"/>
+          <path class="ps-lamp-arm" d="M170 202 L170 168 L206 130"/>
+          <circle class="ps-lamp-joint" cx="170" cy="168" r="3"/>
+          <polygon class="ps-lamp-shade" points="198,126 218,114 238,142 214,152"/>
+          <circle class="ps-lamp-halo" cx="226" cy="148" r="14"/><circle class="ps-lamp-bulb" cx="226" cy="148" r="3.6"/>
+          <g transform="rotate(-2 350 206)">
+            <rect class="ps-cal" x="300" y="110" width="100" height="96" rx="3"/>
+            <rect class="ps-cal-head" x="300.5" y="110.5" width="99" height="22"/>
+            <text class="ps-mono" x="350" y="126" text-anchor="middle" letter-spacing="3">OCT</text>
+            <rect x="306" y="141" width="84" height="56" fill="url(#ps-days)"/>
+            <circle class="ps-ring" cx="348" cy="162" r="7"/><circle class="ps-acc" cx="348" cy="162" r="1.7"/>
+            <circle class="ps-halo" cx="372" cy="176" r="10"/><circle class="ps-acc" cx="372" cy="176" r="3.2"/>
+            <g class="ps-binding"><rect x="316" y="102" width="5" height="14" rx="2.5"/><rect x="348" y="102" width="5" height="14" rx="2.5"/><rect x="380" y="102" width="5" height="14" rx="2.5"/></g>
+          </g>
+          <path class="ps-trail" d="M372 166 C382 140 366 112 372 94"/>
+          <path class="ps-acc ps-twinkle" d="M372 72Q372 84 384 84Q372 84 372 96Q372 84 360 84Q372 84 372 73Z"/>
+          <rect class="ps-mug" x="436" y="170" width="34" height="36" rx="5"/>
+          <path class="ps-mug-handle" d="M470 180 C486 180 486 198 470 198"/>
+          <g class="ps-steam"><path d="M446 160 C441 152 450 148 445 140"/><path d="M460 160 C455 152 464 148 459 140"/></g>
+          <g class="ps-stray"><circle cx="60" cy="60" r="1.2"/><circle cx="120" cy="120" r="1"/><circle cx="160" cy="40" r="1.3"/><circle cx="480" cy="60" r="1.3"/><circle cx="540" cy="130" r="1"/><circle cx="520" cy="190" r="1.2"/><circle cx="70" cy="200" r="1"/><circle cx="560" cy="40" r="1"/></g>
+        </svg>
       <% } %>
 
       <% if (group.intro) { %>

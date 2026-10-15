@@ -113,7 +113,7 @@ project_groups:
     badge: 暫停中
     intro: 十二段情人節，十二種心動的樣子。
     status: ''
-    visual: calendar-scatter
+    visual: letter
   - key: holidays
     motif: calendar
     name: 冷門節日企劃
@@ -121,7 +121,7 @@ project_groups:
     badge: 進行中
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: ''
-    visual: firefly-calendar
+    visual: desk
   - key: shiguangqian
     motif: tarot
     name: 拾光籤
