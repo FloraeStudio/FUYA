@@ -7,7 +7,7 @@
       <%
         // 置頂文章一律排在最前面（彼此之間仍依日期新到舊），其餘文章維持原本的日期排序，
         // 最後才截斷到要顯示的篇數，確保置頂文章不會被排擠出「最近寫的字」。
-        var recentPosts = site.posts.sort('-date').toArray().sort(function(a, b){
+        var recentPosts = site.posts.filter(function(p){ return !p.also_copy; }).sort('-date').toArray().sort(function(a, b){
           return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
         }).slice(0, theme.recent_count || 6);
       %>

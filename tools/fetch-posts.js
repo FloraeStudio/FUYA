@@ -42,6 +42,8 @@ function frontMatter(p, cat) {
   const L = ['---', 'title: ' + q(p.title), 'date: ' + taipeiIso(p.date)];
   if (p.pin) L.push('pin: true');
   L.push('categories:', '  - ' + cat);
+  // 這份是「同時顯示在」產生的副本（不是主分類那份）：首頁會略過它，避免同一篇出現兩次
+  if (cat !== p.category) L.push('also_copy: true');
   if (cat === '企劃') {
     L.push('is_series: ' + (m.is_series ? 'true' : 'false'));
     if (m.status) L.push('status: ' + q(m.status));
