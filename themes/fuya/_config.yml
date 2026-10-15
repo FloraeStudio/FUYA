@@ -102,10 +102,12 @@ gacha_cta_label: ''
 # ------------------------------------------------
 # 企劃頁 — 子企劃（兩張大卡片 + 各自內頁共用同一份資料）
 # theme: lamp（琥珀，呼應「開放中／連載中」）或 moon（月光紫，呼應「籌備中」）
+# motif: 企劃總覽卡片上的小圖案，可填 ring（十二顆星一圈）、calendar（掛式日曆）、tarot（疊開的牌），不填就是一小串星座
 # 這裡的文字之後想改標題、簡介、狀態都直接改這裡即可，不用碰 .ejs
 # ------------------------------------------------
 project_groups:
   - key: valentines
+    motif: ring
     name: 十二個情人節
     theme: lamp
     badge: 暫停中
@@ -113,6 +115,7 @@ project_groups:
     status: ''
     visual: calendar-scatter
   - key: holidays
+    motif: calendar
     name: 冷門節日企劃
     theme: moon
     badge: 進行中
@@ -120,6 +123,7 @@ project_groups:
     status: ''
     visual: firefly-calendar
   - key: shiguangqian
+    motif: tarot
     name: 拾光籤
     theme: moon
     badge: 進行中
