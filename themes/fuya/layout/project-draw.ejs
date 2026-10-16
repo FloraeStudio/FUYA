@@ -31,20 +31,47 @@
       <% } %>
 
       <!-- ===== 抽籤卡 ===== -->
-      <div class="draw-stage">
-        <div class="draw-card" id="draw-card">
-          <div class="draw-face draw-face-front">
-            <svg class="draw-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="24" cy="24" r="15" stroke="currentColor" stroke-width="1.2"/>
-              <circle cx="24" cy="24" r="2" fill="currentColor"/>
-            </svg>
-            <div class="draw-hint">尚未揭曉</div>
-          </div>
-          <div class="draw-face draw-face-back">
-            <div class="draw-code" id="draw-code">I</div>
-            <span class="draw-orientation" id="draw-orientation">正位</span>
-            <div class="draw-mood" id="draw-mood"></div>
-            <div class="draw-clue" id="draw-clue"></div>
+      <div class="draw-scene">
+        <svg class="draw-backdrop" viewBox="0 0 520 620" aria-hidden="true">
+          <defs>
+            <radialGradient id="ds-glow" cx="260" cy="300" r="160" gradientUnits="userSpaceOnUse">
+              <stop offset="0" class="ds-glow-stop" stop-opacity=".22"/><stop offset="1" class="ds-glow-stop" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="260" cy="300" r="160" fill="url(#ds-glow)"/>
+          <ellipse class="ds-shadow" cx="260" cy="566" rx="120" ry="6"/>
+          <line class="ds-ground" x1="90" y1="574" x2="430" y2="574"/>
+          <path class="ds-trail" d="M62 520 C40 430 92 340 70 196"/>
+          <path class="ds-trail" d="M468 540 C500 450 452 390 480 346"/>
+          <g class="ds-star ds-twinkle">
+            <path d="M70 170Q70 182 82 182Q70 182 70 194Q70 182 58 182Q70 182 70 171Z"/>
+            <path style="animation-delay:.9s" d="M452 120Q452 128 460 128Q452 128 452 136Q452 128 444 128Q452 128 452 121Z"/>
+            <path style="animation-delay:1.8s" d="M482 322Q482 332 492 332Q482 332 482 342Q482 332 472 332Q482 332 482 323Z"/>
+            <path style="animation-delay:2.7s" d="M46 448Q46 454 52 454Q46 454 46 460Q46 454 40 454Q46 454 46 449Z"/>
+            <path style="animation-delay:1.3s" d="M436 506Q436 514 444 514Q436 514 436 522Q436 514 428 514Q436 514 436 507Z"/>
+            <path style="animation-delay:2.2s" d="M104 96Q104 100 108 100Q104 100 104 104Q104 100 100 100Q104 100 104 97Z"/>
+          </g>
+          <g class="ds-stray"><circle cx="40" cy="60" r="1.2"/><circle cx="150" cy="40" r="1"/><circle cx="380" cy="50" r="1.3"/><circle cx="500" cy="200" r="1"/><circle cx="30" cy="300" r="1.2"/><circle cx="490" cy="440" r="1"/><circle cx="110" cy="590" r="1.2"/><circle cx="410" cy="600" r="1"/><circle cx="20" cy="520" r="1"/></g>
+        </svg>
+
+        <div class="draw-stage">
+          <div class="draw-card" id="draw-card">
+            <div class="draw-face draw-face-front">
+              <span class="draw-corner tl"></span><span class="draw-corner tr"></span><span class="draw-corner bl"></span><span class="draw-corner br"></span>
+              <svg class="draw-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M38 12 A21 21 0 1 0 38 52 A17 17 0 0 1 38 12Z" fill="currentColor" fill-opacity=".9"/>
+                <path d="M50 18Q50 25 57 25Q50 25 50 32Q50 25 43 25Q50 25 50 18Z" fill="currentColor"/>
+                <circle cx="50" cy="46" r="1.6" fill="currentColor"/>
+              </svg>
+              <div class="draw-hint">尚未揭曉</div>
+            </div>
+            <div class="draw-face draw-face-back">
+              <span class="draw-corner tl"></span><span class="draw-corner tr"></span><span class="draw-corner bl"></span><span class="draw-corner br"></span>
+              <div class="draw-code" id="draw-code">I</div>
+              <span class="draw-orientation" id="draw-orientation">正位</span>
+              <div class="draw-mood" id="draw-mood"></div>
+              <div class="draw-clue" id="draw-clue"></div>
+            </div>
           </div>
         </div>
       </div>

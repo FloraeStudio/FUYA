@@ -9,6 +9,9 @@
     return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
   });
 
+  // 上方插畫：visual 填 letter / desk；舊名稱（calendar-scatter / firefly-calendar）也會對應過來，避免設定沒更新時頁面空白
+  var sceneKey = { 'calendar-scatter': 'letter', 'firefly-calendar': 'desk' }[group.visual] || group.visual;
+
   var litMonths = {};
   posts.forEach(function(post){ litMonths[post.date.format('M')] = true; });
 %>
@@ -22,7 +25,7 @@
         <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } %>
       </div>
 
-      <% if (group.visual === 'letter') { %>
+      <% if (sceneKey === 'letter') { %>
         <svg class="pg-scene" viewBox="0 0 600 260" aria-hidden="true">
           <defs>
             <radialGradient id="ps-glow" cx="300" cy="104" r="100" gradientUnits="userSpaceOnUse">
@@ -48,7 +51,7 @@
         </svg>
       <% } %>
 
-      <% if (group.visual === 'desk') { %>
+      <% if (sceneKey === 'desk') { %>
         <svg class="pg-scene" viewBox="0 0 600 260" aria-hidden="true">
           <defs>
             <linearGradient id="ps-beam" x1="226" y1="146" x2="330" y2="206" gradientUnits="userSpaceOnUse">
