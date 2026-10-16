@@ -1,59 +1,55 @@
 <section class="hero">
   <div class="eyebrow">FUYA'S WRITING STUDIO</div>
 
-  <svg class="hero-window" viewBox="0 0 300 380" role="img" aria-label="夜裡的拱形窗，窗外有月亮與雲，窗台上亮著一盞燈">
+  <svg class="hero-scene" viewBox="70 16 380 244" role="img" aria-label="夜裡的拱形窗，窗外有月亮與星星，窗台上亮著一盞燈和一杯熱茶">
     <defs>
-      <linearGradient id="hw-glass" x1="0" y1="0" x2="0" y2="1">
-        <stop class="hw-s-top" offset="0"/>
-        <stop class="hw-s-mid" offset="0.6"/>
-        <stop class="hw-s-warm" offset="1"/>
-      </linearGradient>
-      <radialGradient id="hw-spill" cx="0.5" cy="0.5" r="0.5">
-        <stop class="hw-s-lamp" offset="0" stop-opacity="0.38"/>
-        <stop class="hw-s-lamp" offset="1" stop-opacity="0"/>
+      <radialGradient id="hs-spill" cx=".5" cy=".5" r=".5">
+        <stop class="hs-s-lamp" offset="0" stop-opacity=".26"/><stop class="hs-s-lamp" offset="1" stop-opacity="0"/>
       </radialGradient>
-      <clipPath id="hw-arch"><path d="M60 300V140A90 90 0 0 1 240 140V300Z"/></clipPath>
+      <linearGradient id="hs-beam" x1="0" y1="0" x2="0" y2="1">
+        <stop class="hs-s-lamp" offset="0" stop-opacity=".24"/><stop class="hs-s-lamp" offset="1" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="hs-steam" gradientUnits="userSpaceOnUse" x1="0" y1="199" x2="0" y2="176">
+        <stop offset="0" stop-color="#A9ABC6" stop-opacity=".55"/><stop offset="1" stop-color="#A9ABC6" stop-opacity="0"/>
+      </linearGradient>
     </defs>
 
-    <ellipse cx="150" cy="330" rx="150" ry="46" fill="url(#hw-spill)"/>
-    <path class="hw-frame-out" d="M52 304V140A98 98 0 0 1 248 140V304Z"/>
-    <path d="M60 300V140A90 90 0 0 1 240 140V300Z" fill="url(#hw-glass)"/>
-
-    <g clip-path="url(#hw-arch)">
-      <circle class="hw-moon-halo" cx="188" cy="118" r="46" opacity="0.07"/>
-      <circle class="hw-moon-halo" cx="188" cy="118" r="33" opacity="0.14"/>
-      <circle class="hw-moon" cx="188" cy="118" r="22"/>
-      <circle class="hw-crater" cx="181" cy="112" r="5" opacity="0.55"/>
-      <circle class="hw-crater" cx="194" cy="126" r="3" opacity="0.45"/>
-
-      <circle class="hw-star hw-twinkle" cx="92" cy="92" r="1.6"/>
-      <circle class="hw-star hw-twinkle" cx="128" cy="62" r="1.2" style="animation-delay:1s"/>
-      <circle class="hw-star hw-twinkle" cx="112" cy="150" r="1.4" style="animation-delay:2s"/>
-      <circle class="hw-star hw-twinkle" cx="222" cy="170" r="1.2" style="animation-delay:.5s"/>
-
-      <g class="hw-cloud-drift hw-cloud" opacity="0.8">
-        <ellipse cx="120" cy="212" rx="38" ry="9"/>
-        <ellipse cx="146" cy="205" rx="22" ry="9"/>
-        <ellipse cx="190" cy="240" rx="34" ry="8" opacity="0.7"/>
-      </g>
-      <rect x="60" y="262" width="180" height="38" fill="var(--lamp)" opacity="0.1"/>
+    <ellipse cx="240" cy="234" rx="110" ry="24" fill="url(#hs-spill)"/>
+    <path class="hs-glass" d="M170 220V110A70 70 0 0 1 310 110V220Z"/>
+    <path class="hs-glass-in" d="M177 220V110A63 63 0 0 1 303 110V220"/>
+    <g class="hs-bar"><line x1="240" y1="47" x2="240" y2="220"/><line x1="177" y1="132" x2="303" y2="132"/></g>
+    <circle class="hs-moon-halo" cx="268" cy="88" r="24"/>
+    <path class="hs-moon" d="M275 76A13 13 0 1 0 275 100A12 12 0 0 1 275 76Z"/>
+    <g class="hs-star-moon">
+      <path d="M202 74Q202 80 208 80Q202 80 202 86Q202 80 196 80Q202 80 202 75Z"/>
+      <path d="M214 156Q214 160 218 160Q214 160 214 164Q214 160 210 160Q214 160 214 157Z"/>
+      <circle cx="195" cy="118" r="1.2"/><circle cx="288" cy="152" r="1.2"/>
     </g>
 
-    <path class="hw-bar" d="M150 44V300"/>
-    <path class="hw-bar" d="M60 196H240"/>
-    <path class="hw-frame-line" d="M60 300V140A90 90 0 0 1 240 140V300Z"/>
+    <rect class="hs-sill" x="155" y="220" width="170" height="8" rx="1"/>
+    <line class="hs-sill-under" x1="148" y1="234" x2="332" y2="234"/>
+    <polygon fill="url(#hs-beam)" points="266,200 294,200 306,220 254,220"/>
+    <ellipse class="hs-lamp-base" cx="280" cy="219" rx="9" ry="2.5"/>
+    <line class="hs-lamp-stem" x1="280" y1="218" x2="280" y2="200"/>
+    <polygon class="hs-shade" points="274,182 286,182 294,200 266,200"/>
+    <circle class="hs-bulb-halo" cx="280" cy="202" r="12"/><circle class="hs-bulb" cx="280" cy="202" r="3.4"/>
+    <rect class="hs-cup" x="196" y="204" width="22" height="16" rx="3"/>
+    <path class="hs-cup-handle" d="M218 208C226 208 226 218 218 217"/>
+    <g class="hs-steam"><path d="M203 199C199 192 207 188 203 182C200 178 205 176 204 174"/><path d="M211 198C207 191 215 187 211 181C208 177 213 175 212 173"/></g>
+    <line class="hs-ground" x1="110" y1="244" x2="370" y2="244"/>
 
-    <rect class="hw-sill" x="40" y="300" width="220" height="12" rx="2"/>
-    <rect class="hw-sill-under" x="34" y="312" width="232" height="6" rx="2"/>
-
-    <rect class="hw-lamp-base" x="198" y="290" width="14" height="10"/>
-    <rect class="hw-lamp-base" x="203" y="276" width="4" height="14"/>
-    <path class="hw-lamp" d="M190 276L196 252H214L220 276Z"/>
-    <ellipse class="hw-lamp" cx="205" cy="264" rx="22" ry="16" opacity="0.18"/>
-
-    <path class="hw-cup" d="M78 300V284Q78 280 82 280H98Q102 280 102 284V300Z"/>
-    <path class="hw-cup-handle" d="M102 286Q110 286 110 292Q110 298 102 297"/>
-    <path class="hw-steam" d="M86 272Q84 266 88 262M94 272Q92 266 96 262"/>
+    <g class="hs-twinkle">
+        <path class="hs-star-lamp" d="M372 55Q372 64 381 64Q372 64 372 73Q372 64 363 64Q372 64 372 55Z"/>
+        <path class="hs-star-lamp" style="animation-delay:1.1s" d="M412 93Q412 98 417 98Q412 98 412 103Q412 98 407 98Q412 98 412 93Z"/>
+        <path class="hs-star-lamp" style="animation-delay:2.2s" d="M388 138Q388 142 392 142Q388 142 388 146Q388 142 384 142Q388 142 388 138Z"/>
+        <path class="hs-star-lamp" style="animation-delay:0.6s" d="M336 42Q336 46 340 46Q336 46 336 50Q336 46 332 46Q336 46 336 42Z"/>
+        <path class="hs-star-lamp" style="animation-delay:1.7s" d="M436 55Q436 58 439 58Q436 58 436 61Q436 58 433 58Q436 58 436 55Z"/>
+        <path class="hs-star-moon" style="animation-delay:0.4s" d="M142 73Q142 80 149 80Q142 80 142 87Q142 80 135 80Q142 80 142 73Z"/>
+        <path class="hs-star-moon" style="animation-delay:1.5s" d="M106 121.5Q106 126 110.5 126Q106 126 106 130.5Q106 126 101.5 126Q106 126 106 121.5Z"/>
+        <path class="hs-star-moon" style="animation-delay:2.6s" d="M146 166.5Q146 170 149.5 170Q146 170 146 173.5Q146 170 142.5 170Q146 170 146 166.5Z"/>
+        <path class="hs-star-moon" style="animation-delay:0.9s" d="M96 60.5Q96 64 99.5 64Q96 64 96 67.5Q96 64 92.5 64Q96 64 96 60.5Z"/>
+    </g>
+    <g class="hs-stray"><circle cx="112" cy="40" r="1.2"/><circle cx="90" cy="200" r="1"/><circle cx="430" cy="200" r="1.2"/><circle cx="446" cy="120" r="1.2"/><circle cx="82" cy="104" r="1"/><circle cx="170" cy="30" r="1.2"/><circle cx="436" cy="170" r="1"/><circle cx="200" cy="24" r="1"/><circle cx="414" cy="40" r="1"/><circle cx="122" cy="212" r="1"/></g>
   </svg>
 
   <h3>在這裡，慢慢寫一些溫柔的<em>故事</em>。</h3>
