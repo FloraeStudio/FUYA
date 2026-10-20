@@ -1364,150 +1364,49 @@
 }
 
 /* ============================================
-   星軌分頁 / STAR-TRAIL PAGINATION
-   沿用 .pc-dot 的呼吸動畫、.diary-item 的虛線語彙、
-   .pc-lamp / .pc-moon 的顏色開關機制
+   分頁 / PAGINATION
+   樣式與後台列表的分頁一致：‹ 上一頁　第 1 / 3 頁　下一頁 ›
+   .pc-lamp / .pc-moon 只負責 hover 時的亮色
 ============================================ */
-.star-pager {
+.site-pager {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 26px;
+  gap: 20px;
   margin-top: 56px;
-  flex-wrap: wrap;
-}
-
-.sp-track {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 26px;
-}
-
-.sp-track::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  right: 3px;
-  top: 3px;
-  height: 1px;
-  background: rgba(169, 171, 198, 0.2);
-  z-index: 0;
-}
-
-.sp-node {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: var(--mist-dim);
-  transition: color .2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  a.sp-node:hover {
-    color: var(--paper);
-  }
-}
-
-@media (hover: none) {
-  a.sp-node:active {
-    color: var(--paper);
-  }
-}
-
-.sp-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(169, 171, 198, 0.4);
-  transition: background .2s ease, transform .2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  a.sp-node:hover .sp-dot {
-    background: var(--mist);
-  }
-}
-
-@media (hover: none) {
-  a.sp-node:active .sp-dot {
-    background: var(--mist);
-  }
-}
-
-.sp-num {
-  font-family: var(--font-mono);
-  font-size: 11px;
-}
-
-.sp-node.sp-current .sp-dot {
-  background: var(--light, var(--lamp));
-  transform: scale(1.3);
-  box-shadow:
-    0 0 5px 1.5px var(--dot-glow-a, rgba(240, 182, 92, 0.7)),
-    0 0 14px 4px var(--dot-glow-b, rgba(240, 182, 92, 0.28));
-  animation: twinkle-star 3.6s ease-in-out infinite;
-}
-
-.sp-node.sp-current .sp-num {
-  color: var(--light, var(--lamp));
-  font-weight: 600;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sp-node.sp-current .sp-dot {
-    animation: none;
-  }
-}
-
-.sp-node.sp-ellipsis {
-  cursor: default;
-}
-
-.sp-node.sp-ellipsis .sp-dot {
-  transform: scale(.55);
-  opacity: .6;
-}
-
-.sp-arrow {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 1px;
   color: var(--mist-dim);
+}
+
+.sp-link {
+  padding: 6px 4px;
+  color: inherit;
+  text-decoration: none;
   white-space: nowrap;
   transition: color .2s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a.sp-arrow:hover {
+  a.sp-link:hover {
     color: var(--light, var(--lamp));
   }
 }
 
 @media (hover: none) {
-  a.sp-arrow:active {
+  a.sp-link:active {
     color: var(--light, var(--lamp));
   }
 }
 
-.sp-arrow.is-disabled {
-  color: rgba(110, 112, 146, 0.3);
+.sp-link.is-disabled {
+  opacity: .3;
   pointer-events: none;
 }
 
 @media (max-width: 640px) {
-  .star-pager {
+  .site-pager {
     gap: 14px;
-  }
-
-  .sp-track {
-    gap: 18px;
-  }
-
-  .sp-arrow {
     font-size: 11px;
   }
 }

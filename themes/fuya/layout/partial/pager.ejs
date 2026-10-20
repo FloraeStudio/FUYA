@@ -14,49 +14,20 @@
     function pageUrl(i) {
       return i === 1 ? pager.base : pager.base + pdir + '/' + i + '/';
     }
-
-    // 頭尾各留一個、目前頁左右各留一個，中間跳號的地方收成一個「···」
-    var nodes = [];
-    for (var i = 1; i <= total; i++) {
-      if (i === 1 || i === total || Math.abs(i - current) <= 1) {
-        nodes.push(i);
-      } else if (nodes[nodes.length - 1] !== '...') {
-        nodes.push('...');
-      }
-    }
   %>
-  <nav class="star-pager <%= lightClass %>" aria-label="分頁">
+  <nav class="site-pager <%= lightClass %>" aria-label="分頁">
     <% if (pager.prev) { %>
-      <a class="sp-arrow" href="<%- url_for(pageUrl(pager.prev)) %>">← 上一頁</a>
+      <a class="sp-link" href="<%- url_for(pageUrl(pager.prev)) %>">‹ 上一頁</a>
     <% } else { %>
-      <span class="sp-arrow is-disabled">← 上一頁</span>
+      <span class="sp-link is-disabled">‹ 上一頁</span>
     <% } %>
 
-    <div class="sp-track">
-      <% nodes.forEach(function(n){ %>
-        <% if (n === '...') { %>
-          <span class="sp-node sp-ellipsis">
-            <span class="sp-dot"></span>
-            <span class="sp-num" aria-hidden="true">···</span>
-          </span>
-        <% } else if (n === current) { %>
-          <span class="sp-node sp-current" aria-current="page">
-            <span class="sp-dot"></span>
-            <span class="sp-num"><%= n %></span>
-          </span>
-        <% } else { %>
-          <a class="sp-node" href="<%- url_for(pageUrl(n)) %>">
-            <span class="sp-dot"></span>
-            <span class="sp-num"><%= n %></span>
-          </a>
-        <% } %>
-      <% }) %>
-    </div>
+    <span class="sp-status">第 <%= current %> / <%= total %> 頁</span>
 
     <% if (pager.next) { %>
-      <a class="sp-arrow" href="<%- url_for(pageUrl(pager.next)) %>">下一頁 →</a>
+      <a class="sp-link" href="<%- url_for(pageUrl(pager.next)) %>">下一頁 ›</a>
     <% } else { %>
-      <span class="sp-arrow is-disabled">下一頁 →</span>
+      <span class="sp-link is-disabled">下一頁 ›</span>
     <% } %>
   </nav>
 <% } %>
