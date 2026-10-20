@@ -14,6 +14,16 @@
     function pageUrl(i) {
       return i === 1 ? pager.base : pager.base + pdir + '/' + i + '/';
     }
+
+    // 頭尾各留一個、目前頁左右各留一個，中間跳號的地方收成一個「···」
+    var nodes = [];
+    for (var i = 1; i <= total; i++) {
+      if (i === 1 || i === total || Math.abs(i - current) <= 1) {
+        nodes.push(i);
+      } else if (nodes[nodes.length - 1] !== '...') {
+        nodes.push('...');
+      }
+    }
   %>
   <nav class="site-pager <%= lightClass %>" aria-label="分頁">
     <% if (pager.prev) { %>
@@ -22,7 +32,17 @@
       <span class="sp-link is-disabled">‹ 上一頁</span>
     <% } %>
 
-    <span class="sp-status">第 <%= current %> / <%= total %> 頁</span>
+    <div class="sp-pages">
+      <% nodes.forEach(function(n){ %>
+        <% if (n === '...') { %>
+          <span class="sp-gap" aria-hidden="true">···</span>
+        <% } else if (n === current) { %>
+          <span class="sp-page is-current" aria-current="page"><%= n %></span>
+        <% } else { %>
+          <a class="sp-page" href="<%- url_for(pageUrl(n)) %>" aria-label="第 <%= n %> 頁"><%= n %></a>
+        <% } %>
+      <% }) %>
+    </div>
 
     <% if (pager.next) { %>
       <a class="sp-link" href="<%- url_for(pageUrl(pager.next)) %>">下一頁 ›</a>

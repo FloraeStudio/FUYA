@@ -1404,10 +1404,55 @@
   pointer-events: none;
 }
 
+.sp-pages {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.sp-page,
+.sp-gap {
+  min-width: 28px;
+  padding: 6px 4px;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sp-gap {
+  min-width: 20px;
+  opacity: .5;
+}
+
+a.sp-page {
+  transition: color .2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.sp-page:hover {
+    color: var(--paper);
+  }
+}
+
+@media (hover: none) {
+  a.sp-page:active {
+    color: var(--paper);
+  }
+}
+
+.sp-page.is-current {
+  color: var(--light, var(--lamp));
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .site-pager {
-    gap: 14px;
+    gap: 8px;
     font-size: 11px;
+  }
+
+  .sp-page {
+    min-width: 26px;
   }
 }
 
