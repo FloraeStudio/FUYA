@@ -21,6 +21,8 @@
   (data.types || []).forEach(function (t) { typeName[t.key] = t.name; });
 
   var hasAny = false;
+  var keySeq = 0;
+  var doneByKey = {};
   var byDay = {};      // 日數 → 那天預計交稿的委託
   var marksByDay = {}; // 日數 → 休息日／備註
 
@@ -45,7 +47,7 @@
   function deliveriesOf(d) {
     if (Array.isArray(d.deliveries)) return d.deliveries;
     return (d.schedule || []).map(function (e) {
-      return { id: e.id, type: e.type, date: e.end, note: e.note, done: !!e.done };
+      return { id: e.id, type: e.type, date: e.end, note: e.note, done: !!e.done, showcase: e.showcase, post: e.post };
     });
   }
 
@@ -53,13 +55,19 @@
     data = d;
     byDay = {};
     marksByDay = {};
+    doneByKey = {};
+    keySeq = 0;
     hasAny = false;
     // 已完成的只留最近 14 天，之後自動退場
     deliveriesOf(d).forEach(function (e) {
       if (!e || !e.date) return;
       var n = toNum(e.date);
       hasAny = true;
-      (byDay[n] = byDay[n] || []).push({ id: e.id, type: e.type, note: e.note || '', done: !!e.done, n: n });
+      (byDay[n] = byDay[n] || []).push({
+        id: e.id, type: e.type, note: e.note || '', done: !!e.done, n: n,
+        showcase: e.showcase || 'private', post: e.post || '',
+        key: 'k' + (keySeq++)
+      });
     });
     (d.marks || []).forEach(function (m) {
       var n = toNum(m.date);
@@ -75,8 +83,13 @@
     return (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + (ev.done ? '　已完成' : '');
   }
 
+  // 已完成的標記做成按鈕，可以點開看作品；還沒完成的維持純顯示
   function markHtml(ev) {
-    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' + FLOWER + '<span>' + labelOf(ev) + '</span></div>';
+    if (ev.done) {
+      doneByKey[ev.key] = ev;
+      return '<button type="button" class="cm-mk done" data-t="' + esc(ev.type) + '" data-k="' + ev.key + '" aria-haspopup="dialog">' + FLOWER + '<span>' + labelOf(ev) + '</span></button>';
+    }
+    return '<div class="cm-mk" data-t="' + esc(ev.type) + '">' + FLOWER + '<span>' + labelOf(ev) + '</span></div>';
   }
 
   // 在 -a / -b 之間輪流切換 class，讓同一個動畫可以連續觸發
@@ -121,9 +134,11 @@
         evs.forEach(function (ev) {
           monthHasEvent = true;
           marks += markHtml(ev);
-          listItems += '<div class="cm-li' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' +
+          listItems += (ev.done
+            ? '<button type="button" class="cm-li done" data-t="' + esc(ev.type) + '" data-k="' + ev.key + '" aria-haspopup="dialog">'
+            : '<div class="cm-li" data-t="' + esc(ev.type) + '">') +
             FLOWER + '<span class="cm-li-nm">' + labelOf(ev) + '</span>' +
-            '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span></div>';
+            '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span>' + (ev.done ? '</button>' : '</div>');
         });
 
         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() +
@@ -147,7 +162,7 @@
     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
     if (foot) {
       foot.textContent = hasAny
-        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。' : '這個月沒有預計交稿的委託')
+        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。' : '這個月沒有預計交稿的委託')
         : '目前沒有排程中的委託';
     }
     applyFilter();
@@ -178,6 +193,86 @@
     cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); render(); replay('m');
   });
 
+  // ---------- 已完成的委託：點開小視窗 ----------
+  var worksList = data.works || [];
+  var worksUrl = data.worksUrl || '/works/';
+  var pop = null;
+  var lastFocus = null;
+
+  function findWork(name) {
+    if (!name) return null;
+    var q = String(name).trim();
+    for (var i = 0; i < worksList.length; i++) { if (worksList[i].title === q) return worksList[i]; }
+    for (var j = 0; j < worksList.length; j++) {
+      if (worksList[j].title.indexOf(q) !== -1 || q.indexOf(worksList[j].title) !== -1) return worksList[j];
+    }
+    return null;
+  }
+
+  function closePop() {
+    if (!pop) return;
+    document.removeEventListener('keydown', onKey);
+    pop.parentNode.removeChild(pop);
+    pop = null;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape') { closePop(); return; }
+    if (e.key === 'Tab' && pop) {
+      var f = pop.querySelectorAll('a, button');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  function openPop(ev, trigger) {
+    closePop();
+    lastFocus = trigger;
+    var shown = ev.showcase === 'public' || ev.showcase === 'masked';
+    var work = shown ? findWork(ev.post) : null;
+    var meta = (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + '　' + md(ev.n).replace('/', ' 月 ') + ' 日完稿';
+    var title, text, go, href;
+    if (work) {
+      title = esc(work.title);
+      text = esc(work.text) + (ev.showcase === 'masked' ? '<span class="cm-pop-note">文中的姓名已經打碼。</span>' : '');
+      go = '閱讀這篇作品'; href = work.path;
+    } else if (shown) {
+      title = '作品整理中';
+      text = '這篇已經同意公開，文章整理好之後會放在作品展示。';
+      go = '看看其他作品'; href = worksUrl;
+    } else {
+      title = '這篇沒有公開展示';
+      text = '完稿已經交給委託人。委託人沒有同意公開的話，這裡不會顯示內容。想看類似的故事，可以到作品展示逛逛。';
+      go = '看看其他作品'; href = worksUrl;
+    }
+    pop = document.createElement('div');
+    pop.className = 'cm-pop';
+    pop.setAttribute('data-t', ev.type);
+    pop.innerHTML =
+      '<div class="cm-pop-card" role="dialog" aria-modal="true" aria-labelledby="cm-pop-t">' +
+        '<div class="cm-pop-meta">' + FLOWER + '<span>' + meta + '</span></div>' +
+        '<h3 id="cm-pop-t">' + title + '</h3>' +
+        '<p>' + text + '</p>' +
+        '<div class="cm-pop-act"><a class="cm-pop-go" href="' + esc(href) + '">' + go + '</a>' +
+        '<button type="button" class="cm-pop-x">關閉</button></div>' +
+      '</div>';
+    pop.addEventListener('click', function (e) { if (e.target === pop) closePop(); });
+    pop.querySelector('.cm-pop-x').addEventListener('click', closePop);
+    document.body.appendChild(pop);
+    document.addEventListener('keydown', onKey);
+    pop.querySelector('.cm-pop-go').focus();
+  }
+
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-k]') : null;
+    if (!b) return;
+    var ev = doneByKey[b.getAttribute('data-k')];
+    if (ev) openPop(ev, b);
+  });
+
   if (menu) {
     menu.addEventListener('click', function (e) {
       var it = e.target.closest ? e.target.closest('.cm-it') : null;
@@ -198,7 +293,7 @@
       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
       .then(function (d) {
         if (!d || !Array.isArray(d.marks) || !(Array.isArray(d.deliveries) || Array.isArray(d.schedule))) throw new Error('bad shape');
-        setData({ deliveries: d.deliveries, schedule: d.schedule, marks: d.marks, types: data.types });
+        setData({ deliveries: d.deliveries, schedule: d.schedule, marks: d.marks, types: data.types, works: data.works, worksUrl: data.worksUrl });
         render();
       })
       .catch(function () { /* 後台暫時連不上：保留原本的資料 */ });

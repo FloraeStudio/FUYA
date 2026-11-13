@@ -1,0 +1,47 @@
+<%
+  // 作品展示：轉蛋、企劃、委託的文章合在一起，每篇一列：日期與來源、標題與標籤、開頭三行預覽。
+  var posts = page.posts.toArray();
+  var catClass = { '轉蛋': 'c-egg', '企劃': 'c-proj', '委託': 'c-comm' };
+  function catOf(p){
+    var names = (p.categories && p.categories.data) ? p.categories.data.map(function(c){ return c.name; }) : [];
+    return names.filter(function(n){ return catClass[n]; })[0] || '';
+  }
+  function previewOf(p){
+    if (p.description) return p.description;
+    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
+    return t.length > 150 ? t.slice(0, 150) : t;
+  }
+%>
+<h1 class="page-title">作品展示</h1>
+<p class="page-intro">寫過的故事都收在這裡。轉蛋、企劃與委託的文章放在一起，依日期由新到舊排列。</p>
+
+<div class="works-list">
+  <% posts.forEach(function(p){
+       var cat = catOf(p);
+       var tags = (p.tags && p.tags.length) ? p.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
+  %>
+    <a class="work-row <%= catClass[cat] || '' %>" href="<%- url_for(p.path) %>">
+      <span class="work-meta">
+        <span class="work-date"><%= date(p.date, 'YYYY.MM.DD') %></span>
+        <span class="work-src"><svg width="16" height="16" aria-hidden="true"><use href="#flw"/></svg><span><%= cat %></span></span>
+      </span>
+      <span class="work-main">
+        <span class="work-head">
+          <span class="work-title"><%= p.title %></span>
+          <% if (tags.length) { %>
+            <span class="work-tags">
+              <% tags.slice(0, 4).forEach(function(t){ %><span><%= t.name %></span><% }) %>
+            </span>
+          <% } %>
+        </span>
+        <% var pv = previewOf(p); if (pv) { %><span class="work-preview"><%= pv %></span><% } %>
+      </span>
+    </a>
+  <% }) %>
+  <% if (!posts.length) { %><p class="empty-note">故事，未完待續。</p><% } %>
+</div>
+
+<div class="works-foot">
+  <span class="works-count">共 <%= page.total_posts %> 篇<% if (page.total > 1) { %>，第 <%= page.current %> / <%= page.total %> 頁<% } %></span>
+  <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
+</div>

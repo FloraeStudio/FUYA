@@ -589,3 +589,124 @@
     padding: 32px 24px;
   }
 }
+
+/* ---------- 已完成的標記：可點開 ---------- */
+button.cm-mk,
+button.cm-li {
+  width: auto;
+  border: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.cm-mk {
+  min-height: 30px;
+}
+
+button.cm-li {
+  width: 100%;
+  background: none;
+}
+
+.cm-pop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(58, 38, 48, .30);
+}
+
+.cm-pop-card {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 28px 28px 26px;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: 0 24px 48px -24px rgba(58, 38, 48, .55);
+}
+
+.cm-pop-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.cm-pop-meta svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--c);
+}
+
+.cm-pop-card h3 {
+  margin: 14px 0 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.5;
+  letter-spacing: .03em;
+  color: var(--text);
+}
+
+.cm-pop-card p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--text-soft);
+}
+
+.cm-pop-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.cm-pop-act {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.cm-pop-go,
+.cm-pop-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cm-pop-go {
+  background: var(--green);
+  color: #FFFCFA;
+}
+
+.cm-pop-x {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button.cm-mk:hover { background: #fff; box-shadow: 0 0 0 1px #D9B9B3; }
+  .cm-pop-go:hover { background: var(--green-deep); }
+  .cm-pop-x:hover { border-color: var(--accent); color: var(--accent); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cm-pop-card { animation: cm-pop-in .3s cubic-bezier(.3, 1.4, .5, 1); }
+  @keyframes cm-pop-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+}

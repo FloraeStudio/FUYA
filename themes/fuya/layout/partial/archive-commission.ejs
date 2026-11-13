@@ -27,7 +27,11 @@
   var deliveries = (cm.schedule || [])
     .filter(function(e){ return e && e.public !== false && d10(e.deliver_on || e.end); })
     .map(function(e){
-     return { id: e.id || '', type: e.type || '', date: d10(e.deliver_on || e.end), done: !!e.done };
+     return {
+       id: e.id || '', type: e.type || '', date: d10(e.deliver_on || e.end), done: !!e.done,
+       // showcase：private（預設，不公開）／public（公開）／masked（姓名打碼後公開）；post：對應文章的標題
+       showcase: e.showcase || 'private', post: e.post || ''
+     };
     })
     .sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
   var marks = (cm.marks || [])
@@ -39,7 +43,15 @@
   Object.keys(extraTypes).forEach(function(k){
     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
   });
-  var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types }).replace(/</g, '\\u003c');
+  // 已完成的委託點開後，可以連到作品展示裡對應的文章：這裡把可連結的作品（標題、網址、開頭預覽）一起帶進頁面。
+  var workCats = ['轉蛋', '企劃', '委託'];
+  var works = site.posts.filter(function(p){
+    return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
+  }).map(function(p){
+    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
+    return { title: p.title, path: url_for(p.path), text: t.slice(0, 90) };
+  });
+  var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types, works: works, worksUrl: url_for('/works/') }).replace(/</g, '\\u003c');
 %>
 <link rel="stylesheet" href="<%- url_for('/css/commission.css') %>">
 
@@ -90,7 +102,7 @@
       <div class="cm-grid" id="cm-grid"></div>
     </div>
     <div class="cm-list" id="cm-list"></div>
-    <p class="cm-foot" id="cm-foot">花朵標在預計交稿日，只顯示單號或代稱。</p>
+    <p class="cm-foot" id="cm-foot">花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。</p>
   </div>
 </section>
 <script type="application/json" id="cm-data"><%- payload %></script>

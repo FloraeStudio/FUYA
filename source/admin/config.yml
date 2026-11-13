@@ -93,6 +93,16 @@ collections:
               - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後這一筆會標示「已完成」，再留 14 天就自動從交稿排程消失。' }
               - { label: 公開顯示, name: public, widget: boolean, default: true, hint: '關閉後這一筆完全不會出現在網站上。' }
               - { label: 公開備註, name: note, widget: string, required: false, hint: '顯示在這一筆下方，例如「撰寫中」。' }
+              - label: 作品展示
+                name: showcase
+                widget: select
+                default: private
+                options:
+                  - { label: 不公開, value: private }
+                  - { label: 公開, value: public }
+                  - { label: 姓名打碼後公開, value: masked }
+                hint: '只有「已完成」的這一筆會用到。預設不公開；選公開或打碼公開，客人點開完稿標記就能連到下面那篇作品。'
+              - { label: 對應文章, name: post, widget: string, required: false, hint: '填作品展示裡那篇文章的標題，例如「【原創】月光灑落的地方」。上面選了公開才會用到。' }
           - label: 月曆備註與休息日
             name: marks
             widget: list

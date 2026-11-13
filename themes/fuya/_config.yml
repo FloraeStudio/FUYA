@@ -15,14 +15,14 @@ nav:
     name: 主頁
     slug: ''
     desc: 關於芙婭
+  - key: gacha
+    name: 作品展示
+    slug: works
+    desc: 寫過的故事都在這裡
   - key: proj
-    name: 企劃
+    name: 企劃主題
     slug: projects
     desc: 正在發生的故事
-  - key: gacha
-    name: 轉蛋
-    slug: gacha
-    desc: 蘊含了驚喜的故事
   - key: comm
     name: 委託
     slug: commission

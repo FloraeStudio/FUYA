@@ -4,7 +4,15 @@
     <span class="brand-zh"><%= config.author %></span><span class="brand-en">Fuya</span>
   </a>
   <nav class="navlinks" aria-label="主選單">
-    <% var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = ''; %>
+    <%
+      var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = '';
+      // 單篇文章：轉蛋、企劃、委託的文章都歸在「作品展示」底下
+      if (page.layout === 'post' && page.categories && page.categories.length) {
+        var cn = page.categories.data[0].name;
+        if (cn === '轉蛋' || cn === '企劃' || cn === '委託') current = 'works';
+        else if (cn === '雜談') current = 'misc';
+      }
+    %>
     <% theme.nav.forEach(function(item){
          var href = item.slug ? '/' + item.slug + '/' : '/';
          var active = item.slug === current || (item.slug === '' && !current);

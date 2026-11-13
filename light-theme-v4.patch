@@ -1,0 +1,1055 @@
+diff --git a/scripts/works.js b/scripts/works.js
+new file mode 100644
+index 0000000..70d1ad7
+--- /dev/null
++++ b/scripts/works.js
+@@ -0,0 +1,22 @@
++'use strict';
++
++// 作品展示：把「轉蛋、企劃、委託」三個分類的文章合併成一份清單（/works/），
++// 依日期由新到舊，每頁 12 篇。文章本身的分類與網址都不變，只是多一個總覽入口。
++
++var pagination = require('hexo-pagination');
++
++var WORK_CATS = ['轉蛋', '企劃', '委託'];
++var PER_PAGE = 12;
++
++hexo.extend.generator.register('works', function (locals) {
++  var posts = locals.posts.filter(function (p) {
++    return (p.categories || []).some(function (c) { return WORK_CATS.indexOf(c.name) !== -1; });
++  }).sort('-date');
++
++  return pagination('works/', posts, {
++    perPage: PER_PAGE,
++    layout: ['works'],
++    format: (hexo.config.pagination_dir || 'page') + '/%d/',
++    data: { total_posts: posts.length, title: '作品展示' }
++  });
++});
+diff --git a/source/admin/config.yml b/source/admin/config.yml
+index 2a7598e..352e8a7 100644
+--- a/source/admin/config.yml
++++ b/source/admin/config.yml
+@@ -93,6 +93,16 @@ collections:
+               - { label: 已完成, name: done, widget: boolean, default: false, hint: '開啟後這一筆會標示「已完成」，再留 14 天就自動從交稿排程消失。' }
+               - { label: 公開顯示, name: public, widget: boolean, default: true, hint: '關閉後這一筆完全不會出現在網站上。' }
+               - { label: 公開備註, name: note, widget: string, required: false, hint: '顯示在這一筆下方，例如「撰寫中」。' }
++              - label: 作品展示
++                name: showcase
++                widget: select
++                default: private
++                options:
++                  - { label: 不公開, value: private }
++                  - { label: 公開, value: public }
++                  - { label: 姓名打碼後公開, value: masked }
++                hint: '只有「已完成」的這一筆會用到。預設不公開；選公開或打碼公開，客人點開完稿標記就能連到下面那篇作品。'
++              - { label: 對應文章, name: post, widget: string, required: false, hint: '填作品展示裡那篇文章的標題，例如「【原創】月光灑落的地方」。上面選了公開才會用到。' }
+           - label: 月曆備註與休息日
+             name: marks
+             widget: list
+diff --git a/themes/fuya/_config.yml b/themes/fuya/_config.yml
+index a3e577d..2161382 100644
+--- a/themes/fuya/_config.yml
++++ b/themes/fuya/_config.yml
+@@ -15,14 +15,14 @@ nav:
+     name: 主頁
+     slug: ''
+     desc: 關於芙婭
++  - key: gacha
++    name: 作品展示
++    slug: works
++    desc: 寫過的故事都在這裡
+   - key: proj
+-    name: 企劃
++    name: 企劃主題
+     slug: projects
+     desc: 正在發生的故事
+-  - key: gacha
+-    name: 轉蛋
+-    slug: gacha
+-    desc: 蘊含了驚喜的故事
+   - key: comm
+     name: 委託
+     slug: commission
+diff --git a/themes/fuya/layout/partial/archive-commission.ejs b/themes/fuya/layout/partial/archive-commission.ejs
+index e40a1f0..f5e2f3b 100644
+--- a/themes/fuya/layout/partial/archive-commission.ejs
++++ b/themes/fuya/layout/partial/archive-commission.ejs
+@@ -27,7 +27,11 @@
+   var deliveries = (cm.schedule || [])
+     .filter(function(e){ return e && e.public !== false && d10(e.deliver_on || e.end); })
+     .map(function(e){
+-     return { id: e.id || '', type: e.type || '', date: d10(e.deliver_on || e.end), done: !!e.done };
++     return {
++       id: e.id || '', type: e.type || '', date: d10(e.deliver_on || e.end), done: !!e.done,
++       // showcase：private（預設，不公開）／public（公開）／masked（姓名打碼後公開）；post：對應文章的標題
++       showcase: e.showcase || 'private', post: e.post || ''
++     };
+     })
+     .sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+   var marks = (cm.marks || [])
+@@ -39,7 +43,15 @@
+   Object.keys(extraTypes).forEach(function(k){
+     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
+   });
+-  var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types }).replace(/</g, '\\u003c');
++  // 已完成的委託點開後，可以連到作品展示裡對應的文章：這裡把可連結的作品（標題、網址、開頭預覽）一起帶進頁面。
++  var workCats = ['轉蛋', '企劃', '委託'];
++  var works = site.posts.filter(function(p){
++    return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
++  }).map(function(p){
++    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
++    return { title: p.title, path: url_for(p.path), text: t.slice(0, 90) };
++  });
++  var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types, works: works, worksUrl: url_for('/works/') }).replace(/</g, '\\u003c');
+ %>
+ <link rel="stylesheet" href="<%- url_for('/css/commission.css') %>">
+ 
+@@ -90,7 +102,7 @@
+       <div class="cm-grid" id="cm-grid"></div>
+     </div>
+     <div class="cm-list" id="cm-list"></div>
+-    <p class="cm-foot" id="cm-foot">花朵標在預計交稿日，只顯示單號或代稱。</p>
++    <p class="cm-foot" id="cm-foot">花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。</p>
+   </div>
+ </section>
+ <script type="application/json" id="cm-data"><%- payload %></script>
+diff --git a/themes/fuya/layout/partial/archive-works.ejs b/themes/fuya/layout/partial/archive-works.ejs
+new file mode 100644
+index 0000000..6accda5
+--- /dev/null
++++ b/themes/fuya/layout/partial/archive-works.ejs
+@@ -0,0 +1,47 @@
++<%
++  // 作品展示：轉蛋、企劃、委託的文章合在一起，每篇一列：日期與來源、標題與標籤、開頭三行預覽。
++  var posts = page.posts.toArray();
++  var catClass = { '轉蛋': 'c-egg', '企劃': 'c-proj', '委託': 'c-comm' };
++  function catOf(p){
++    var names = (p.categories && p.categories.data) ? p.categories.data.map(function(c){ return c.name; }) : [];
++    return names.filter(function(n){ return catClass[n]; })[0] || '';
++  }
++  function previewOf(p){
++    if (p.description) return p.description;
++    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
++    return t.length > 150 ? t.slice(0, 150) : t;
++  }
++%>
++<h1 class="page-title">作品展示</h1>
++<p class="page-intro">寫過的故事都收在這裡。轉蛋、企劃與委託的文章放在一起，依日期由新到舊排列。</p>
++
++<div class="works-list">
++  <% posts.forEach(function(p){
++       var cat = catOf(p);
++       var tags = (p.tags && p.tags.length) ? p.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
++  %>
++    <a class="work-row <%= catClass[cat] || '' %>" href="<%- url_for(p.path) %>">
++      <span class="work-meta">
++        <span class="work-date"><%= date(p.date, 'YYYY.MM.DD') %></span>
++        <span class="work-src"><svg width="16" height="16" aria-hidden="true"><use href="#flw"/></svg><span><%= cat %></span></span>
++      </span>
++      <span class="work-main">
++        <span class="work-head">
++          <span class="work-title"><%= p.title %></span>
++          <% if (tags.length) { %>
++            <span class="work-tags">
++              <% tags.slice(0, 4).forEach(function(t){ %><span><%= t.name %></span><% }) %>
++            </span>
++          <% } %>
++        </span>
++        <% var pv = previewOf(p); if (pv) { %><span class="work-preview"><%= pv %></span><% } %>
++      </span>
++    </a>
++  <% }) %>
++  <% if (!posts.length) { %><p class="empty-note">故事，未完待續。</p><% } %>
++</div>
++
++<div class="works-foot">
++  <span class="works-count">共 <%= page.total_posts %> 篇<% if (page.total > 1) { %>，第 <%= page.current %> / <%= page.total %> 頁<% } %></span>
++  <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
++</div>
+diff --git a/themes/fuya/layout/partial/nav.ejs b/themes/fuya/layout/partial/nav.ejs
+index f30a6ef..6826779 100644
+--- a/themes/fuya/layout/partial/nav.ejs
++++ b/themes/fuya/layout/partial/nav.ejs
+@@ -4,7 +4,15 @@
+     <span class="brand-zh"><%= config.author %></span><span class="brand-en">Fuya</span>
+   </a>
+   <nav class="navlinks" aria-label="主選單">
+-    <% var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = ''; %>
++    <%
++      var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = '';
++      // 單篇文章：轉蛋、企劃、委託的文章都歸在「作品展示」底下
++      if (page.layout === 'post' && page.categories && page.categories.length) {
++        var cn = page.categories.data[0].name;
++        if (cn === '轉蛋' || cn === '企劃' || cn === '委託') current = 'works';
++        else if (cn === '雜談') current = 'misc';
++      }
++    %>
+     <% theme.nav.forEach(function(item){
+          var href = item.slug ? '/' + item.slug + '/' : '/';
+          var active = item.slug === current || (item.slug === '' && !current);
+diff --git a/themes/fuya/layout/post.ejs b/themes/fuya/layout/post.ejs
+index 5c09319..33f0926 100644
+--- a/themes/fuya/layout/post.ejs
++++ b/themes/fuya/layout/post.ejs
+@@ -1,84 +1,97 @@
++<%
++  var cats = (page.categories && page.categories.length) ? page.categories.data.map(function(c){ return c.name; }) : [];
++  var catName = cats[0] || '';
++  var workCats = ['轉蛋', '企劃', '委託'];
++  var srcCat = cats.filter(function(n){ return workCats.indexOf(n) !== -1; })[0] || '';
++  var isWork = !!srcCat;
++  var catClass = { '轉蛋': 'c-egg', '企劃': 'c-proj', '委託': 'c-comm' }[srcCat] || '';
++
++  // 提醒標籤（notices）不再顯示，資料保留在文章檔案裡，之後跟標籤整合時再處理。
++  var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
++  var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
++  var showStatusBadge = page.status && (catName !== '企劃' || page.is_series);
++
++  // 上一篇、下一篇：只在作品之間走（依日期，上一篇是比較早寫的）
++  var prevPost = null, nextPost = null;
++  if (isWork) {
++    var ordered = site.posts.filter(function(p){
++      return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
++    }).sort('date').toArray();
++    var idx = -1;
++    ordered.forEach(function(p, i){ if (p.path === page.path) idx = i; });
++    if (idx > 0) prevPost = ordered[idx - 1];
++    if (idx > -1 && idx < ordered.length - 1) nextPost = ordered[idx + 1];
++  }
++
++  // 回到上一層總覽
++  var backHref = '/';
++  var backLabel = '回到首頁';
++  if (isWork) { backHref = '/works/'; backLabel = '作品展示'; }
++  else if (catName && theme.nav) {
++    var navEntry = theme.nav.find(function(n){ return n.name === catName; });
++    if (navEntry && navEntry.slug) { backHref = '/' + navEntry.slug + '/'; backLabel = catName; }
++  }
++%>
+ <%- partial('partial/head') %>
+   <%- partial('partial/header') %>
+ 
+-    <div class="post-detail">
+-      <div class="eyebrow">
+-        <%= date(page.date, 'YYYY.MM.DD' ) %>
+-          <% if (page.categories && page.categories.length) { %> · <%= page.categories.data[0].name %>
+-              <% } %>
++    <article class="post-detail">
++      <a class="back-link" href="<%- url_for(backHref) %>">← <%= backLabel %></a>
++
++      <div class="post-meta <%= catClass %>">
++        <svg width="20" height="20" aria-hidden="true"><use href="#flw"/></svg>
++        <% if (catName) { %><span><%= catName %></span><% } %>
++        <span class="post-date"><%= date(page.date, 'YYYY.MM.DD') %></span>
++        <% if (showStatusBadge) { %><span class="post-status"><%= page.status %></span><% } %>
+       </div>
+ 
+-      <h1 class="post-title">
+-        <%= page.title %>
+-      </h1>
++      <h1 class="post-title"><%= page.title %></h1>
+ 
+-      <%
+-        // 企劃分類的狀態徽章只在勾選「是連載作品」時顯示；
+-        // 委託等其他分類的狀態沒有 is_series 這個概念，維持原本行為（有填就顯示）。
+-        var catName = (page.categories && page.categories.length) ? page.categories.data[0].name : '';
+-        var showStatusBadge = page.status && (catName !== '企劃' || page.is_series);
+-      %>
+-      <% if (showStatusBadge) { %>
+-        <span class="star-badge">
+-          <%= page.status %>
+-        </span>
+-        <% } %>
++      <% if (validTags.length) { %>
++        <div class="post-tags <%= catClass %>">
++          <% validTags.forEach(function(tag){ %>
++            <a class="tag-pill" href="<%- url_for(tag.path) %>"><%= tag.name %></a>
++          <% }) %>
++        </div>
++      <% } %>
+ 
+-          <%
+-            // 逐一過濾掉空白內容，確保「有欄位但內容是空的」不會留下一個空殼容器。
+-            var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
+-            // notices 可能是 CMS 產生的 {text: '...'} 物件，也可能是手動編輯 frontmatter 時
+-            // 直接寫的純字串陣列 — 兩種格式都要能顯示，取文字時一併處理。
+-            var validNotices = (page.notices && page.notices.length)
+-              ? page.notices
+-                  .map(function(n){ return (typeof n === 'string') ? n : (n && n.text); })
+-                  .filter(function(t){ return t && t.trim(); })
+-              : [];
+-            var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
+-          %>
++      <div class="post-content">
++        <%- page.content %>
++      </div>
+ 
+-          <% if (validTags.length) { %>
+-            <div class="post-tags">
+-              <% validTags.forEach(function(tag){ %>
+-                <a class="tag-pill" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+-              <% }) %>
+-            </div>
+-          <% } %>
++      <div class="post-end" aria-hidden="true">
++        <svg width="18" height="18"><use href="#flw"/></svg><svg width="18" height="18"><use href="#flw"/></svg><svg width="18" height="18"><use href="#flw"/></svg>
++      </div>
+ 
+-          <% if (validNotices.length) { %>
+-            <div class="post-notices">
+-              <% validNotices.forEach(function(text){ %>
+-                <p>※<%= text %></p>
+-              <% }) %>
+-            </div>
+-          <% } %>
++      <% if (validLinks.length) { %>
++        <p class="post-links">
++          <span>相關連結</span>
++          <% validLinks.forEach(function(l){ %>
++            <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
++          <% }) %>
++        </p>
++      <% } %>
+ 
+-          <% if (validLinks.length) { %>
+-            <div class="post-links">
+-              <% validLinks.forEach(function(l){ %>
+-                <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
+-              <% }) %>
+-            </div>
++      <% if (prevPost || nextPost) { %>
++        <nav class="post-adj" aria-label="上一篇與下一篇">
++          <% if (prevPost) { %>
++            <a class="adj prev" href="<%- url_for(prevPost.path) %>"><span class="adj-l">← 上一篇</span><span class="adj-t"><%= prevPost.title %></span></a>
++          <% } else { %><span></span><% } %>
++          <% if (nextPost) { %>
++            <a class="adj next" href="<%- url_for(nextPost.path) %>"><span class="adj-l">下一篇 →</span><span class="adj-t"><%= nextPost.title %></span></a>
+           <% } %>
++        </nav>
++      <% } %>
+ 
+-          <div class="post-content">
+-            <%- page.content %>
++      <% if (isWork) { %>
++        <div class="post-cta">
++          <div>
++            <h2>想要一篇屬於你的故事？</h2>
++            <p>原創、夢向、二創都可以委託。</p>
+           </div>
+-
+-          <%
+-            // 回到上一層總覽，而不是一律回首頁：依文章分類對應到 theme.nav
+-            // 裡設定好的 slug（跟導覽列/星座共用同一份設定，不用另外維護）。
+-            var backHref = '/';
+-            var backLabel = '回到首頁';
+-            if (catName && theme.nav) {
+-              var navEntry = theme.nav.find(function(n){ return n.name === catName; });
+-              if (navEntry && navEntry.slug) {
+-                backHref = '/' + navEntry.slug + '/';
+-                backLabel = '回到所有' + catName + '文章';
+-              }
+-            }
+-          %>
+-          <a class="back-link" href="<%- url_for(backHref) %>">← <%= backLabel %></a>
+-    </div>
++          <a class="cta-btn" href="<%- url_for('/commission/') %>">看委託菜單</a>
++        </div>
++      <% } %>
++    </article>
+ 
+     <%- partial('partial/footer') %>
+diff --git a/themes/fuya/layout/works.ejs b/themes/fuya/layout/works.ejs
+new file mode 100644
+index 0000000..d46d975
+--- /dev/null
++++ b/themes/fuya/layout/works.ejs
+@@ -0,0 +1,8 @@
++<%- partial('partial/head') %>
++  <%- partial('partial/header') %>
++
++    <div class="archive-page works-page">
++      <%- partial('partial/archive-works') %>
++    </div>
++
++  <%- partial('partial/footer') %>
+diff --git a/themes/fuya/source/css/commission.css b/themes/fuya/source/css/commission.css
+index c814b77..64c229d 100644
+--- a/themes/fuya/source/css/commission.css
++++ b/themes/fuya/source/css/commission.css
+@@ -589,3 +589,124 @@
+     padding: 32px 24px;
+   }
+ }
++
++/* ---------- 已完成的標記：可點開 ---------- */
++button.cm-mk,
++button.cm-li {
++  width: auto;
++  border: 0;
++  font-family: inherit;
++  text-align: left;
++  cursor: pointer;
++}
++
++button.cm-mk {
++  min-height: 30px;
++}
++
++button.cm-li {
++  width: 100%;
++  background: none;
++}
++
++.cm-pop {
++  position: fixed;
++  inset: 0;
++  z-index: 50;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  padding: 20px;
++  background: rgba(58, 38, 48, .30);
++}
++
++.cm-pop-card {
++  width: 100%;
++  max-width: 420px;
++  box-sizing: border-box;
++  padding: 28px 28px 26px;
++  border-radius: 22px;
++  background: var(--surface);
++  box-shadow: 0 24px 48px -24px rgba(58, 38, 48, .55);
++}
++
++.cm-pop-meta {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  font-size: 14px;
++  color: var(--text-dim);
++}
++
++.cm-pop-meta svg {
++  flex: none;
++  width: 20px;
++  height: 20px;
++  color: var(--c);
++}
++
++.cm-pop-card h3 {
++  margin: 14px 0 0;
++  font-family: var(--font-serif);
++  font-weight: 600;
++  font-size: 20px;
++  line-height: 1.5;
++  letter-spacing: .03em;
++  color: var(--text);
++}
++
++.cm-pop-card p {
++  margin: 10px 0 0;
++  font-size: 15px;
++  line-height: 1.95;
++  color: var(--text-soft);
++}
++
++.cm-pop-note {
++  display: block;
++  margin-top: 8px;
++  font-size: 14px;
++  color: var(--text-dim);
++}
++
++.cm-pop-act {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 10px;
++  margin-top: 22px;
++}
++
++.cm-pop-go,
++.cm-pop-x {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 44px;
++  padding: 0 22px;
++  border-radius: 999px;
++  font-family: inherit;
++  font-size: 15px;
++  cursor: pointer;
++}
++
++.cm-pop-go {
++  background: var(--green);
++  color: #FFFCFA;
++}
++
++.cm-pop-x {
++  border: 1px solid var(--line);
++  background: transparent;
++  color: var(--text);
++}
++
++@media (hover: hover) and (pointer: fine) {
++  button.cm-mk:hover { background: #fff; box-shadow: 0 0 0 1px #D9B9B3; }
++  .cm-pop-go:hover { background: var(--green-deep); }
++  .cm-pop-x:hover { border-color: var(--accent); color: var(--accent); }
++}
++
++@media (prefers-reduced-motion: no-preference) {
++  .cm-pop-card { animation: cm-pop-in .3s cubic-bezier(.3, 1.4, .5, 1); }
++  @keyframes cm-pop-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
++}
+diff --git a/themes/fuya/source/css/shop.css b/themes/fuya/source/css/shop.css
+index e93eb90..f0301b8 100644
+--- a/themes/fuya/source/css/shop.css
++++ b/themes/fuya/source/css/shop.css
+@@ -921,3 +921,369 @@ html.lenis body {
+ .lenis.lenis-smooth iframe {
+   pointer-events: none;
+ }
++
++/* ================================================
++   作品展示（/works/）與單篇文章 v2
++   來源顏色：轉蛋 = 綠、企劃 = 玫瑰、委託 = 蜜糖黃
++   ================================================ */
++.shop .c-egg  { --c: var(--t-egg);    --cb: var(--t-egg-bg); }
++.shop .c-proj { --c: var(--accent);   --cb: var(--t-medium-bg); }
++.shop .c-comm { --c: #936313;         --cb: var(--t-long-bg); }
++
++.shop .archive-page.works-page {
++  max-width: none;
++  margin-top: 0;
++  padding-top: 64px;
++}
++
++.shop .works-page .page-title {
++  margin: 0;
++  font-family: var(--font-serif);
++  font-weight: 400;
++  font-size: clamp(30px, 3.6vw, 42px);
++  letter-spacing: .06em;
++  line-height: 1.4;
++  color: var(--text);
++}
++
++.shop .works-page .page-intro {
++  max-width: 32em;
++  margin: 16px 0 0;
++  font-size: 16px;
++  line-height: 2;
++  color: var(--text-soft);
++}
++
++.works-list {
++  margin-top: 48px;
++  border-bottom: 1px solid var(--line);
++}
++
++.work-row {
++  display: grid;
++  grid-template-columns: 104px minmax(0, 1fr);
++  gap: 8px 28px;
++  padding: 26px 8px;
++  border-top: 1px solid var(--line);
++  color: var(--text);
++}
++
++.work-meta {
++  display: flex;
++  flex-direction: column;
++  gap: 6px;
++  padding-top: 3px;
++  font-size: 14px;
++  color: var(--text-dim);
++}
++
++.work-date {
++  font-family: var(--font-serif);
++  font-size: 15px;
++  color: var(--text);
++}
++
++.work-src {
++  display: flex;
++  align-items: center;
++  gap: 6px;
++  color: var(--c);
++}
++
++.work-src svg {
++  flex: none;
++}
++
++.work-main {
++  display: flex;
++  flex-direction: column;
++  gap: 10px;
++  min-width: 0;
++}
++
++.work-head {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 8px 14px;
++}
++
++.work-title {
++  font-family: var(--font-serif);
++  font-weight: 600;
++  font-size: 19px;
++  line-height: 1.5;
++  letter-spacing: .03em;
++}
++
++.work-tags {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 6px;
++}
++
++.work-tags span {
++  padding: 2px 10px;
++  border-radius: 999px;
++  background: var(--cb);
++  font-size: 13px;
++  color: #4A3540;
++}
++
++.work-preview {
++  display: -webkit-box;
++  max-width: 44em;
++  overflow: hidden;
++  font-size: 15px;
++  line-height: 1.95;
++  color: var(--text-soft);
++  -webkit-line-clamp: 3;
++  -webkit-box-orient: vertical;
++}
++
++.works-foot {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  justify-content: space-between;
++  gap: 16px 24px;
++  margin-top: 32px;
++}
++
++.works-count {
++  font-size: 15px;
++  color: var(--text-dim);
++}
++
++.shop .works-foot .site-pager {
++  margin: 0;
++}
++
++/* ---------- 單篇文章 v2 ---------- */
++.shop .post-detail {
++  max-width: 760px;
++  margin: 0 auto;
++  padding-top: 56px;
++}
++
++.shop .post-detail .back-link {
++  display: inline-block;
++  padding: 10px 0;
++}
++
++.shop .post-meta {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  margin-top: 28px;
++  font-size: 15px;
++  color: var(--c, var(--text-dim));
++}
++
++.shop .post-meta svg {
++  flex: none;
++}
++
++.shop .post-meta .post-date {
++  color: var(--text-dim);
++}
++
++.shop .post-status {
++  padding: 2px 12px;
++  border-radius: 999px;
++  background: var(--bg-sunk);
++  font-size: 13px;
++  color: var(--text-soft);
++}
++
++.shop .post-title {
++  margin: 14px 0 0;
++  font-family: var(--font-serif);
++  font-weight: 400;
++  font-size: clamp(26px, 3.2vw, 34px);
++  letter-spacing: .05em;
++  line-height: 1.5;
++  color: var(--text);
++}
++
++.shop .post-tags {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 8px;
++  margin: 20px 0 0;
++  padding-bottom: 44px;
++  border-bottom: 1px solid var(--line);
++}
++
++.shop .post-tags .tag-pill {
++  margin: 0;
++  padding: 5px 14px;
++  border: 0;
++  border-radius: 999px;
++  background: var(--cb, var(--bg-sunk));
++  font-size: 14px;
++  color: var(--green);
++}
++
++.shop .post-content {
++  margin-top: 44px;
++  font-family: var(--font-serif);
++  font-size: 17px;
++  line-height: 2.15;
++  letter-spacing: .02em;
++}
++
++.shop .post-end {
++  display: flex;
++  justify-content: center;
++  gap: 14px;
++  margin-top: 48px;
++  color: #E8A5B3;
++}
++
++.shop .post-end svg:nth-child(2) { color: #CDBFEA; }
++.shop .post-end svg:nth-child(3) { color: #F8D983; }
++
++.shop .post-links {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 4px 18px;
++  margin: 36px 0 0;
++  font-size: 13px;
++  color: var(--text-dim);
++}
++
++.shop .post-links a {
++  padding: 8px 0;
++  border: 0;
++  border-bottom: 1px solid var(--line-strong);
++  font-size: 13px;
++  color: var(--text-soft);
++}
++
++.shop .post-adj {
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
++  gap: 14px;
++  margin-top: 40px;
++}
++
++.shop .post-adj .adj {
++  display: flex;
++  flex-direction: column;
++  gap: 6px;
++  min-height: 44px;
++  padding: 20px 22px;
++  border: 1px solid #EADDD6;
++  border-radius: 18px;
++  background: var(--surface);
++  color: var(--text);
++}
++
++.shop .post-adj .adj.next {
++  text-align: right;
++}
++
++.shop .adj-l {
++  font-size: 14px;
++  color: var(--text-dim);
++}
++
++.shop .adj-t {
++  font-family: var(--font-serif);
++  font-weight: 600;
++  font-size: 17px;
++  line-height: 1.5;
++}
++
++.shop .post-cta {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 18px 32px;
++  margin-top: 40px;
++  padding: 30px 32px;
++  border: 1px solid #EADDD6;
++  border-radius: 22px;
++  background: var(--surface);
++}
++
++.shop .post-cta > div {
++  flex: 1 1 280px;
++}
++
++.shop .post-cta h2 {
++  margin: 0;
++  font-family: var(--font-serif);
++  font-weight: 600;
++  font-size: 19px;
++  letter-spacing: .04em;
++  color: var(--text);
++}
++
++.shop .post-cta p {
++  margin: 8px 0 0;
++  font-size: 15px;
++  line-height: 1.9;
++  color: var(--text-soft);
++}
++
++.shop .post-cta .cta-btn {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 48px;
++  padding: 0 28px;
++  border-radius: 999px;
++  background: var(--green);
++  color: #FFFCFA;
++  font-size: 16px;
++}
++
++.shop .post-detail > .back-link:last-child {
++  margin-top: 32px;
++}
++
++/* 分頁：圓形頁碼 */
++.shop .works-foot .sp-page,
++.shop .works-foot .sp-link {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-width: 44px;
++  min-height: 44px;
++}
++
++.shop .works-foot .sp-page.is-current {
++  min-width: 44px;
++  height: 44px;
++  border-radius: 50%;
++}
++
++@media (hover: hover) and (pointer: fine) {
++  .work-row:hover { background: var(--surface); }
++  .work-row:hover .work-title { color: var(--accent); }
++  .work-row:hover .work-src svg { transform: rotate(72deg) scale(1.15); }
++  .shop .post-adj .adj:hover { border-color: #D9B9B3; background: #fff; }
++  .shop .post-adj .adj:hover .adj-t { color: var(--accent); }
++  .shop .post-links a:hover { background: none; color: var(--accent); border-bottom-color: var(--accent); }
++  .shop .post-cta .cta-btn:hover { background: var(--green-deep); }
++}
++
++@media (prefers-reduced-motion: no-preference) {
++  .work-row { transition: background .25s; }
++  .work-title { transition: color .2s; }
++  .work-src svg { transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
++  .shop .post-adj .adj { transition: background .25s, border-color .25s, transform .25s; }
++  .shop .post-adj .adj:hover { transform: translateY(-3px); }
++}
++
++@media (max-width: 620px) {
++  .work-row { grid-template-columns: minmax(0, 1fr); padding: 22px 0; }
++  .work-meta { flex-direction: row; align-items: center; gap: 14px; padding-top: 0; }
++  .shop .archive-page.works-page { padding-top: 40px; }
++  .shop .post-detail { padding-top: 32px; }
++  .shop .post-content { font-size: 16.5px; }
++  .shop .post-cta { padding: 24px; }
++}
+diff --git a/themes/fuya/source/js/commission-calendar.js b/themes/fuya/source/js/commission-calendar.js
+index 58ec132..315411a 100644
+--- a/themes/fuya/source/js/commission-calendar.js
++++ b/themes/fuya/source/js/commission-calendar.js
+@@ -21,6 +21,8 @@
+   (data.types || []).forEach(function (t) { typeName[t.key] = t.name; });
+ 
+   var hasAny = false;
++  var keySeq = 0;
++  var doneByKey = {};
+   var byDay = {};      // 日數 → 那天預計交稿的委託
+   var marksByDay = {}; // 日數 → 休息日／備註
+ 
+@@ -45,7 +47,7 @@
+   function deliveriesOf(d) {
+     if (Array.isArray(d.deliveries)) return d.deliveries;
+     return (d.schedule || []).map(function (e) {
+-      return { id: e.id, type: e.type, date: e.end, note: e.note, done: !!e.done };
++      return { id: e.id, type: e.type, date: e.end, note: e.note, done: !!e.done, showcase: e.showcase, post: e.post };
+     });
+   }
+ 
+@@ -53,13 +55,19 @@
+     data = d;
+     byDay = {};
+     marksByDay = {};
++    doneByKey = {};
++    keySeq = 0;
+     hasAny = false;
+     // 已完成的只留最近 14 天，之後自動退場
+     deliveriesOf(d).forEach(function (e) {
+       if (!e || !e.date) return;
+       var n = toNum(e.date);
+       hasAny = true;
+-      (byDay[n] = byDay[n] || []).push({ id: e.id, type: e.type, note: e.note || '', done: !!e.done, n: n });
++      (byDay[n] = byDay[n] || []).push({
++        id: e.id, type: e.type, note: e.note || '', done: !!e.done, n: n,
++        showcase: e.showcase || 'private', post: e.post || '',
++        key: 'k' + (keySeq++)
++      });
+     });
+     (d.marks || []).forEach(function (m) {
+       var n = toNum(m.date);
+@@ -75,8 +83,13 @@
+     return (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + (ev.done ? '　已完成' : '');
+   }
+ 
++  // 已完成的標記做成按鈕，可以點開看作品；還沒完成的維持純顯示
+   function markHtml(ev) {
+-    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' + FLOWER + '<span>' + labelOf(ev) + '</span></div>';
++    if (ev.done) {
++      doneByKey[ev.key] = ev;
++      return '<button type="button" class="cm-mk done" data-t="' + esc(ev.type) + '" data-k="' + ev.key + '" aria-haspopup="dialog">' + FLOWER + '<span>' + labelOf(ev) + '</span></button>';
++    }
++    return '<div class="cm-mk" data-t="' + esc(ev.type) + '">' + FLOWER + '<span>' + labelOf(ev) + '</span></div>';
+   }
+ 
+   // 在 -a / -b 之間輪流切換 class，讓同一個動畫可以連續觸發
+@@ -121,9 +134,11 @@
+         evs.forEach(function (ev) {
+           monthHasEvent = true;
+           marks += markHtml(ev);
+-          listItems += '<div class="cm-li' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' +
++          listItems += (ev.done
++            ? '<button type="button" class="cm-li done" data-t="' + esc(ev.type) + '" data-k="' + ev.key + '" aria-haspopup="dialog">'
++            : '<div class="cm-li" data-t="' + esc(ev.type) + '">') +
+             FLOWER + '<span class="cm-li-nm">' + labelOf(ev) + '</span>' +
+-            '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span></div>';
++            '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span>' + (ev.done ? '</button>' : '</div>');
+         });
+ 
+         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() +
+@@ -147,7 +162,7 @@
+     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
+     if (foot) {
+       foot.textContent = hasAny
+-        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。' : '這個月沒有預計交稿的委託')
++        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。' : '這個月沒有預計交稿的委託')
+         : '目前沒有排程中的委託';
+     }
+     applyFilter();
+@@ -178,6 +193,86 @@
+     cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); render(); replay('m');
+   });
+ 
++  // ---------- 已完成的委託：點開小視窗 ----------
++  var worksList = data.works || [];
++  var worksUrl = data.worksUrl || '/works/';
++  var pop = null;
++  var lastFocus = null;
++
++  function findWork(name) {
++    if (!name) return null;
++    var q = String(name).trim();
++    for (var i = 0; i < worksList.length; i++) { if (worksList[i].title === q) return worksList[i]; }
++    for (var j = 0; j < worksList.length; j++) {
++      if (worksList[j].title.indexOf(q) !== -1 || q.indexOf(worksList[j].title) !== -1) return worksList[j];
++    }
++    return null;
++  }
++
++  function closePop() {
++    if (!pop) return;
++    document.removeEventListener('keydown', onKey);
++    pop.parentNode.removeChild(pop);
++    pop = null;
++    if (lastFocus && lastFocus.focus) lastFocus.focus();
++  }
++
++  function onKey(e) {
++    if (e.key === 'Escape') { closePop(); return; }
++    if (e.key === 'Tab' && pop) {
++      var f = pop.querySelectorAll('a, button');
++      if (!f.length) return;
++      var first = f[0], last = f[f.length - 1];
++      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
++      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
++    }
++  }
++
++  function openPop(ev, trigger) {
++    closePop();
++    lastFocus = trigger;
++    var shown = ev.showcase === 'public' || ev.showcase === 'masked';
++    var work = shown ? findWork(ev.post) : null;
++    var meta = (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + '　' + md(ev.n).replace('/', ' 月 ') + ' 日完稿';
++    var title, text, go, href;
++    if (work) {
++      title = esc(work.title);
++      text = esc(work.text) + (ev.showcase === 'masked' ? '<span class="cm-pop-note">文中的姓名已經打碼。</span>' : '');
++      go = '閱讀這篇作品'; href = work.path;
++    } else if (shown) {
++      title = '作品整理中';
++      text = '這篇已經同意公開，文章整理好之後會放在作品展示。';
++      go = '看看其他作品'; href = worksUrl;
++    } else {
++      title = '這篇沒有公開展示';
++      text = '完稿已經交給委託人。委託人沒有同意公開的話，這裡不會顯示內容。想看類似的故事，可以到作品展示逛逛。';
++      go = '看看其他作品'; href = worksUrl;
++    }
++    pop = document.createElement('div');
++    pop.className = 'cm-pop';
++    pop.setAttribute('data-t', ev.type);
++    pop.innerHTML =
++      '<div class="cm-pop-card" role="dialog" aria-modal="true" aria-labelledby="cm-pop-t">' +
++        '<div class="cm-pop-meta">' + FLOWER + '<span>' + meta + '</span></div>' +
++        '<h3 id="cm-pop-t">' + title + '</h3>' +
++        '<p>' + text + '</p>' +
++        '<div class="cm-pop-act"><a class="cm-pop-go" href="' + esc(href) + '">' + go + '</a>' +
++        '<button type="button" class="cm-pop-x">關閉</button></div>' +
++      '</div>';
++    pop.addEventListener('click', function (e) { if (e.target === pop) closePop(); });
++    pop.querySelector('.cm-pop-x').addEventListener('click', closePop);
++    document.body.appendChild(pop);
++    document.addEventListener('keydown', onKey);
++    pop.querySelector('.cm-pop-go').focus();
++  }
++
++  root.addEventListener('click', function (e) {
++    var b = e.target.closest ? e.target.closest('[data-k]') : null;
++    if (!b) return;
++    var ev = doneByKey[b.getAttribute('data-k')];
++    if (ev) openPop(ev, b);
++  });
++
+   if (menu) {
+     menu.addEventListener('click', function (e) {
+       var it = e.target.closest ? e.target.closest('.cm-it') : null;
+@@ -198,7 +293,7 @@
+       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
+       .then(function (d) {
+         if (!d || !Array.isArray(d.marks) || !(Array.isArray(d.deliveries) || Array.isArray(d.schedule))) throw new Error('bad shape');
+-        setData({ deliveries: d.deliveries, schedule: d.schedule, marks: d.marks, types: data.types });
++        setData({ deliveries: d.deliveries, schedule: d.schedule, marks: d.marks, types: data.types, works: data.works, worksUrl: data.worksUrl });
+         render();
+       })
+       .catch(function () { /* 後台暫時連不上：保留原本的資料 */ });

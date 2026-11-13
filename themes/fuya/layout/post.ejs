@@ -1,84 +1,97 @@
+<%
+  var cats = (page.categories && page.categories.length) ? page.categories.data.map(function(c){ return c.name; }) : [];
+  var catName = cats[0] || '';
+  var workCats = ['轉蛋', '企劃', '委託'];
+  var srcCat = cats.filter(function(n){ return workCats.indexOf(n) !== -1; })[0] || '';
+  var isWork = !!srcCat;
+  var catClass = { '轉蛋': 'c-egg', '企劃': 'c-proj', '委託': 'c-comm' }[srcCat] || '';
+
+  // 提醒標籤（notices）不再顯示，資料保留在文章檔案裡，之後跟標籤整合時再處理。
+  var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
+  var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
+  var showStatusBadge = page.status && (catName !== '企劃' || page.is_series);
+
+  // 上一篇、下一篇：只在作品之間走（依日期，上一篇是比較早寫的）
+  var prevPost = null, nextPost = null;
+  if (isWork) {
+    var ordered = site.posts.filter(function(p){
+      return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
+    }).sort('date').toArray();
+    var idx = -1;
+    ordered.forEach(function(p, i){ if (p.path === page.path) idx = i; });
+    if (idx > 0) prevPost = ordered[idx - 1];
+    if (idx > -1 && idx < ordered.length - 1) nextPost = ordered[idx + 1];
+  }
+
+  // 回到上一層總覽
+  var backHref = '/';
+  var backLabel = '回到首頁';
+  if (isWork) { backHref = '/works/'; backLabel = '作品展示'; }
+  else if (catName && theme.nav) {
+    var navEntry = theme.nav.find(function(n){ return n.name === catName; });
+    if (navEntry && navEntry.slug) { backHref = '/' + navEntry.slug + '/'; backLabel = catName; }
+  }
+%>
 <%- partial('partial/head') %>
   <%- partial('partial/header') %>
 
-    <div class="post-detail">
-      <div class="eyebrow">
-        <%= date(page.date, 'YYYY.MM.DD' ) %>
-          <% if (page.categories && page.categories.length) { %> · <%= page.categories.data[0].name %>
-              <% } %>
+    <article class="post-detail">
+      <a class="back-link" href="<%- url_for(backHref) %>">← <%= backLabel %></a>
+
+      <div class="post-meta <%= catClass %>">
+        <svg width="20" height="20" aria-hidden="true"><use href="#flw"/></svg>
+        <% if (catName) { %><span><%= catName %></span><% } %>
+        <span class="post-date"><%= date(page.date, 'YYYY.MM.DD') %></span>
+        <% if (showStatusBadge) { %><span class="post-status"><%= page.status %></span><% } %>
       </div>
 
-      <h1 class="post-title">
-        <%= page.title %>
-      </h1>
+      <h1 class="post-title"><%= page.title %></h1>
 
-      <%
-        // 企劃分類的狀態徽章只在勾選「是連載作品」時顯示；
-        // 委託等其他分類的狀態沒有 is_series 這個概念，維持原本行為（有填就顯示）。
-        var catName = (page.categories && page.categories.length) ? page.categories.data[0].name : '';
-        var showStatusBadge = page.status && (catName !== '企劃' || page.is_series);
-      %>
-      <% if (showStatusBadge) { %>
-        <span class="star-badge">
-          <%= page.status %>
-        </span>
-        <% } %>
+      <% if (validTags.length) { %>
+        <div class="post-tags <%= catClass %>">
+          <% validTags.forEach(function(tag){ %>
+            <a class="tag-pill" href="<%- url_for(tag.path) %>"><%= tag.name %></a>
+          <% }) %>
+        </div>
+      <% } %>
 
-          <%
-            // 逐一過濾掉空白內容，確保「有欄位但內容是空的」不會留下一個空殼容器。
-            var validTags = (page.tags && page.tags.length) ? page.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
-            // notices 可能是 CMS 產生的 {text: '...'} 物件，也可能是手動編輯 frontmatter 時
-            // 直接寫的純字串陣列 — 兩種格式都要能顯示，取文字時一併處理。
-            var validNotices = (page.notices && page.notices.length)
-              ? page.notices
-                  .map(function(n){ return (typeof n === 'string') ? n : (n && n.text); })
-                  .filter(function(t){ return t && t.trim(); })
-              : [];
-            var validLinks = (page.links && page.links.length) ? page.links.filter(function(l){ return l && l.url && l.url.trim(); }) : [];
-          %>
+      <div class="post-content">
+        <%- page.content %>
+      </div>
 
-          <% if (validTags.length) { %>
-            <div class="post-tags">
-              <% validTags.forEach(function(tag){ %>
-                <a class="tag-pill" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
-              <% }) %>
-            </div>
+      <div class="post-end" aria-hidden="true">
+        <svg width="18" height="18"><use href="#flw"/></svg><svg width="18" height="18"><use href="#flw"/></svg><svg width="18" height="18"><use href="#flw"/></svg>
+      </div>
+
+      <% if (validLinks.length) { %>
+        <p class="post-links">
+          <span>相關連結</span>
+          <% validLinks.forEach(function(l){ %>
+            <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
+          <% }) %>
+        </p>
+      <% } %>
+
+      <% if (prevPost || nextPost) { %>
+        <nav class="post-adj" aria-label="上一篇與下一篇">
+          <% if (prevPost) { %>
+            <a class="adj prev" href="<%- url_for(prevPost.path) %>"><span class="adj-l">← 上一篇</span><span class="adj-t"><%= prevPost.title %></span></a>
+          <% } else { %><span></span><% } %>
+          <% if (nextPost) { %>
+            <a class="adj next" href="<%- url_for(nextPost.path) %>"><span class="adj-l">下一篇 →</span><span class="adj-t"><%= nextPost.title %></span></a>
           <% } %>
+        </nav>
+      <% } %>
 
-          <% if (validNotices.length) { %>
-            <div class="post-notices">
-              <% validNotices.forEach(function(text){ %>
-                <p>※<%= text %></p>
-              <% }) %>
-            </div>
-          <% } %>
-
-          <% if (validLinks.length) { %>
-            <div class="post-links">
-              <% validLinks.forEach(function(l){ %>
-                <a href="<%= l.url %>" target="_blank" rel="noopener noreferrer"><%= l.label || l.url %> ↗</a>
-              <% }) %>
-            </div>
-          <% } %>
-
-          <div class="post-content">
-            <%- page.content %>
+      <% if (isWork) { %>
+        <div class="post-cta">
+          <div>
+            <h2>想要一篇屬於你的故事？</h2>
+            <p>原創、夢向、二創都可以委託。</p>
           </div>
-
-          <%
-            // 回到上一層總覽，而不是一律回首頁：依文章分類對應到 theme.nav
-            // 裡設定好的 slug（跟導覽列/星座共用同一份設定，不用另外維護）。
-            var backHref = '/';
-            var backLabel = '回到首頁';
-            if (catName && theme.nav) {
-              var navEntry = theme.nav.find(function(n){ return n.name === catName; });
-              if (navEntry && navEntry.slug) {
-                backHref = '/' + navEntry.slug + '/';
-                backLabel = '回到所有' + catName + '文章';
-              }
-            }
-          %>
-          <a class="back-link" href="<%- url_for(backHref) %>">← <%= backLabel %></a>
-    </div>
+          <a class="cta-btn" href="<%- url_for('/commission/') %>">看委託菜單</a>
+        </div>
+      <% } %>
+    </article>
 
     <%- partial('partial/footer') %>
