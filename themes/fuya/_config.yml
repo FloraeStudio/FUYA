@@ -66,6 +66,16 @@ commission_plans:
     price: NT$0.6/字
     note: 需詳談篇幅與時程
 
+# 委託頁標題下方的一句話
+commission_intro: 原創、夢向以及二創皆可委託，附上足夠的設定與世界觀即可。
+
+# 委託頁底部的預約按鈕（url 留空就不顯示這一區）
+commission_contact:
+  title: 想委託的話
+  text: 請附上人物設定、字數與大致情境，我會回覆是否接稿、預計交件時間與報價。
+  label: 到噗浪私訊
+  url: ''
+
 commission_flow:
   - 提供詳細人物設定、字數與大致情境或其他特殊要求。
   - 我會回覆是否接稿、預計交件時間與報價。

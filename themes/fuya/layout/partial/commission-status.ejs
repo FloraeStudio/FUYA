@@ -1,0 +1,16 @@
+<%
+  // 接單狀態、本月名額、預估排單等待。首頁和委託頁共用；
+  // 有設定後台網址時，js/home.js 會在載入後改讀即時資料。
+  var cmS = site.data.commission || {};
+  var stStatus = cmS.accepting_status || '工作室修整中';
+  var stTotal = parseInt(cmS.slots_total, 10) || 0;
+  var stOpen = Math.max(0, Math.min(stTotal, parseInt(cmS.slots_open, 10) || 0));
+  var stWait = cmS.wait_estimate || '';
+%>
+<div class="cm-chips" id="cm-chips" data-api="<%= cmS.api_url || '' %>">
+  <span class="cm-chip"><i class="cm-dot<%= stStatus === '開放中' ? '' : ' off' %>"></i><span class="cm-k">目前狀態</span><span class="cm-v"><%= stStatus %></span></span>
+  <% if (stTotal > 0) { %>
+    <span class="cm-chip"><span class="cm-k">本月名額</span><span class="cm-slots" aria-hidden="true"><% for (var s = 0; s < stTotal; s++) { %><svg width="22" height="22"<%- s < stOpen ? '' : ' class="e"' %>><use href="#flw"/></svg><% } %></span><span class="cm-v">剩 <%= stOpen %> / <%= stTotal %></span></span>
+  <% } %>
+  <% if (stWait) { %><span class="cm-chip"><span class="cm-k">預估排單等待</span><span class="cm-v"><%= stWait %></span></span><% } %>
+</div>

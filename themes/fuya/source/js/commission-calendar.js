@@ -68,13 +68,27 @@
     if (hint) hint.hidden = !hasAny;
   }
 
+  var FLOWER = '<svg width="14" height="14" aria-hidden="true"><use href="#flw"/></svg>';
+
+  // 標記上的文字：單號或代稱（有填才顯示）+ 方案名稱 + 已完成
+  function labelOf(ev) {
+    return (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + (ev.done ? '　已完成' : '');
+  }
+
   function markHtml(ev) {
-    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '"><span>' + esc(typeName[ev.type] || '') + '</span></div>';
+    return '<div class="cm-mk' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' + FLOWER + '<span>' + labelOf(ev) + '</span></div>';
+  }
+
+  // 在 -a / -b 之間輪流切換 class，讓同一個動畫可以連續觸發
+  function replay(prefix) {
+    var on = root.classList.contains(prefix + '-a');
+    root.classList.remove(prefix + '-a', prefix + '-b');
+    root.classList.add(prefix + (on ? '-b' : '-a'));
   }
 
   function render() {
     var y = cur.getFullYear(), m = cur.getMonth();
-    title.textContent = y + ' · ' + (m + 1) + ' 月';
+    title.textContent = y + ' 年 ' + (m + 1) + ' 月';
 
     var first = Date.UTC(y, m, 1) / 86400000;
     var daysIn = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
@@ -108,12 +122,12 @@
           monthHasEvent = true;
           marks += markHtml(ev);
           listItems += '<div class="cm-li' + (ev.done ? ' done' : '') + '" data-t="' + esc(ev.type) + '">' +
-            '<span class="cm-li-dot"></span><span class="cm-li-nm">' + esc(typeName[ev.type] || '') + '</span>' +
+            FLOWER + '<span class="cm-li-nm">' + labelOf(ev) + '</span>' +
             '<span class="cm-li-d">' + md(ev.n) + ' 交稿</span></div>';
         });
 
         cells += '<div class="' + cls + '"><span class="n">' + new Date(dn * 86400000).getUTCDate() +
-          (isRest ? '<i class="moon" role="img" aria-label="休息日"></i>' : '') + '</span>' +
+          '</span>' +
           marks +
           (txt ? '<div class="tx">' + esc(txt) + '</div>' : '') + '</div>';
       }
@@ -133,14 +147,15 @@
     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
     if (foot) {
       foot.textContent = hasAny
-        ? (monthHasEvent ? '星點是那天預計交稿的委託' : '這個月沒有預計交稿的委託')
+        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。' : '這個月沒有預計交稿的委託')
         : '目前沒有排程中的委託';
     }
     applyFilter();
   }
 
-  function applyFilter() {
+  function applyFilter(replayPop) {
     root.classList.toggle('f', !!filter);
+    if (replayPop && filter) replay('p');
     var nodes = root.querySelectorAll('.cm-mk, .cm-li');
     for (var i = 0; i < nodes.length; i++) {
       nodes[i].classList.toggle('on', nodes[i].getAttribute('data-t') === filter);
@@ -157,10 +172,10 @@
   }
 
   document.getElementById('cm-prev').addEventListener('click', function () {
-    cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1); render();
+    cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1); render(); replay('m');
   });
   document.getElementById('cm-next').addEventListener('click', function () {
-    cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); render();
+    cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); render(); replay('m');
   });
 
   if (menu) {
@@ -169,24 +184,8 @@
       if (!it) return;
       var t = it.getAttribute('data-t');
       filter = filter === t ? null : t;
-      applyFilter();
+      applyFilter(true);
     });
-  }
-
-  function renderChips(st) {
-    var box = document.getElementById('cm-chips');
-    if (!box || !st) return;
-    var open = st.accepting_status === '開放中';
-    var total = parseInt(st.slots_total, 10) || 0;
-    var left = Math.max(0, Math.min(total, parseInt(st.slots_open, 10) || 0));
-    var h = '<span class="cm-chip"><span class="cm-chip-dot' + (open ? '' : ' off') + '"></span>目前狀態：' + esc(st.accepting_status) + '</span>';
-    if (total > 0) {
-      var dots = '';
-      for (var i = 0; i < total; i++) dots += '<i class="' + (i < left ? '' : 'e') + '"></i>';
-      h += '<span class="cm-chip">本月名額 <span class="cm-slots" aria-hidden="true">' + dots + '</span> 剩 ' + left + ' / ' + total + '</span>';
-    }
-    if (st.wait_estimate) h += '<span class="cm-chip">預估排單等待：' + esc(st.wait_estimate) + '</span>';
-    box.innerHTML = h;
   }
 
   setData(data);
@@ -200,7 +199,6 @@
       .then(function (d) {
         if (!d || !Array.isArray(d.marks) || !(Array.isArray(d.deliveries) || Array.isArray(d.schedule))) throw new Error('bad shape');
         setData({ deliveries: d.deliveries, schedule: d.schedule, marks: d.marks, types: data.types });
-        renderChips(d.settings);
         render();
       })
       .catch(function () { /* 後台暫時連不上：保留原本的資料 */ });

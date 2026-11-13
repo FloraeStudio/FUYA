@@ -1,6 +1,7 @@
 <div class="topbar">
   <a class="brand" href="<%- url_for('/') %>">
-    <span class="moon-ico"></span><%= config.title %>
+    <span class="moon-ico"></span><span class="brand-legacy"><%= config.title %></span>
+    <span class="brand-zh"><%= config.author %></span><span class="brand-en">Fuya</span>
   </a>
   <nav class="navlinks" aria-label="主選單">
     <% var current = (page.path || '').split('/')[0]; if (current === 'index.html') current = ''; %>

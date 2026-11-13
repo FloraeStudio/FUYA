@@ -18,6 +18,11 @@ collections:
         label: 首頁小狀態
         file: source/_data/site.yml
         fields:
+          - label: 首頁大標題
+            name: hero_title
+            widget: text
+            required: false
+            hint: 首頁最上方的大字，可以換行。留空會用預設文字。
           - label: 首頁介紹
             name: homepage_intro
             widget: text

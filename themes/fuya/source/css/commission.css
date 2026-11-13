@@ -1,546 +1,591 @@
-/* ============================================
-   委託頁 — 狀態標籤、方案菜單、排程月曆
-   這個檔案獨立存在，不會動到 components.css
-============================================ */
+/* ------------------------------------------------
+   commission — 委託頁（淺色・甜點店）
+   結構在 layout/partial/archive-commission.ejs，月曆由 js/commission-calendar.js 產生。
+   色票來自 tokens.css；方案顏色用 data-t 帶出 --c（花朵）與 --cb（標籤底），定義在 shop.css。
+------------------------------------------------ */
 
-/* 四種方案各自的顏色：方案菜單的星點／價格、月曆上的交稿標記共用 */
-:root {
-  --t-surprise: #8FB8C4;
-  --t-short: #C9BFE8;
-  /* = --moon */
-  --t-medium: #E3A6B1;
-  --t-long: #F0B65C;
-  /* = --lamp */
-  --t-egg: #A8C9A0;
-  --moon-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M8.6 1.2A5 5 0 1 0 10.8 8 4.2 4.2 0 0 1 8.6 1.2Z' fill='%23C9BFE8'/%3E%3C/svg%3E");
+/* ---------- 標題 ---------- */
+.cm-hero {
+  padding: 64px 0 36px;
 }
 
-[data-t="surprise"] {
-  --c: var(--t-surprise);
-  --cb: rgba(143, 184, 196, 0.26);
-  --cg: rgba(143, 184, 196, 0.7);
+.shop .cm-hero .page-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(30px, 3.6vw, 42px);
+  letter-spacing: .06em;
+  line-height: 1.4;
+  color: var(--text);
 }
 
-[data-t="short"] {
-  --c: var(--t-short);
-  --cb: rgba(201, 191, 232, 0.26);
-  --cg: rgba(201, 191, 232, 0.7);
+.shop .cm-hero .page-lede {
+  max-width: 32em;
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text-soft);
 }
 
-[data-t="medium"] {
-  --c: var(--t-medium);
-  --cb: rgba(227, 166, 177, 0.26);
-  --cg: rgba(227, 166, 177, 0.7);
+/* ---------- 區塊 ---------- */
+.cm-sec {
+  margin-top: 96px;
 }
 
-[data-t="long"] {
-  --c: var(--t-long);
-  --cb: rgba(240, 182, 92, 0.26);
-  --cg: rgba(240, 182, 92, 0.7);
+.cm-chips + .cm-sec {
+  margin-top: 80px;
 }
 
-[data-t="egg"] {
-  --c: var(--t-egg);
-  --cb: rgba(168, 201, 160, 0.26);
-  --cg: rgba(168, 201, 160, 0.7);
-}
-
-/* ---------- 頂部狀態標籤 ---------- */
-.cm-chips {
+.cm-sec.cm-two {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 56px;
+  gap: 32px 72px;
 }
 
-.cm-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 15px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: .5px;
-  color: var(--mist);
-  border: 1px solid rgba(169, 171, 198, 0.22);
-  border-radius: 20px;
+.cm-sec.cm-two > .diary {
+  flex: 2 1 460px;
+  min-width: 0;
 }
 
-.cm-chip-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lamp);
-  box-shadow: 0 0 8px 1px rgba(240, 182, 92, 0.7);
+.cm-sec > h2,
+.cm-head-row h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: .06em;
+  color: var(--text);
 }
 
-.cm-chip-dot.off {
-  background: var(--mist-dim);
-  box-shadow: none;
-}
-
-.cm-slots {
-  display: inline-flex;
-  gap: 5px;
-}
-
-.cm-slots i {
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lamp);
-  box-shadow: 0 0 6px 1px rgba(240, 182, 92, 0.6);
-}
-
-.cm-slots i.e {
-  background: transparent;
-  border: 1px solid var(--mist-dim);
-  box-shadow: none;
-}
-
-/* ---------- 方案菜單 ---------- */
 .cm-hint {
-  margin: 12px 0 0;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
+  font-size: 15px;
 }
 
+/* ---------- 方案（可點選的菜單） ---------- */
 .cm-menu {
-  position: relative;
-  max-width: 520px;
-  margin: 30px auto 0;
-  padding-left: 26px;
-}
-
-.cm-menu::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 14px;
-  bottom: 30px;
-  width: 1px;
-  background: rgba(201, 191, 232, 0.22);
+  flex: 2 1 460px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .cm-it {
-  position: relative;
   display: block;
   width: 100%;
-  margin: 0 0 24px;
-  padding: 0;
-  text-align: left;
-  font: inherit;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 16px 18px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
   color: inherit;
-  background: none;
-  border: 0;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
-  transition: opacity .2s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.cm-it:last-child {
-  margin-bottom: 0;
-}
-
-.cm-it::before {
-  content: '';
-  position: absolute;
-  left: -26px;
-  top: 10px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--c, var(--lamp));
-  box-shadow:
-    0 0 6px 1.5px var(--cg, rgba(240, 182, 92, 0.7)),
-    0 0 16px 5px var(--cb, rgba(240, 182, 92, 0.26));
+.cm-it.on {
+  background: var(--surface);
+  border-color: var(--line);
 }
 
 .cm-top {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 12px;
+}
+
+.cm-fl {
+  flex: none;
+  align-self: center;
+  color: var(--c);
+}
+
+.cm-it.on .cm-fl {
+  transform: rotate(72deg) scale(1.15);
 }
 
 .cm-nm {
-  font-size: 18px;
-  letter-spacing: 1px;
-  color: var(--paper);
-  transition: color .2s ease;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: .04em;
+  color: var(--text);
 }
 
 .cm-ld {
   flex: 1;
-  border-bottom: 1px dotted rgba(169, 171, 198, 0.32);
+  min-width: 20px;
+  border-bottom: 2px dotted var(--line-strong);
   transform: translateY(-5px);
 }
 
 .cm-pr {
-  font-size: 15px;
-  color: var(--c, var(--lamp));
-  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--text);
 }
 
 .cm-ds {
   display: block;
-  margin-top: 4px;
-  font-size: 12.5px;
-  line-height: 1.7;
-  color: var(--mist);
+  margin: 6px 0 0 36px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-dim);
 }
 
 .cm-rg {
-  margin-right: 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
+  margin-right: .8em;
 }
 
-.cm-it:focus-visible {
-  outline: none;
-}
-
-.cm-it:focus-visible .cm-nm {
-  color: var(--c);
-}
-
-.cm-menu.f .cm-it {
-  opacity: .35;
-}
-
-.cm-menu.f .cm-it.on {
-  opacity: 1;
-}
-
-.cm-it.on .cm-nm {
-  color: var(--c);
-}
-
-/* 只有真的有滑鼠的裝置才有 hover；手機點一下是切換，不會卡住 */
-@media (hover: hover) and (pointer: fine) {
-  .cm-it:hover .cm-nm {
-    color: var(--c);
-  }
-}
-
-/* ---------- 排程月曆 ---------- */
-.cm-cal {
-  max-width: 760px;
-  margin: 26px auto 0;
+/* ---------- 交稿排程（月曆） ---------- */
+.cm-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 32px;
 }
 
 .cm-mh {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 12px;
-  color: var(--paper);
-  font-size: 15px;
+  gap: 10px;
 }
 
 .cm-nav {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  font-family: var(--font-mono);
-  font-size: 18px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 20px;
   line-height: 1;
-  color: var(--mist-dim);
-  background: none;
-  border: 0;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.cm-nav:focus-visible {
-  outline: none;
-  color: var(--lamp);
+.cm-title {
+  min-width: 7em;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--text);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .cm-nav:hover {
-    color: var(--lamp);
-  }
+.cm-scroll {
+  margin-top: 28px;
+  overflow-x: auto;
 }
 
-@media (hover: none) {
-  .cm-nav:active {
-    color: var(--lamp);
-  }
+.cm-scroll > * {
+  min-width: 840px;
 }
 
 .cm-wd {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  margin-bottom: 6px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--text-dim);
 }
 
-.cm-grid {
-  border: 1px solid rgba(201, 191, 232, 0.14);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.cm-wk {
-  position: relative;
-  border-top: 1px solid rgba(201, 191, 232, 0.1);
-}
-
-.cm-wk:first-child {
-  border-top: 0;
+.cm-wd div {
+  padding: 12px;
+  text-align: left;
 }
 
 .cm-row {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  min-height: inherit;
+  border-left: 1px solid var(--line);
+}
+
+.cm-wk:last-child .cm-c {
+  border-bottom: 1px solid var(--line);
 }
 
 .cm-c {
-  position: relative;
+  box-sizing: border-box;
+  min-height: 118px;
+  padding: 10px 10px 12px;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-  min-height: 96px;
-  padding: 6px 8px 8px;
-  border-left: 1px solid rgba(201, 191, 232, 0.08);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--mist-dim);
+  gap: 7px;
 }
 
-.cm-c:first-child {
-  border-left: 0;
-}
-
-.cm-c.o {
-  color: #3b3f6e;
-}
-
+.cm-c.o,
 .cm-c.r {
-  background: rgba(10, 12, 24, 0.55);
+  background: var(--bg-sunk);
+}
+
+.cm-c .n {
+  align-self: flex-start;
+  min-width: 26px;
+  height: 26px;
+  box-sizing: border-box;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.cm-c.o .n {
+  color: #A59399;
 }
 
 .cm-c.t .n {
-  color: var(--lamp);
-}
-
-.cm-c.t .n::after {
-  content: '';
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  margin-left: 5px;
-  vertical-align: middle;
-  border-radius: 50%;
-  background: var(--lamp);
-  box-shadow: 0 0 6px 1px rgba(240, 182, 92, 0.7);
+  border-color: var(--accent);
 }
 
 .cm-c .tx {
-  margin-top: auto;
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  line-height: 1.4;
-  color: var(--mist-dim);
+  font-size: 14px;
+  color: var(--text-dim);
 }
 
-.cm-cal.f .cm-mk,
-.cm-cal.f .cm-li {
-  opacity: .2;
-}
-
-.cm-cal.f .cm-mk.on,
-.cm-cal.f .cm-li.on {
-  opacity: 1;
-}
-
-
-/* 預計交稿日的標記：依方案上色的小膠囊，裡面是星點 + 方案名稱 */
+/* 預計交稿日的標記：花朵 + 單號或代稱 */
 .cm-mk {
   display: flex;
   align-items: center;
-  align-self: flex-start;
   gap: 6px;
-  min-width: 0;
-  max-width: 100%;
-  margin-top: 2px;
-  padding: 2px 9px 2px 8px;
+  padding: 5px 9px;
   border-radius: 999px;
-  background: var(--cb, rgba(169, 171, 198, 0.16));
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  line-height: 1.5;
-  letter-spacing: .5px;
-  color: var(--paper);
-  color: color-mix(in srgb, var(--c, #A9ABC6) 62%, var(--paper));
-  transition: opacity .2s ease;
+  background: var(--cb);
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text);
 }
 
-.cm-mk::before {
-  content: '';
+.cm-mk svg {
   flex: none;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--c, var(--mist));
-  box-shadow: 0 0 5px 1px var(--cg, rgba(169, 171, 198, 0.5));
-}
-
-.cm-mk span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: var(--c);
 }
 
 .cm-mk.done {
-  opacity: .45;
+  opacity: .6;
 }
 
-/* 休息日的彎月記號 */
-.cm-c .moon {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-left: 6px;
-  vertical-align: -1px;
-  background: var(--moon-icon) no-repeat center / contain;
-  opacity: .85;
+.cm-cal.f .cm-mk {
+  opacity: .25;
+}
+
+.cm-cal.f .cm-mk.on {
+  opacity: 1;
 }
 
 .cm-foot {
   margin: 18px 0 0;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: var(--mist-dim);
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--text-dim);
 }
 
-/* ---------- 手機：月曆改成週列表 ---------- */
+/* 週別清單：桌機月曆已經看得到，只在手機顯示 */
 .cm-list {
   display: none;
 }
 
-@media (max-width: 640px) {
+.cm-lw {
+  margin-top: 22px;
+}
 
-  .cm-wd,
-  .cm-grid {
+.cm-lw-h {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.cm-li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.cm-li svg {
+  flex: none;
+  color: var(--c);
+}
+
+.cm-li.done {
+  opacity: .6;
+}
+
+.cm-li-d {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.cm-lm {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.cm-lm span {
+  margin-right: .8em;
+}
+
+.cm-cal.f .cm-li {
+  opacity: .3;
+}
+
+.cm-cal.f .cm-li.on {
+  opacity: 1;
+}
+
+.cm-none {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* ---------- 流程 ---------- */
+.cm-steps {
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 40px;
+}
+
+.cm-step {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.cm-step .num {
+  display: block;
+  font-family: var(--font-latin);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 46px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.cm-step p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.95;
+  color: var(--text);
+}
+
+/* ---------- 常見問題 ---------- */
+.cm-faq {
+  flex: 2 1 460px;
+  min-width: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cm-faq details {
+  border-top: 1px solid var(--line);
+}
+
+.cm-faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 44px;
+  padding: 18px 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.cm-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.cm-faq .q {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.cm-faq .plus {
+  flex: none;
+  color: var(--text-dim);
+}
+
+.cm-faq details[open] .plus {
+  transform: rotate(45deg);
+}
+
+.cm-faq .ans {
+  max-width: 38em;
+  margin: 0 0 22px;
+  font-size: 15.5px;
+  line-height: 2;
+  color: var(--text-soft);
+}
+
+/* ---------- 預約 ---------- */
+.cm-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 40px;
+  padding: 48px 44px;
+  border-radius: 24px;
+  background: var(--green);
+  color: var(--bg);
+}
+
+.cm-cta h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: .06em;
+  color: inherit;
+}
+
+.cm-cta p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 2;
+  color: #D9CFC6;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--green);
+  font-size: 17px;
+  letter-spacing: .06em;
+}
+
+/* ---------- 動態 ---------- */
+@keyframes cm-pop-a { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes cm-pop-b { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes cm-month-a { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes cm-month-b { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes cm-ans-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cm-it { transition: background .25s, border-color .25s; }
+  .cm-fl { transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+  .cm-mk,
+  .cm-li { transition: opacity .3s ease; }
+  .cm-cal.p-a .cm-mk.on { animation: cm-pop-a .55s cubic-bezier(.3, 1.6, .5, 1); }
+  .cm-cal.p-b .cm-mk.on { animation: cm-pop-b .55s cubic-bezier(.3, 1.6, .5, 1); }
+  .cm-cal.m-a .cm-scroll,
+  .cm-cal.m-a .cm-list { animation: cm-month-a .4s ease-out; }
+  .cm-cal.m-b .cm-scroll,
+  .cm-cal.m-b .cm-list { animation: cm-month-b .4s ease-out; }
+  .cm-nav { transition: background .2s, transform .2s; }
+  .cm-nav:active { transform: scale(.92); }
+  .cm-faq details[open] .ans { animation: cm-ans-in .35s ease-out; }
+  .cm-faq .plus { transition: transform .2s; }
+  .cm-step .num { transition: transform .3s cubic-bezier(.3, 1.5, .5, 1); }
+  .cta-btn { transition: transform .2s, box-shadow .2s; }
+}
+
+/* 滑鼠專屬的 hover：手機沒有 hover，不會黏住 */
+@media (hover: hover) and (pointer: fine) {
+  .cm-it:hover { background: var(--surface); }
+  .cm-it:hover .cm-fl { transform: rotate(72deg) scale(1.15); }
+  .cm-nav:hover { background: var(--bg-sunk); }
+  .cm-faq summary:hover .q { color: var(--accent); }
+  .cm-step:hover .num { transform: translateY(-4px); }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -10px rgba(0, 0, 0, .5); }
+}
+
+/* ---------- 手機 ---------- */
+@media (max-width: 640px) {
+  .cm-hero {
+    padding: 40px 0 28px;
+  }
+
+  .cm-sec,
+  .cm-chips + .cm-sec {
+    margin-top: 64px;
+  }
+
+  .cm-sec.cm-two {
+    gap: 24px;
+  }
+
+  .cm-it {
+    padding: 14px 12px;
+  }
+
+  .cm-nm {
+    font-size: 20px;
+  }
+
+  .cm-pr {
+    font-size: 16px;
+  }
+
+  .cm-ds {
+    margin-left: 0;
+  }
+
+  /* 月曆縮成小格子，標記只留花朵，細節看下面的清單 */
+  .cm-scroll > * {
+    min-width: 0;
+  }
+
+  .cm-wd div {
+    padding: 8px 4px;
+    font-size: 13px;
+  }
+
+  .cm-c {
+    min-height: 56px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .cm-c .n {
+    min-width: 22px;
+    height: 22px;
+    font-size: 13px;
+  }
+
+  .cm-c .tx {
+    display: none;
+  }
+
+  .cm-mk {
+    width: fit-content;
+    padding: 3px;
+    border-radius: 50%;
+  }
+
+  .cm-mk span {
     display: none;
   }
 
   .cm-list {
     display: block;
-    border: 1px solid rgba(201, 191, 232, 0.14);
-    border-radius: 10px;
   }
 
-  .cm-lw {
-    padding: 14px 16px 12px;
-    border-top: 1px solid rgba(201, 191, 232, 0.1);
-  }
-
-  .cm-lw:first-child {
-    border-top: 0;
-  }
-
-  .cm-lw-h {
-    margin-bottom: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: var(--mist-dim);
-  }
-
-  .cm-li {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    column-gap: 10px;
-    padding: 7px 0;
-    transition: opacity .2s ease;
-  }
-
-  .cm-li.done {
-    opacity: .45;
-  }
-
-  .cm-li-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--c, var(--mist));
-    box-shadow: 0 0 6px 1.5px var(--cg, rgba(169, 171, 198, 0.5));
-    transform: translateY(-1px);
-  }
-
-  .cm-li-nm {
-    font-size: 14px;
-    color: var(--paper);
-  }
-
-
-  .cm-li-d {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--mist);
-  }
-
-
-  .cm-lm {
-    padding: 4px 0;
-    font-size: 12.5px;
-    color: var(--mist-dim);
-  }
-
-  .cm-lm span {
-    margin-right: 10px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-  }
-
-  .cm-lm.rest {
-    color: var(--mist);
-  }
-
-  .cm-lm.rest::after {
-    content: '';
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    margin-left: 8px;
-    vertical-align: -2px;
-    background: var(--moon-icon) no-repeat center / contain;
-  }
-
-  .cm-none {
-    padding: 22px 16px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--mist-dim);
-  }
-
-  .cm-chips {
-    margin-top: 44px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .cm-it,
-  .cm-mk,
-  .cm-li {
-    transition: none;
+  .cm-cta {
+    padding: 32px 24px;
   }
 }

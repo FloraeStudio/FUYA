@@ -1,5 +1,14 @@
-    <footer>FLORAESTUDIO · <%= config.author %> · <%= date(new Date(), 'YYYY') %></footer>
   </div>
+  <footer class="site-footer">
+    <div class="footer-legacy">FLORAESTUDIO · <%= config.author %> · <%= date(new Date(), 'YYYY') %></div>
+    <div class="footer-shop">
+      <span class="fs-name"><span class="fs-zh"><%= config.title %></span><span class="fs-en">Fuya</span></span>
+      <span class="fs-year"><%= date(new Date(), 'YYYY') %></span>
+    </div>
+  </footer>
   <script src="<%- url_for('/js/stars.js') %>"></script>
+  <script src="<%- url_for('/js/vendor/lenis.min.js') %>" defer></script>
+  <script src="<%- url_for('/js/smooth-scroll.js') %>" defer></script>
+  <script src="<%- url_for('/js/home.js') %>" defer></script>
 </body>
 </html>

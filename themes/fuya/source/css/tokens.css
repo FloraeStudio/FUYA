@@ -32,4 +32,30 @@
   /* 字體 */
   --font-display: 'LXGW WenKai TC', serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-serif: 'Noto Serif TC', 'LXGW WenKai TC', serif;
+  --font-latin: 'Cormorant Garamond', 'Noto Serif TC', serif;
+
+  /* ------------------------------------------------
+     淺色（甜點店）語意色票 —— 首頁、委託、轉蛋、雜談、文章頁使用
+     企劃總覽與企劃內頁仍是夜色，沿用上面那組
+  ------------------------------------------------ */
+  --bg: #F7F1EE;          /* 牆 */
+  --bg-sunk: #F1E8E4;     /* 休息日、淡一階的底 */
+  --surface: #FFFCFA;     /* 被選取的卡片、按鈕 */
+  --text: #3A2630;        /* 茶褐墨色 */
+  --text-soft: #5C4651;
+  --text-dim: #7A6670;
+  --line: #E2D3CC;
+  --line-strong: #C9B8B0;
+  --accent: #A34E63;      /* 玫瑰，連結與強調 */
+  --green: #2F4A3E;       /* 店面的深綠：主按鈕、頁尾 */
+  --green-deep: #243A31;
+  --honey: #B98023;
+
+  /* 委託方案顏色（深色版用於花朵，淡色版用於標籤底） */
+  --t-egg: #5F8250;       --t-egg-bg: #E3EBDC;
+  --t-surprise: #4F7F8F;  --t-surprise-bg: #DCE9EC;
+  --t-short: #7C6BB0;     --t-short-bg: #E6E1F3;
+  --t-medium: #B25A6E;    --t-medium-bg: #F4DDE1;
+  --t-long: #B98023;      --t-long-bg: #F6E6C6;
 }

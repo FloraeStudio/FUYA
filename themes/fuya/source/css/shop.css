@@ -1,0 +1,923 @@
+/* ------------------------------------------------
+   shop — 淺色（甜點店）外觀
+   套用在 <body class="shop">：首頁、委託、轉蛋、雜談、文章頁。
+   企劃總覽與企劃內頁是 <body class="theme-night">，仍使用 components.css 的夜色樣式。
+   色票在 tokens.css 的「淺色（甜點店）語意色票」。
+------------------------------------------------ */
+
+/* 舊樣式還在用的夜色色票，在淺色頁面裡換成對應的淺色版，
+   這樣 inline style 或沒改到的舊規則也不會出現看不見的字 */
+body.shop {
+  --paper: #3A2630;
+  --mist: #5C4651;
+  --mist-dim: #7A6670;
+  --moon: #7C6BB0;
+  --lamp: #A34E63;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  isolation: isolate;
+}
+
+/* 背景質感：上半部有淡淡的奶油格紋（往下淡出），全頁有一層細小的顆粒。
+   兩層都是 position:absolute 的靜態圖層（不是 fixed），不會拖慢捲動。 */
+body.shop::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 900px;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(226, 160, 150, .09) 0 24px, transparent 24px 48px),
+    repeating-linear-gradient(90deg, rgba(226, 160, 150, .09) 0 24px, transparent 24px 48px);
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 40%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 40%, transparent 100%);
+}
+
+body.shop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(163, 78, 99, .28) 1px, transparent 1.6px),
+    radial-gradient(circle at 63% 71%, rgba(185, 128, 35, .24) 1px, transparent 1.6px),
+    radial-gradient(circle at 37% 44%, rgba(58, 38, 48, .16) .8px, transparent 1.4px);
+  background-size: 97px 89px, 131px 113px, 59px 71px;
+}
+
+.shop .wrap {
+  max-width: 1280px;
+  padding: 0 56px 40px;
+}
+
+.shop a:focus-visible,
+.shop button:focus-visible,
+.shop summary:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- 頁首 ---------- */
+.brand-zh,
+.brand-en {
+  display: none;
+}
+
+.shop .topbar {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  padding: 28px 0 0;
+}
+
+.shop .brand {
+  align-items: baseline;
+  gap: 12px;
+  color: var(--text);
+  font-size: inherit;
+  letter-spacing: 0;
+}
+
+.shop .moon-ico,
+.shop .brand-legacy {
+  display: none;
+}
+
+.shop .brand-zh {
+  display: inline;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: .08em;
+}
+
+.shop .brand-en {
+  display: inline;
+  font-family: var(--font-latin);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--text-dim);
+}
+
+.shop .navlinks {
+  flex-wrap: wrap;
+  gap: 6px 30px;
+}
+
+.shop .navlinks a {
+  padding: 10px 2px;
+  font-size: 15px;
+  letter-spacing: 0;
+  color: var(--text);
+  text-shadow: none;
+  background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 2px no-repeat;
+}
+
+.shop .navlinks a:not(:last-child)::after {
+  display: none;
+}
+
+.shop .navlinks a.active {
+  color: var(--text);
+  background-size: 100% 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop .navlinks a:hover {
+    color: var(--accent);
+    background-size: 100% 2px;
+  }
+}
+
+/* ---------- 按鈕與文字連結 ---------- */
+.btn-main {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 28px;
+  background: var(--green);
+  color: #FFFCFA;
+  border-radius: 999px;
+  font-size: 17px;
+  letter-spacing: .06em;
+}
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 17px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-main:hover {
+    background: var(--green-deep);
+  }
+
+  .btn-text:hover {
+    color: var(--accent);
+  }
+}
+
+/* ---------- 首頁主視覺 ---------- */
+.shop .hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: 36px 0 56px;
+  text-align: left;
+}
+
+.hero-text {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.shop .hero-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(30px, 3.6vw, 44px);
+  line-height: 1.4;
+  letter-spacing: .04em;
+  white-space: pre-line;
+  color: var(--text);
+}
+
+.shop .hero-intro {
+  max-width: 30em;
+  margin: 22px 0 0;
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text-soft);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  margin-top: 36px;
+}
+
+.shop .hero-status {
+  max-width: none;
+  margin: 34px 0 0;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.hero-art {
+  flex: 0 1 480px;
+  width: 100%;
+  min-width: 280px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* 櫥窗：可以互動的部分 */
+.stage {
+  position: relative;
+}
+
+.shopfront {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stage .hit {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.hit-lamp { left: 21%; top: 17%; width: 18%; height: 17%; }
+.hit-dome { left: 20%; top: 66%; width: 17.5%; height: 13.5%; }
+.hit-vase { left: 54%; top: 51%; width: 18.5%; height: 28%; }
+.hit-sign { left: 84.5%; top: 54%; width: 15%; height: 13%; }
+
+.sf-glow { opacity: 1; }
+.sf-shade { fill: #D9A441; }
+.sf-dim { opacity: 0; }
+.stage.lamp-off .sf-glow { opacity: 0; }
+.stage.lamp-off .sf-shade { fill: #B9A99A; }
+.stage.lamp-off .sf-dim { opacity: .17; }
+
+.sf-dome { transform: translateY(0); }
+.stage.dome-open .sf-dome { transform: translateY(-36px); }
+.sf-sign { transform-origin: 444px 301px; }
+.sf-bouquet { transform-origin: 290px 386px; }
+.sf-petals ellipse { opacity: 0; }
+
+@keyframes sf-lamp-on { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sf-swing-a { 0% { transform: rotate(0); } 15% { transform: rotate(9deg); } 35% { transform: rotate(-6deg); } 55% { transform: rotate(3.5deg); } 75% { transform: rotate(-1.8deg); } 100% { transform: rotate(0); } }
+@keyframes sf-swing-b { 0% { transform: rotate(0); } 15% { transform: rotate(9deg); } 35% { transform: rotate(-6deg); } 55% { transform: rotate(3.5deg); } 75% { transform: rotate(-1.8deg); } 100% { transform: rotate(0); } }
+@keyframes sf-sway-a { 0% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 55% { transform: rotate(3deg); } 80% { transform: rotate(-1.4deg); } 100% { transform: rotate(0); } }
+@keyframes sf-sway-b { 0% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 55% { transform: rotate(3deg); } 80% { transform: rotate(-1.4deg); } 100% { transform: rotate(0); } }
+@keyframes sf-fall-a { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), 96px) rotate(var(--rot)); } }
+@keyframes sf-fall-b { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), 96px) rotate(var(--rot)); } }
+@keyframes sf-pop { 0% { transform: scale(0); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+/* ---------- 狀態列（接單狀態、名額、等待） ---------- */
+.cm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px 64px;
+  margin: 0;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0;
+  color: var(--text-dim);
+}
+
+.cm-k {
+  color: var(--text-dim);
+}
+
+.cm-v {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.cm-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--t-egg);
+}
+
+.cm-dot.off {
+  background: var(--line-strong);
+}
+
+.cm-slots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.cm-slots svg {
+  color: var(--t-medium);
+}
+
+.cm-slots svg.e {
+  color: var(--line);
+}
+
+/* ---------- 首頁區塊（左標題、右內容） ---------- */
+.home-sec {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 36px 72px;
+  margin-top: 88px;
+}
+
+.home-sec + .home-sec {
+  margin-top: 56px;
+}
+
+.home-side,
+.cm-side {
+  flex: 1 1 280px;
+  max-width: 360px;
+}
+
+.home-side h2,
+.cm-side h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: .06em;
+  color: var(--text);
+}
+
+.home-side p,
+.cm-side p {
+  margin: 18px 0 0;
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text-soft);
+}
+
+.home-side .btn-text {
+  margin-top: 18px;
+  font-size: 16px;
+}
+
+.home-main {
+  flex: 2 1 460px;
+  min-width: 0;
+}
+
+/* 方案顏色：用 data-t 帶出 --c（花朵）與 --cb（標籤底） */
+[data-t="egg"] { --c: var(--t-egg); --cb: var(--t-egg-bg); }
+[data-t="surprise"] { --c: var(--t-surprise); --cb: var(--t-surprise-bg); }
+[data-t="short"] { --c: var(--t-short); --cb: var(--t-short-bg); }
+[data-t="medium"] { --c: var(--t-medium); --cb: var(--t-medium-bg); }
+[data-t="long"] { --c: var(--t-long); --cb: var(--t-long-bg); }
+
+/* 菜單（首頁用的靜態版） */
+.menu-row {
+  padding: 0 0 26px;
+}
+
+.menu-top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.menu-top .fl {
+  flex: none;
+  align-self: center;
+  color: var(--c);
+}
+
+.menu-nm {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: .04em;
+}
+
+.menu-ld {
+  flex: 1;
+  min-width: 20px;
+  border-bottom: 2px dotted var(--line-strong);
+  transform: translateY(-5px);
+}
+
+.menu-pr {
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+
+.menu-ds {
+  margin: 6px 0 0 34px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-dim);
+}
+
+/* ---------- 文章條列（首頁、轉蛋、委託作品、標籤頁共用） ---------- */
+.shop .diary {
+  max-width: none;
+  margin: 0;
+}
+
+.shop .diary-item {
+  display: flex;
+  gap: 22px;
+  margin: 0;
+  padding: 20px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.shop .diary-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.shop .diary-date {
+  width: 56px;
+  padding-top: 4px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.shop .diary-body .tag {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--text-dim);
+}
+
+.shop .diary-body h3 {
+  margin: 4px 0 6px;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  letter-spacing: .03em;
+  color: var(--text);
+}
+
+.shop .diary-body p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--text-soft);
+}
+
+.shop .pin-badge {
+  margin: 0 8px 0 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+
+.shop .pin-badge .dot {
+  background: var(--accent);
+  box-shadow: none;
+  animation: none;
+}
+
+.empty-note {
+  padding: 20px 0;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop .diary-item:hover {
+    border-color: var(--line);
+    background: none;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .shop .diary-item:hover .diary-body h3 {
+    color: var(--accent);
+  }
+}
+
+/* ---------- 列表頁共用 ---------- */
+.shop .archive-page {
+  max-width: 760px;
+  margin-top: 48px;
+}
+
+.shop .archive-page.wide {
+  max-width: none;
+  margin-top: 0;
+  padding: 0;
+}
+
+.shop .section-title {
+  margin: 40px 0 10px;
+  text-align: left;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-transform: none;
+  color: var(--text);
+}
+
+.shop .archive-intro {
+  max-width: none;
+  margin: 0 0 24px;
+  text-align: left;
+  font-size: 16px;
+  color: var(--text-soft);
+}
+
+.shop .gacha-cta {
+  margin: 0 0 8px;
+  padding: 10px 24px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: .04em;
+  color: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 999px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop .gacha-cta:hover {
+    background: var(--green);
+    color: #FFFCFA;
+  }
+}
+
+/* 雜談 */
+.shop .misc-month-label {
+  margin: 40px 0 6px;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  letter-spacing: .06em;
+  text-transform: none;
+  color: var(--text-dim);
+}
+
+.shop .misc-item {
+  gap: 20px;
+  margin: 0;
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  transform: none;
+}
+
+.shop .misc-item .misc-date {
+  width: 48px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.shop .misc-item h3 {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--text);
+}
+
+.shop .misc-item p {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop .misc-item:hover {
+    border-color: var(--line);
+    background: none;
+    transform: none;
+  }
+
+  .shop .misc-item:hover h3 {
+    color: var(--accent);
+  }
+}
+
+/* 分頁 */
+.shop .site-pager {
+  margin-top: 48px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.shop .sp-page.is-current {
+  min-width: 32px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #FFFCFA;
+  font-weight: 400;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop a.sp-link:hover,
+  .shop a.sp-page:hover {
+    color: var(--accent);
+  }
+}
+
+/* ---------- 單篇文章 ---------- */
+.shop .post-detail {
+  max-width: 680px;
+  margin-top: 56px;
+}
+
+.shop .eyebrow {
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: .06em;
+  text-transform: none;
+  color: var(--text-dim);
+}
+
+.shop .post-title {
+  margin: 6px 0 10px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: .04em;
+  color: var(--text);
+}
+
+.shop .star-badge {
+  margin-top: 6px;
+  padding: 3px 12px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.shop .post-content {
+  font-size: 16px;
+  line-height: 2.1;
+  color: var(--text);
+}
+
+.shop .post-content h1,
+.shop .post-content h2,
+.shop .post-content h3,
+.shop .post-content h4 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  color: var(--text);
+}
+
+.shop .post-content hr {
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+.shop .post-content blockquote {
+  border-left-color: var(--accent);
+  color: var(--text-dim);
+}
+
+.shop .tag-pill {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--text-soft);
+  border: 1px solid var(--line-strong);
+}
+
+.shop .post-notices {
+  border-left: 0;
+  border-radius: 12px;
+  background: var(--t-long-bg);
+}
+
+.shop .post-notices p {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text-soft);
+}
+
+.shop .post-links a {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.shop .back-link {
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0;
+  color: var(--text-dim);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop .tag-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: none;
+  }
+
+  .shop .post-links a:hover {
+    background: var(--green);
+    color: #FFFCFA;
+  }
+
+  .shop .back-link:hover {
+    color: var(--accent);
+  }
+}
+
+/* ---------- 頁尾 ---------- */
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.shop .site-footer {
+  margin-top: 96px;
+  padding: 0;
+  text-align: left;
+  background: var(--green);
+  color: var(--bg);
+  letter-spacing: 0;
+}
+
+.shop .footer-legacy {
+  display: none;
+}
+
+.footer-shop {
+  display: none;
+}
+
+.shop .footer-shop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 56px;
+}
+
+.fs-name {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.fs-zh {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: .08em;
+}
+
+.fs-en {
+  font-family: var(--font-latin);
+  font-style: italic;
+  font-size: 20px;
+  color: #D9CFC6;
+}
+
+.fs-year {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: #D9CFC6;
+}
+
+.theme-night .site-footer {
+  padding: 70px 0 30px;
+}
+
+/* ---------- 動態：只在沒有開「減少動態效果」時啟用 ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .sf-glow { animation: sf-lamp-on 1.6s .3s backwards; }
+  .sf-glow,
+  .sf-shade,
+  .sf-dim { transition: opacity .6s, fill .5s; }
+  .sf-dome { transition: transform .55s cubic-bezier(.3, 1.5, .5, 1); }
+
+  .stage.sign-load .sf-sign { animation: sf-swing-a 2.6s 1s ease-in-out both; }
+  .stage.sign-a .sf-sign { animation: sf-swing-a 2.2s ease-in-out; }
+  .stage.sign-b .sf-sign { animation: sf-swing-b 2.2s ease-in-out; }
+  .stage.vase-a .sf-bouquet { animation: sf-sway-a 2s ease-in-out; }
+  .stage.vase-b .sf-bouquet { animation: sf-sway-b 2s ease-in-out; }
+  .stage.vase-a .sf-petals ellipse { animation: sf-fall-a 2.2s ease-in forwards; }
+  .stage.vase-b .sf-petals ellipse { animation: sf-fall-b 2.2s ease-in forwards; }
+  .sf-petals ellipse:nth-child(2) { animation-delay: .18s !important; }
+  .sf-petals ellipse:nth-child(3) { animation-delay: .36s !important; }
+  .sf-petals ellipse:nth-child(4) { animation-delay: .1s !important; }
+
+  .cm-slots svg { animation: sf-pop .55s cubic-bezier(.3, 1.5, .5, 1) both; }
+  .cm-slots svg:nth-child(1) { animation-delay: .9s; }
+  .cm-slots svg:nth-child(2) { animation-delay: 1.05s; }
+  .cm-slots svg:nth-child(3) { animation-delay: 1.2s; }
+  .cm-slots svg:nth-child(4) { animation-delay: 1.35s; }
+  .cm-slots svg:nth-child(n+5) { animation-delay: 1.5s; }
+
+  .shop .navlinks a,
+  .btn-text { transition: background-size .25s ease, color .2s; }
+  .btn-main { transition: transform .2s, background .2s, box-shadow .2s; }
+  .menu-top .fl { transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+  .shop .diary-body h3,
+  .shop .misc-item h3 { transition: transform .25s ease, color .2s; }
+}
+
+/* 滑鼠專屬的 hover：手機沒有 hover，不會黏住 */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -10px rgba(47, 74, 62, .7); }
+  .btn-main:active { transform: translateY(0); }
+  .menu-row:hover .fl { transform: rotate(72deg) scale(1.18); }
+  .shop .diary-item:hover .diary-body h3,
+  .shop .misc-item:hover h3 { transform: translateX(8px); }
+  .stage:has(.hit-dome:hover) .sf-dome { transform: translateY(-5px); }
+  .stage.dome-open:has(.hit-dome:hover) .sf-dome { transform: translateY(-36px); }
+  .stage:has(.hit-sign:hover) .sf-sign { animation: sf-swing-a 1.8s ease-in-out; }
+  .stage:has(.hit-vase:hover) .sf-bouquet { animation: sf-sway-a 1.6s ease-in-out; }
+}
+
+/* ---------- 手機 ---------- */
+@media (max-width: 640px) {
+  .shop .wrap {
+    padding: 0 20px 28px;
+  }
+
+  .shop .topbar {
+    align-items: center;
+    padding: 20px 0 0;
+  }
+
+  .shop .hero {
+    gap: 28px;
+    padding: 28px 0 40px;
+  }
+
+  .shop .hero-intro {
+    font-size: 15.5px;
+  }
+
+  .cm-chips {
+    gap: 16px 28px;
+  }
+
+  .home-sec {
+    margin-top: 64px;
+    gap: 24px;
+  }
+
+  .home-side h2,
+  .cm-side h2 {
+    font-size: 24px;
+  }
+
+  .shop .post-title {
+    font-size: 26px;
+  }
+
+  .shop .footer-shop {
+    padding: 36px 20px;
+  }
+}
+
+/* ---------- 慣性滾動（Lenis） ----------
+   html 原本有 scroll-behavior:smooth，會跟 Lenis 打架，啟用時要關掉 */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}

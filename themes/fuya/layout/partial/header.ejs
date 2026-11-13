@@ -1,4 +1,19 @@
-<body>
-  <div class="stars" id="stars" aria-hidden="true"></div>
+<%
+  // 淺色（甜點店）是預設；企劃內頁與企劃總覽暫時維持夜色
+  var layoutName = page.layout || '';
+  var slug0 = (page.path || '').split('/')[0];
+  var isNight = layoutName === 'project-group' || layoutName === 'project-draw'
+    || (slug0 === 'projects' && page.category && !page.date);
+%>
+<body class="<%= isNight ? 'theme-night' : 'shop' %>">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="flw" viewBox="0 0 24 24">
+        <g fill="currentColor"><circle cx="12" cy="6" r="4.6"/><circle cx="18" cy="10.4" r="4.6"/><circle cx="15.7" cy="17.5" r="4.6"/><circle cx="8.3" cy="17.5" r="4.6"/><circle cx="6" cy="10.4" r="4.6"/></g>
+        <circle cx="12" cy="12.4" r="2.8" fill="#FFFCFA"/>
+      </symbol>
+    </defs>
+  </svg>
+  <% if (isNight) { %><div class="stars" id="stars" aria-hidden="true"></div><% } %>
   <div class="wrap">
     <%- partial('partial/nav') %>

@@ -3,41 +3,76 @@
 
     <%- partial('partial/hero') %>
 
-      <div class="section-title">— 最近寫的字 —</div>
-      <%
-        // 置頂文章一律排在最前面（彼此之間仍依日期新到舊），其餘文章維持原本的日期排序，
-        // 最後才截斷到要顯示的篇數，確保置頂文章不會被排擠出「最近寫的字」。
-        var recentPosts = site.posts.filter(function(p){ return !p.also_copy; }).sort('-date').toArray().sort(function(a, b){
-          return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
-        }).slice(0, theme.recent_count || 6);
-      %>
-      <div class="diary">
-        <% recentPosts.forEach(function(post){ %>
-          <a class="diary-item" href="<%- url_for(post.path) %>">
-            <div class="diary-date">
-              <%= date(post.date, 'MM.DD' ) %>
-            </div>
-            <div class="diary-body">
-              <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
-              <% if (post.categories && post.categories.length) { %>
-                <span class="tag">
-                  <%= post.categories.data[0].name %>
-                </span>
-                <% } %>
-                  <h3>
-                    <%= post.title %>
-                  </h3>
-                  <% if (post.description) { %>
-                    <p><%= post.description %></p>
-                  <% } else { %>
-                    <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
-                  <% } %>
-            </div>
-          </a>
-          <% }) %>
-            <% if (site.posts.length===0) { %>
-              <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
-              <% } %>
-      </div>
+    <%- partial('partial/commission-status') %>
 
-      <%- partial('partial/footer') %>
+    <%
+      var homePlans = theme.commission_plans || [];
+    %>
+    <% if (homePlans.length) { %>
+      <section class="home-sec">
+        <div class="home-side">
+          <h2>委託菜單</h2>
+          <p>稿子依你給的設定一篇一篇寫。初稿階段有兩次修改機會，完稿後有一次小幅修改。</p>
+          <a class="btn-text" href="<%- url_for('/commission/') %>">看完整菜單與排程</a>
+        </div>
+        <div class="home-main">
+          <% homePlans.forEach(function(p){ %>
+            <div class="menu-row" data-t="<%= p.key %>">
+              <div class="menu-top">
+                <svg class="fl" width="22" height="22" aria-hidden="true"><use href="#flw"/></svg>
+                <span class="menu-nm"><%= p.name %></span>
+                <span class="menu-ld"></span>
+                <span class="menu-pr"><%= String(p.price).replace('/', ' / ') %></span>
+              </div>
+              <p class="menu-ds"><% if (p.range && String(p.range).trim() !== '-') { %><%= p.range %>　<% } %><%= p.note %></p>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+
+    <%
+      // 置頂文章一律排在最前面（彼此之間仍依日期新到舊），其餘文章維持原本的日期排序，
+      // 最後才截斷到要顯示的篇數，確保置頂文章不會被排擠出「最近寫的字」。
+      var recentPosts = site.posts.filter(function(p){ return !p.also_copy; }).sort('-date').toArray().sort(function(a, b){
+        return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
+      }).slice(0, theme.recent_count || 6);
+    %>
+    <section class="home-sec">
+      <div class="home-side">
+        <h2>最近寫下的字</h2>
+        <p>轉蛋的短篇與企劃的連載，不定期更新。</p>
+      </div>
+      <div class="home-main">
+        <div class="diary">
+          <% recentPosts.forEach(function(post){ %>
+            <a class="diary-item" href="<%- url_for(post.path) %>">
+              <div class="diary-date">
+                <%= date(post.date, 'MM.DD' ) %>
+              </div>
+              <div class="diary-body">
+                <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
+                <% if (post.categories && post.categories.length) { %>
+                  <span class="tag">
+                    <%= post.categories.data[0].name %>
+                  </span>
+                <% } %>
+                <h3>
+                  <%= post.title %>
+                </h3>
+                <% if (post.description) { %>
+                  <p><%= post.description %></p>
+                <% } else { %>
+                  <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
+                <% } %>
+              </div>
+            </a>
+          <% }) %>
+          <% if (site.posts.length===0) { %>
+            <p class="empty-note">故事，未完待續。</p>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <%- partial('partial/footer') %>
