@@ -1287,3 +1287,163 @@ html.lenis body {
   .shop .post-content { font-size: 16.5px; }
   .shop .post-cta { padding: 24px; }
 }
+
+/* ================================================
+   企劃主題（/projects/）
+   ================================================ */
+.shop .archive-page.themes-page {
+  max-width: none;
+  margin-top: 0;
+  padding-top: 64px;
+}
+
+.shop .themes-page .page-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(30px, 3.6vw, 42px);
+  letter-spacing: .06em;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.shop .themes-page .page-intro {
+  max-width: 34em;
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text-soft);
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.theme-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #EADDD6;
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.theme-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.theme-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 26px 26px;
+}
+
+.theme-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-name h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: .04em;
+  color: var(--text);
+}
+
+.theme-badge {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #ECE3DF;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.theme-badge.live {
+  background: #DCEBDD;
+  color: #2F5A44;
+}
+
+.theme-body p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-soft);
+}
+
+.theme-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.theme-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 48px;
+  margin-top: 72px;
+  padding: 32px 36px;
+  border: 1px solid #EADDD6;
+  border-radius: 22px;
+  background: var(--surface);
+}
+
+.theme-cta > div {
+  flex: 1 1 320px;
+}
+
+.theme-cta h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: .04em;
+  color: var(--text);
+}
+
+.theme-cta p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-soft);
+}
+
+.theme-link {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--accent);
+  font-size: 16px;
+  color: var(--accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-card:hover { border-color: #D9B9B3; background: #fff; }
+  .theme-card:hover .go { color: var(--accent); }
+  .theme-card:hover .tart { transform: scale(1.04) rotate(-1.5deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .theme-card { transition: border-color .25s, background .25s, transform .3s; }
+  .theme-card:hover { transform: translateY(-4px); }
+  .tart { transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+  .theme-foot .go { transition: color .2s; }
+}
+
+@media (max-width: 620px) {
+  .shop .archive-page.themes-page { padding-top: 40px; }
+  .theme-cta { padding: 24px; }
+}

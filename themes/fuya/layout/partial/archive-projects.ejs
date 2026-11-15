@@ -1,60 +1,71 @@
-<div class="section-title" style="margin-top:40px;">進行中的企劃 / PROJECTS</div>
-
 <%
-  // 每張卡片上方的小圖案由 _config.yml 裡各企劃的 motif 決定：
-  //   ring = 十二顆星排成一圈　calendar = 掛式日曆　tarot = 三張疊開的牌　（沒填 = 一小串星座）
+  // 企劃主題：每個企劃是一個主題，一張卡片。
+  // 卡片上的小插圖由 _config.yml 裡各企劃的 motif 決定：calendar = 日曆　ring = 十二朵花圍成一圈　tarot = 疊開的牌　（沒填 = 一朵花）
+  var groups = theme.project_groups || [];
+  function countOf(key){
+    return site.posts.filter(function(p){
+      return p.project_group === key && p.categories && p.categories.some(function(c){ return c.name === '企劃'; });
+    }).length;
+  }
+  var tints = { calendar: '#F8E6E4', ring: '#F4EBD9', tarot: '#E8E3F3', flower: '#F4EBD9' };
 %>
-<div class="project-grid">
-  <% (theme.project_groups || []).forEach(function(group){
-       var themeClass = group.theme === 'moon' ? 'pc-moon' : 'pc-lamp';
-       var motif = group.motif || 'stars';
+<h1 class="page-title">企劃主題</h1>
+<p class="page-intro">每個企劃是一個主題。選一個進去，可以看這個主題下的故事，也能玩裡面的小遊戲。</p>
+
+<div class="theme-grid">
+  <% groups.forEach(function(group){
+       var motif = tints[group.motif] ? group.motif : 'flower';
+       var live = group.badge && group.badge.indexOf('進行') !== -1;
   %>
-    <a class="project-card <%= themeClass %>" href="<%- url_for('/projects/' + group.key + '/') %>">
-      <svg class="pcard-art" viewBox="0 0 200 90" aria-hidden="true">
-        <% if (motif === 'ring') { %>
-          <circle class="pa-line" cx="100" cy="45" r="32"/>
-          <circle class="pa-faint" cx="100" cy="45" r="21" stroke-dasharray="2 4"/>
-          <g class="pa-dots">
-            <circle cx="100" cy="13" r="1.8"/><circle cx="127.7" cy="29" r="1.8"/><circle cx="132" cy="45" r="1.8"/>
-            <circle cx="127.7" cy="61" r="1.8"/><circle cx="116" cy="72.7" r="1.8"/><circle cx="100" cy="77" r="1.8"/>
-            <circle cx="84" cy="72.7" r="1.8"/><circle cx="72.3" cy="61" r="1.8"/><circle cx="68" cy="45" r="1.8"/>
-            <circle cx="72.3" cy="29" r="1.8"/><circle cx="84" cy="17.3" r="1.8"/>
-          </g>
-          <circle class="pa-halo" cx="116" cy="17.3" r="7"/><circle class="pa-lit" cx="116" cy="17.3" r="3.2"/>
-        <% } else if (motif === 'calendar') { %>
-          <defs>
-            <pattern id="pa-days" x="65.5" y="35" width="9.5" height="10" patternUnits="userSpaceOnUse">
-              <circle cx="4.75" cy="5" r="1.1" fill="rgba(251,245,231,.35)"/>
-            </pattern>
-          </defs>
-          <rect class="pa-paper" x="62" y="12" width="76" height="68" rx="3"/>
-          <rect class="pa-head" x="62.5" y="12.5" width="75" height="16"/>
-          <text class="pa-mono" x="100" y="24" text-anchor="middle" letter-spacing="2">OCT</text>
-          <rect x="65.5" y="35" width="66.5" height="40" fill="url(#pa-days)"/>
-          <circle class="pa-ring" cx="98.5" cy="50" r="5.5"/><circle class="pa-lit" cx="98.5" cy="50" r="1.6"/>
-          <circle class="pa-halo" cx="117.5" cy="60" r="7"/><circle class="pa-lit" cx="117.5" cy="60" r="2.8"/>
-          <circle class="pa-ring" cx="79.5" cy="70" r="5.5"/><circle class="pa-lit" cx="79.5" cy="70" r="1.6"/>
-          <g class="pa-binding"><rect x="79" y="6" width="5" height="13" rx="2.5"/><rect x="116" y="6" width="5" height="13" rx="2.5"/></g>
+    <a class="theme-card" href="<%- url_for('/projects/' + group.key + '/') %>">
+      <div class="theme-art" style="background:<%= tints[motif] %>">
+        <% if (motif === 'calendar') { %>
+          <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
+            <rect x="38" y="26" width="114" height="122" rx="14" fill="#FFFCFA"/>
+            <path d="M38 40 a14 14 0 0 1 14 -14 h86 a14 14 0 0 1 14 14 v22 h-114z" fill="#E8A5B3"/>
+            <rect x="62" y="16" width="9" height="24" rx="4.5" fill="#4E7E68"/><rect x="119" y="16" width="9" height="24" rx="4.5" fill="#4E7E68"/>
+            <g fill="#F0D9D4"><circle cx="62" cy="86" r="5"/><circle cx="82" cy="86" r="5"/><circle cx="102" cy="86" r="5"/><circle cx="122" cy="86" r="5"/><circle cx="62" cy="108" r="5"/><circle cx="82" cy="108" r="5"/><circle cx="122" cy="108" r="5"/><circle cx="62" cy="130" r="5"/><circle cx="82" cy="130" r="5"/></g>
+            <circle cx="102" cy="108" r="12" fill="#F8D983"/><use href="#flw" x="92" y="98" width="20" height="20" style="color:#E5586F"/>
+            <circle cx="122" cy="130" r="5" fill="#CDBFEA"/>
+          </svg>
+        <% } else if (motif === 'ring') { %>
+          <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
+            <circle cx="95" cy="85" r="46" fill="#FFFCFA"/>
+            <use href="#flw" x="148.0" y="76.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="139.7" y="107.0" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="117.0" y="129.7" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="86.0" y="138.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="55.0" y="129.7" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="32.3" y="107.0" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="24.0" y="76.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="32.3" y="45.0" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="55.0" y="22.3" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="86.0" y="14.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="117.0" y="22.3" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="139.7" y="45.0" width="18" height="18" style="color:#F8D983"/>
+            <use href="#flw" x="77" y="67" width="36" height="36" style="color:#E5586F"/>
+          </svg>
         <% } else if (motif === 'tarot') { %>
-          <rect class="pa-card-side" x="82" y="14" width="36" height="62" rx="4" transform="rotate(-16 100 80)"/>
-          <rect class="pa-card-side" x="82" y="14" width="36" height="62" rx="4" transform="rotate(16 100 80)"/>
-          <rect class="pa-card-main" x="82" y="12" width="36" height="62" rx="4"/>
-          <rect class="pa-faint" x="87" y="17" width="26" height="52" rx="2"/>
-          <path class="pa-fill" d="M105 34 A9 9 0 1 0 105 50 A7.6 7.6 0 0 1 105 34Z"/>
-          <circle class="pa-fill" cx="94" cy="26" r="1.4"/><circle class="pa-fill" cx="108" cy="60" r="1.4"/><circle class="pa-fill" cx="93" cy="58" r="1"/>
+          <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
+            <g transform="rotate(-14 95 150)"><rect x="56" y="22" width="68" height="112" rx="12" fill="#CDBFEA"/></g>
+            <g transform="rotate(14 95 150)"><rect x="66" y="22" width="68" height="112" rx="12" fill="#F4C7CF"/></g>
+            <rect x="61" y="18" width="68" height="116" rx="12" fill="#FFFCFA"/>
+            <rect x="68" y="25" width="54" height="102" rx="8" fill="none" stroke="#E5B8C0" stroke-width="2" stroke-dasharray="3 5"/>
+            <path d="M104 52 a22 22 0 1 0 0 44 a17 17 0 0 1 0 -44z" fill="#F8D983"/>
+            <use href="#flw" x="84" y="98" width="22" height="22" style="color:#E8A5B3"/>
+          </svg>
         <% } else { %>
-          <polyline class="pa-line" fill="none" points="60,56 100,18 140,56"/>
-          <circle class="pa-lit" cx="60" cy="56" r="2.2"/><circle class="pa-lit" cx="100" cy="18" r="3"/><circle class="pa-lit" cx="140" cy="56" r="2.2"/>
+          <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
+            <circle cx="95" cy="85" r="46" fill="#FFFCFA"/>
+            <use href="#flw" x="65" y="55" width="60" height="60" style="color:#E8A5B3"/>
+          </svg>
         <% } %>
-        <g class="pa-stray"><circle cx="34" cy="28" r="1"/><circle cx="30" cy="62" r="1"/><circle cx="168" cy="28" r="1"/><circle cx="172" cy="64" r="1"/></g>
-      </svg>
-      <h3><%= group.name %></h3>
-      <% if (group.intro) { %><p><%= group.intro %></p><% } %>
-      <span class="pcard-foot">
-        <% if (group.badge) { %><span class="pc-badge"><%= group.badge %></span><% } else { %><span></span><% } %>
-        <span class="pcard-go">進入 →</span>
-      </span>
-      <% if (group.status) { %><span class="pc-status"><%= group.status %></span><% } %>
+      </div>
+      <div class="theme-body">
+        <div class="theme-name">
+          <h2><%= group.name %></h2>
+          <% if (group.badge) { %><span class="theme-badge<%= live ? ' live' : '' %>"><%= group.badge %></span><% } %>
+        </div>
+        <% if (group.intro) { %><p><%= group.intro %></p><% } %>
+        <div class="theme-foot"><span><%= countOf(group.key) %> 篇</span><span class="go">進入主題</span></div>
+      </div>
     </a>
   <% }) %>
+</div>
+
+<div class="theme-cta">
+  <div>
+    <h2>想要一篇有主題的故事？</h2>
+    <p>委託時可以直接選這些主題當靈感，也可以在表單裡寫「tag：主題名」。</p>
+  </div>
+  <a class="theme-link" href="<%- url_for('/commission/') %>">看委託菜單</a>
 </div>
