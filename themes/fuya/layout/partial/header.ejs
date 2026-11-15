@@ -2,8 +2,8 @@
   // 淺色（甜點店）是預設；企劃內頁與企劃總覽暫時維持夜色
   var layoutName = page.layout || '';
   var slug0 = (page.path || '').split('/')[0];
-  // 夜色只留給企劃內頁（各主題自己的頁面與抽籤）；「企劃主題」總覽頁已改成淺色
-  var isNight = layoutName === 'project-group' || layoutName === 'project-draw';
+  // 全站都是淺色（甜點店）。夜色樣式只剩單一來源：若之後想做特別的夜間頁，把這個條件改回來即可
+  var isNight = false;
 %>
 <body class="<%= isNight ? 'theme-night' : 'shop' %>">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">

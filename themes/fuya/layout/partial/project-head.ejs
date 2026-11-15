@@ -1,0 +1,20 @@
+<%
+  // 企劃內頁的頁首：小插圖、主題名稱、進行狀態與一句說明。傳入 group、page。
+  var tintMap = { calendar: '#F8E6E4', ring: '#F4EBD9', tarot: '#E8E3F3', flower: '#F4EBD9' };
+  var hMotif = tintMap[group.motif] ? group.motif : 'flower';
+  var hLive = group.badge && group.badge.indexOf('進行') !== -1;
+%>
+<a class="back-link" href="<%- url_for('/projects/') %>">← 企劃主題</a>
+<div class="project-hero">
+  <div class="theme-art project-art" style="background:<%= tintMap[hMotif] %>">
+    <%- partial('partial/project-art', { motif: hMotif }) %>
+  </div>
+  <div class="project-hero-text">
+    <div class="theme-name">
+      <h1 class="page-title"><%= group.name || page.title %></h1>
+      <% if (group.badge) { %><span class="theme-badge<%= hLive ? ' live' : '' %>"><%= group.badge %></span><% } %>
+    </div>
+    <% if (group.intro) { %><p class="page-intro"><%= group.intro %></p><% } %>
+    <% if (group.status) { %><p class="project-status"><%= group.status %></p><% } %>
+  </div>
+</div>

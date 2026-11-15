@@ -1,0 +1,29 @@
+<%
+  // 這個企劃底下的文章列表，樣式跟「作品展示」一致。傳入 posts。
+%>
+<div class="works-list">
+  <% posts.forEach(function(post){
+       var tags = (post.tags && post.tags.length) ? post.tags.filter(function(t){ return t && t.name && t.name.trim(); }) : [];
+       var pv = post.description || strip_html(post.excerpt || post.content || '').replace(/\s+/g, ' ').trim().slice(0, 150);
+  %>
+    <a class="work-row c-proj" href="<%- url_for(post.path) %>">
+      <span class="work-meta">
+        <span class="work-date"><%= date(post.date, 'YYYY.MM.DD') %></span>
+        <% if (post.pin) { %><span class="work-src"><svg width="16" height="16" aria-hidden="true"><use href="#flw"/></svg><span>置頂</span></span><% } %>
+      </span>
+      <span class="work-main">
+        <span class="work-head">
+          <span class="work-title"><%= post.title %></span>
+          <% if ((post.is_series && post.status) || tags.length) { %>
+            <span class="work-tags">
+              <% if (post.is_series && post.status) { %><span><%= post.status %></span><% } %>
+              <% tags.slice(0, 4).forEach(function(t){ %><span><%= t.name %></span><% }) %>
+            </span>
+          <% } %>
+        </span>
+        <% if (pv) { %><span class="work-preview"><%= pv %></span><% } %>
+      </span>
+    </a>
+  <% }) %>
+  <% if (!posts.length) { %><p class="empty-note">故事，未完待續。</p><% } %>
+</div>
