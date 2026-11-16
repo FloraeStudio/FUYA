@@ -4,7 +4,7 @@
   var hMotif = tintMap[group.motif] ? group.motif : 'flower';
   var hLive = group.badge && group.badge.indexOf('進行') !== -1;
 %>
-<a class="back-link" href="<%- url_for('/projects/') %>">← 企劃主題</a>
+<a class="back-link" href="<%- url_for('/projects/') %>">← 故事企劃</a>
 <div class="project-hero">
   <div class="theme-art project-art" style="background:<%= tintMap[hMotif] %>">
     <%- partial('partial/project-art', { motif: hMotif }) %>
