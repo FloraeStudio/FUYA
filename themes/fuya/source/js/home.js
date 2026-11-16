@@ -1,9 +1,31 @@
 /* ------------------------------------------------
    home.js
+   0. 首頁區塊捲動浮現（.rv → .in）
    1. 首頁櫥窗：點吊燈、蛋糕罩、花束、牌子會有反應（只切換 class，動畫在 shop.css）
    2. 接單狀態列：有設定後台網址時，載入後改讀即時資料；讀不到就維持頁面內建的內容
 ------------------------------------------------ */
 (function () {
+  // ---------- 捲動浮現（首頁各區塊） ----------
+  // 標了 .rv 的元素捲到畫面裡才加上 .in，動畫寫在 css/home.css。
+  // head.ejs 會在頁面一開始加上 .js；若這段沒跑成功，3 秒後會自動拿掉 .js，內容照常顯示。
+  var rvEls = document.querySelectorAll('.rv');
+  if (rvEls.length) {
+    window.fuyaReveal = true;
+    if ('IntersectionObserver' in window) {
+      var rvIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.classList.add('in');
+            rvIo.unobserve(en.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+      Array.prototype.forEach.call(rvEls, function (el) { rvIo.observe(el); });
+    } else {
+      Array.prototype.forEach.call(rvEls, function (el) { el.classList.add('in'); });
+    }
+  }
+
   // ---------- 櫥窗 ----------
   var stage = document.getElementById('stage');
   if (stage) {

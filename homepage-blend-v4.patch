@@ -1,0 +1,153 @@
+diff --git a/themes/fuya/layout/partial/hero.ejs b/themes/fuya/layout/partial/hero.ejs
+index 0232c6e..ddf54dd 100644
+--- a/themes/fuya/layout/partial/hero.ejs
++++ b/themes/fuya/layout/partial/hero.ejs
+@@ -23,23 +23,8 @@
+ 
+   var flower = '<svg class="fl" width="16" height="16" aria-hidden="true" focusable="false"><use href="#flw"/></svg>';
+   var signHtml = escape_html(heroSign).replace(/✿/g, flower);
+-
+-  // 飄落的花瓣（純裝飾，系統設定「減少動態效果」時不顯示）
+-  var petals = [
+-    { x: 6,  s: 12, t: 19, d: 0,  w: 26 },
+-    { x: 19, s: 9,  t: 23, d: 7,  w: -22 },
+-    { x: 33, s: 14, t: 21, d: 12, w: 30 },
+-    { x: 52, s: 10, t: 25, d: 4,  w: -28 },
+-    { x: 68, s: 13, t: 20, d: 15, w: 24 },
+-    { x: 81, s: 9,  t: 24, d: 9,  w: -20 },
+-    { x: 93, s: 12, t: 22, d: 2,  w: 28 }
+-  ];
+ %>
+ <section class="hero">
+-  <div class="hero-petals" aria-hidden="true">
+-    <% petals.forEach(function (p) { %><i style="--x:<%= p.x %>%;--s:<%= p.s %>px;--t:<%= p.t %>s;--d:-<%= p.d %>s;--w:<%= p.w %>px"></i><% }) %>
+-  </div>
+-
+   <div class="hero-text">
+     <h1 class="hero-tagline hl-in" style="--i:0"><%- tagHtml %></h1>
+     <p class="hero-tagline-zh hl-in" style="--i:2"><%= tagZh %></p>
+diff --git a/themes/fuya/source/css/home.css b/themes/fuya/source/css/home.css
+index 63cd9a7..f30e3f9 100644
+--- a/themes/fuya/source/css/home.css
++++ b/themes/fuya/source/css/home.css
+@@ -117,37 +117,49 @@
+   color: var(--honey);
+ }
+ 
+-/* 小花與花瓣 */
+-.hero-petals {
+-  position: absolute;
+-  inset: 0;
+-  z-index: 0;
+-  overflow: hidden;
+-  pointer-events: none;
+-  display: none;
++/* ---------- 右側插畫 ---------- */
++.hero-art {
++  flex: 0 1 580px;
++  max-width: 580px;
++}
++
++.hero-art {
++  position: relative;
++  isolation: isolate;
+ }
+ 
+-.hero-petals i {
++/* 插畫後面的一塊「安靜的底」：把格紋在這一帶淡掉，邊緣羽化，細節才不會被格紋搶走 */
++.hero-art::before {
++  content: "";
+   position: absolute;
+-  top: -24px;
+-  left: var(--x);
+-  width: var(--s);
+-  height: calc(var(--s) * 1.45);
+-  border-radius: 80% 0 80% 0;
+-  background: #F4A9B8;
+-  opacity: 0;
++  z-index: -1;
++  inset: -12% -9% -4% -9%;
++  border-radius: 50%;
++  background: radial-gradient(closest-side, rgba(255, 250, 247, .94) 0%, rgba(255, 250, 247, .78) 52%, rgba(255, 250, 247, 0) 100%);
++  pointer-events: none;
+ }
+ 
+-/* ---------- 右側插畫 ---------- */
+-.hero-art {
+-  flex: 0 1 580px;
+-  max-width: 580px;
++/* 落在地上的影子：讓櫥窗「站」在頁面上，而不是飄著 */
++.hero-art::after {
++  content: "";
++  position: absolute;
++  left: 14%;
++  right: 8%;
++  bottom: 1.5%;
++  height: 5.5%;
++  border-radius: 50%;
++  background: radial-gradient(closest-side, rgba(122, 70, 84, .24), rgba(122, 70, 84, 0));
++  filter: blur(5px);
++  pointer-events: none;
++  z-index: -1;
+ }
+ 
+ .shopfront-img {
+   display: block;
+   width: 100%;
+   height: auto;
++  /* 色調收一點：飽和度降低、帶一點暖，貼近頁面的玫瑰色與奶油色 */
++  filter: saturate(.86) sepia(.05) drop-shadow(0 10px 14px rgba(122, 70, 84, .12));
+ }
+ 
+ /* 吊燈的暖光：圖片上方一層很淡的光暈 */
+@@ -212,6 +224,7 @@
+ }
+ 
+ @media (max-width: 640px) {
++  .hero-art::before { inset: -8% -4% -2% -4%; }
+   .shop .hero-text .hero-tagline-zh { margin-top: 20px; font-size: 15px; letter-spacing: .06em; text-wrap: balance; }
+   .shop .hero-text .hero-label { margin-top: 34px; gap: 10px; letter-spacing: .14em; font-size: 11px; }
+   .hero-label::before { width: 22px; }
+@@ -248,13 +261,6 @@
+     70% { transform: scale(1.22) rotate(8deg); }
+     100% { transform: scale(1) rotate(0); }
+   }
+-  @keyframes hl-fall {
+-    0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+-    10% { opacity: .55; }
+-    50% { transform: translate3d(var(--w), 46vh, 0) rotate(140deg); }
+-    90% { opacity: .45; }
+-    100% { opacity: 0; transform: translate3d(calc(var(--w) * -.6), 92vh, 0) rotate(300deg); }
+-  }
+ 
+   /* 首頁載入：由上而下依序浮現 */
+   .hl-in {
+@@ -292,6 +298,13 @@
+   .stage-glow {
+     animation: hl-glow 5.5s ease-in-out infinite;
+   }
++  @keyframes hl-shadow {
++    0%, 100% { transform: scaleX(1); opacity: 1; }
++    50% { transform: scaleX(.94); opacity: .75; }
++  }
++  .hero-art::after {
++    animation: hl-shadow 8s ease-in-out 1.4s infinite;
++  }
+ 
+   /* 結尾的兩朵小花慢慢轉 */
+   .hero-sign .fl {
+@@ -301,14 +314,6 @@
+     animation-name: hl-spin-b;
+   }
+ 
+-  /* 花瓣：很淡、很慢，不蓋住文字 */
+-  .hero-petals {
+-    display: block;
+-  }
+-  .hero-petals i {
+-    animation: hl-fall var(--t) linear var(--d) infinite;
+-  }
+-
+   /* 捲動到才浮現（js 加上 .in；沒有 js 時完全不隱藏） */
+   .js .rv:not(.in) {
+     opacity: 0;

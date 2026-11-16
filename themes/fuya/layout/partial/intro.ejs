@@ -1,0 +1,25 @@
+<%
+  // 首頁的小小自我介紹。內容寫在 source/_data/site.yml（後台「首頁設定」也能改）。
+  var siteData = site.data.site || {};
+  var pickI = function (v, d) { return (v && String(v).trim()) ? String(v) : d; };
+  var linesI = function (v) { return String(v).split(/\r?\n/).map(function (t) { return t.trim(); }).filter(Boolean); };
+
+  var introTitle = pickI(siteData.intro_title, '你好，歡迎來到我的小小故事收藏室。');
+  var introLines = linesI(pickI(siteData.intro_text, '我總覺得，這個世界上有好多好多故事。\n它們藏在某一次擦肩而過的眼神裡、藏在午後沒有喝完的咖啡裡，也藏在那些明明很平凡，卻讓人忍不住記住的瞬間。\n於是，我開始寫字。\n把遇見的人、想像的世界、說不出口的情緒，以及那些稍縱即逝的心動，一點一點地寫下來。\n如果你也喜歡故事，歡迎在這裡坐坐。'));
+  var introClosing = pickI(siteData.intro_closing, '今天想為你留一份什麼樣的故事呢？');
+%>
+<section class="home-sec home-intro">
+  <div class="home-side rv">
+    <svg class="intro-fl fl" width="26" height="26" aria-hidden="true" focusable="false"><use href="#flw"/></svg>
+    <h2><%= introTitle %></h2>
+  </div>
+  <div class="home-main intro-body">
+    <% introLines.forEach(function (t, i) { %>
+      <p class="rv" style="--d:<%= i %>"><%= t %></p>
+    <% }) %>
+    <p class="intro-closing rv" style="--d:<%= introLines.length %>">
+      <svg class="fl" width="22" height="22" aria-hidden="true" focusable="false"><use href="#flw"/></svg>
+      <span><%= introClosing %></span>
+    </p>
+  </div>
+</section>

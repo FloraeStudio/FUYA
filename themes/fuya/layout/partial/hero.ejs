@@ -1,153 +1,53 @@
 <%
+  // 首頁品牌文字。內容寫在 source/_data/site.yml（後台「首頁設定」也能改）；
+  // 欄位留空時退回下面的預設文字，頁面不會空掉。
   var siteData = site.data.site || {};
-  var heroTitle = siteData.hero_title || '到處都有故事在發生，\n而我慢慢記錄下來。';
+  var pick = function (v, d) { return (v && String(v).trim()) ? String(v) : d; };
+  var lines = function (v) { return String(v).split(/\r?\n/).map(function (t) { return t.trim(); }).filter(Boolean); };
+
+  var eyebrow = pick(siteData.hero_eyebrow, 'WELCOME TO MY LITTLE STORY SHOP');
+  var tagLines = lines(pick(siteData.hero_tagline, 'A little story,\na little sweetness.'));
+  var tagZh = pick(siteData.hero_tagline_zh, '一些故事，一點甜，一份值得被記住的日常。');
+  var poem = lines(pick(siteData.hero_text, '世界很大，故事很多。\n而我想慢慢把它們寫下來。\n收集那些不經意的心動、沒有說出口的話，\n以及每一段值得被記住的相遇。'));
+  var heroSign = pick(siteData.hero_sign, '✿ A PLACE WHERE STORIES BLOOM ✿');
+
+  // 標語最後一行的最後一個英文字加上粉色手繪底線
+  var lastIdx = tagLines.length - 1;
+  var tagHtml = tagLines.map(function (t, i) {
+    var safe = escape_html(t);
+    if (i === lastIdx) {
+      safe = safe.replace(/([A-Za-zÀ-ɏ]+)([.!?。！？]*)$/, '<span class="hl">$1<svg class="hl-wave" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q15 1 27 7 T51 7 T75 7 T99 7 T123 7 T147 7 T171 7 T197 7" pathLength="1"/></svg></span>$2');
+    }
+    return '<span class="tag-line">' + safe + '</span>';
+  }).join('');
+
+  var flower = '<svg class="fl" width="16" height="16" aria-hidden="true" focusable="false"><use href="#flw"/></svg>';
+  var signHtml = escape_html(heroSign).replace(/✿/g, flower);
 %>
 <section class="hero">
   <div class="hero-text">
-    <h1 class="hero-title"><%= heroTitle %></h1>
-    <p class="hero-intro"><%= siteData.homepage_intro %></p>
-    <div class="hero-actions">
+    <h1 class="hero-tagline hl-in" style="--i:0"><%- tagHtml %></h1>
+    <p class="hero-tagline-zh hl-in" style="--i:2"><%= tagZh %></p>
+
+    <p class="hero-label hl-in" style="--i:3"><%= eyebrow %></p>
+    <p class="hero-poem">
+      <% poem.forEach(function (t, i) { %><span class="hl-in" style="--i:<%= 4 + i %>"><%= t %></span><% }) %>
+    </p>
+    <p class="hero-sign hl-in" style="--i:<%= 4 + poem.length %>"><%- signHtml %></p>
+
+    <div class="hero-actions hl-in" style="--i:<%= 5 + poem.length %>">
       <a class="btn-main" href="<%- url_for('/commission/') %>">看委託菜單</a>
       <a class="btn-text" href="<%- url_for('/gacha/') %>">讀幾篇作品</a>
     </div>
     <% if (siteData.status_line) { %>
-      <p class="hero-status">近況：<%= siteData.status_line %></p>
+      <p class="hero-status hl-in" style="--i:<%= 6 + poem.length %>">近況：<%= siteData.status_line %></p>
     <% } %>
   </div>
 
   <div class="hero-art">
-    <div class="stage sign-load" id="stage">
-      <svg class="shopfront" viewBox="0 0 500 560" role="img" aria-label="綠色拱形店面的櫥窗，裡面有草莓蛋糕、花瓶與吊燈，門邊掛著營業中的牌子">
-        <defs>
-          <clipPath id="sf-glass"><path d="M54 540 V212 A156 156 0 0 1 366 212 V540 Z"/></clipPath>
-          <pattern id="sf-gingham" width="24" height="24" patternUnits="userSpaceOnUse">
-            <rect width="24" height="24" fill="#FFF8F4"/>
-            <rect width="12" height="24" fill="#F2B8C0" fill-opacity=".55"/>
-            <rect width="24" height="12" fill="#F2B8C0" fill-opacity=".55"/>
-          </pattern>
-          <g id="sf-bloom-a">
-            <g fill="#F4A9B8"><circle cx="0" cy="-9.5" r="8.5"/><circle cx="9" cy="-2.9" r="8.5"/><circle cx="5.6" cy="7.7" r="8.5"/><circle cx="-5.6" cy="7.7" r="8.5"/><circle cx="-9" cy="-2.9" r="8.5"/></g>
-            <circle cx="0" cy="0" r="4.6" fill="#FFF1C2"/>
-            <circle cx="-9" cy="-2.9" r="2" fill="#fff" fill-opacity=".55"/>
-          </g>
-          <g id="sf-bloom-b">
-            <g fill="#CDBFEA"><circle cx="0" cy="-9.5" r="8.5"/><circle cx="9" cy="-2.9" r="8.5"/><circle cx="5.6" cy="7.7" r="8.5"/><circle cx="-5.6" cy="7.7" r="8.5"/><circle cx="-9" cy="-2.9" r="8.5"/></g>
-            <circle cx="0" cy="0" r="4.6" fill="#FFF1C2"/>
-            <circle cx="-9" cy="-2.9" r="2" fill="#fff" fill-opacity=".55"/>
-          </g>
-          <g id="sf-bloom-c">
-            <g fill="#F8D983"><circle cx="0" cy="-9.5" r="8.5"/><circle cx="9" cy="-2.9" r="8.5"/><circle cx="5.6" cy="7.7" r="8.5"/><circle cx="-5.6" cy="7.7" r="8.5"/><circle cx="-9" cy="-2.9" r="8.5"/></g>
-            <circle cx="0" cy="0" r="4.6" fill="#F4A9B8"/>
-          </g>
-        </defs>
-
-        <g transform="translate(20,10)">
-          <!-- 拱形門框 -->
-          <path d="M30 540 V210 A180 180 0 0 1 390 210 V540 Z" fill="#3F6B57"/>
-          <path d="M40 540 V210 A170 170 0 0 1 380 210 V540 Z" fill="#4E7E68"/>
-          <path d="M54 540 V212 A156 156 0 0 1 366 212 V540 Z" fill="#FFF3EA"/>
-          <g clip-path="url(#sf-glass)">
-            <path d="M54 330 L190 40 L262 40 L130 540 L54 540Z" fill="#FFFFFF" opacity=".5"/>
-            <path d="M290 40 L316 40 L214 400 L190 400Z" fill="#FFFFFF" opacity=".35"/>
-          </g>
-          <path d="M210 54 V440 M54 250 H366" stroke="#4E7E68" stroke-width="7" fill="none" stroke-linecap="round"/>
-
-          <!-- 櫃檯：木頭檯面＋格紋桌布 -->
-          <rect x="48" y="428" width="324" height="18" rx="9" fill="#D9A27C"/>
-          <rect x="54" y="446" width="312" height="94" fill="url(#sf-gingham)"/>
-          <path d="M54 446 h312 v10 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 q-13 14 -26 0 Z" fill="#F2B8C0"/>
-
-          <!-- 蛋糕架＋草莓蛋糕 -->
-          <ellipse cx="122" cy="429" rx="26" ry="5" fill="#F4C9CF"/>
-          <rect x="115" y="420" width="14" height="10" rx="3" fill="#F4C9CF"/>
-          <ellipse cx="122" cy="420" rx="48" ry="7" fill="#F9DCE0"/>
-          <rect x="96" y="396" width="52" height="25" rx="8" fill="#F8D9A8"/>
-          <rect x="96" y="407" width="52" height="5" fill="#FFFBF5"/>
-          <path d="M94 399 q0 -15 28 -15 q28 0 28 15 q-7 9 -14 0 q-7 9 -14 0 q-7 9 -14 0 q-7 9 -14 0 Z" fill="#F2A0B1"/>
-          <circle cx="106" cy="385" r="5" fill="#FFFBF5"/><circle cx="122" cy="382" r="5" fill="#FFFBF5"/><circle cx="138" cy="385" r="5" fill="#FFFBF5"/>
-          <path d="M122 368 q12 0 13 11 q0 10 -13 15 q-13 -5 -13 -15 q1 -11 13 -11 Z" fill="#E5586F"/>
-          <path d="M114 369 q8 -7 16 0 q-8 4 -16 0 Z" fill="#6E9B63"/>
-          <g fill="#FFE9B0"><circle cx="117" cy="378" r="1.2"/><circle cx="127" cy="377" r="1.2"/><circle cx="122" cy="385" r="1.2"/></g>
-          <g class="sf-dome">
-            <path d="M88 418 A34 56 0 0 1 156 418 Z" fill="#DDEEF1" fill-opacity=".55"/>
-            <path d="M95 408 Q96 378 110 358" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9"/>
-            <circle cx="122" cy="357" r="5" fill="#F2A0B1"/>
-          </g>
-
-          <!-- 花瓶＋花束 -->
-          <g class="sf-bouquet">
-            <g stroke="#6E9B63" stroke-width="3.6" fill="none" stroke-linecap="round">
-              <path d="M290 386 Q280 360 264 328"/>
-              <path d="M290 386 Q292 350 292 302"/>
-              <path d="M290 386 Q304 362 320 332"/>
-              <path d="M290 386 Q284 366 276 354"/>
-            </g>
-            <g fill="#86B176">
-              <ellipse cx="278" cy="358" rx="10" ry="5" transform="rotate(-35 278 358)"/>
-              <ellipse cx="306" cy="352" rx="10" ry="5" transform="rotate(35 306 352)"/>
-              <ellipse cx="288" cy="334" rx="9" ry="4.6" transform="rotate(-60 288 334)"/>
-            </g>
-            <use href="#sf-bloom-a" x="264" y="326"/>
-            <use href="#sf-bloom-b" x="292" y="300"/>
-            <use href="#sf-bloom-c" x="320" y="332"/>
-          </g>
-          <path d="M276 430 Q262 412 280 396 V386 H300 V396 Q318 412 304 430 Z" fill="#CFE3E8"/>
-          <path d="M272 414 Q276 404 284 400" stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".8"/>
-          <circle cx="283" cy="414" r="3" fill="#F4A9B8" fill-opacity=".7"/><circle cx="298" cy="414" r="3" fill="#F4A9B8" fill-opacity=".7"/>
-          <g class="sf-petals" fill="#F4A9B8">
-            <ellipse cx="266" cy="334" rx="4.5" ry="7" style="--dx:-22px;--rot:-140deg"/>
-            <ellipse cx="294" cy="310" rx="4.5" ry="7" style="--dx:18px;--rot:160deg"/>
-            <ellipse cx="320" cy="340" rx="4.5" ry="7" style="--dx:26px;--rot:120deg"/>
-            <ellipse cx="280" cy="350" rx="4.5" ry="7" style="--dx:-10px;--rot:-90deg"/>
-          </g>
-
-          <!-- 夜晚用的暗層（吊燈關掉時） -->
-          <g clip-path="url(#sf-glass)">
-            <path class="sf-dim" d="M54 540 V212 A156 156 0 0 1 366 212 V540 Z" fill="#2A1F2E"/>
-          </g>
-
-          <!-- 吊燈 -->
-          <circle class="sf-glow" cx="132" cy="150" r="38" fill="#F8D983" fill-opacity=".4"/>
-          <path d="M132 54 V118" stroke="#5B7F6E" stroke-width="3" stroke-linecap="round"/>
-          <path class="sf-shade" d="M112 146 Q112 112 132 112 Q152 112 152 146 Q132 152 112 146 Z"/>
-          <circle cx="132" cy="150" r="5" fill="#FFF3C4"/>
-
-          <text x="288" y="168" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="46" fill="#C48A2C">Fuya</text>
-          <text x="288" y="200" text-anchor="middle" font-family="Noto Serif TC, serif" font-size="13" letter-spacing="2" fill="#8A7480"><%= config.title %></text>
-
-          <!-- 左側藤蔓 -->
-          <g stroke="#6E9B63" stroke-width="3.6" fill="none" stroke-linecap="round">
-            <path d="M16 540 C0 490 40 460 18 410 S38 340 14 290"/>
-          </g>
-          <g fill="#86B176">
-            <ellipse cx="28" cy="470" rx="11" ry="5.4" transform="rotate(-30 28 470)"/>
-            <ellipse cx="6" cy="440" rx="11" ry="5.4" transform="rotate(30 6 440)"/>
-            <ellipse cx="32" cy="392" rx="11" ry="5.4" transform="rotate(-25 32 392)"/>
-            <ellipse cx="8" cy="340" rx="11" ry="5.4" transform="rotate(30 8 340)"/>
-          </g>
-          <use href="#sf-bloom-a" x="20" y="500" transform="translate(7 150) scale(.6) translate(-20 -500)"/>
-          <use href="#sf-bloom-b" x="30" y="420" transform="translate(13 189) scale(.6) translate(-30 -420)"/>
-          <use href="#sf-bloom-c" x="8" y="318" transform="translate(4 143) scale(.6) translate(-8 -318)"/>
-
-          <!-- 營業中的牌子 -->
-          <path d="M390 300 H458" stroke="#3F6B57" stroke-width="5" stroke-linecap="round"/>
-          <g class="sf-sign">
-            <g transform="rotate(-3 444 340)">
-              <path d="M426 301 V326 M462 301 V326" stroke="#3F6B57" stroke-width="2.4" stroke-linecap="round"/>
-              <rect x="408" y="324" width="72" height="38" rx="12" fill="#FFFCFA" stroke="#3F6B57" stroke-width="3"/>
-              <text x="444" y="348" text-anchor="middle" font-family="Noto Serif TC, serif" font-weight="600" font-size="15" fill="#3F6B57">營業中</text>
-              <circle cx="418" cy="334" r="3" fill="#F4A9B8"/><circle cx="470" cy="352" r="3" fill="#F8D983"/>
-            </g>
-          </g>
-
-          <rect x="-20" y="540" width="480" height="12" rx="6" fill="#EBDDD5"/>
-        </g>
-      </svg>
-
-      <button type="button" class="hit hit-lamp" data-act="lamp" aria-pressed="true" aria-label="吊燈開關"></button>
-      <button type="button" class="hit hit-dome" data-act="dome" aria-pressed="false" aria-label="掀開蛋糕罩"></button>
-      <button type="button" class="hit hit-vase" data-act="vase" aria-label="碰一下花束"></button>
-      <button type="button" class="hit hit-sign" data-act="sign" aria-label="晃一下營業中的牌子"></button>
+    <div class="stage">
+      <img class="shopfront-img" src="<%- url_for('/img/hero-shopfront.webp') %>" width="1100" height="963" fetchpriority="high" decoding="async" alt="粉色條紋遮陽棚的小店櫥窗，裡面有草莓蛋糕、馬卡龍、花束、書本和一封信，窗邊飛著一隻蝴蝶">
+      <span class="stage-glow" aria-hidden="true"></span>
     </div>
   </div>
 </section>

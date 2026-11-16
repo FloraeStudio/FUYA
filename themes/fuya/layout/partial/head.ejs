@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
+<script>document.documentElement.className+=" js";setTimeout(function(){if(!window.fuyaReveal)document.documentElement.classList.remove("js")},3000)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= (page.title || page.category) ? (page.title || page.category) + ' — ' + config.title : config.title %></title>
 <meta name="description" content="<%= page.description || config.description %>">
@@ -14,4 +15,5 @@
 <link rel="stylesheet" href="<%- url_for('/css/components.css') %>">
 <link rel="stylesheet" href="<%- url_for('/css/layout.css') %>">
 <link rel="stylesheet" href="<%- url_for('/css/shop.css') %>">
+<link rel="stylesheet" href="<%- url_for('/css/home.css') %>">
 </head>

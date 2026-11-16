@@ -3,6 +3,8 @@
 
     <%- partial('partial/hero') %>
 
+    <%- partial('partial/intro') %>
+
     <%- partial('partial/commission-status') %>
 
     <%
@@ -10,14 +12,14 @@
     %>
     <% if (homePlans.length) { %>
       <section class="home-sec">
-        <div class="home-side">
+        <div class="home-side rv">
           <h2>委託菜單</h2>
           <p>稿子依你給的設定一篇一篇寫。初稿階段有兩次修改機會，完稿後有一次小幅修改。</p>
           <a class="btn-text" href="<%- url_for('/commission/') %>">看完整菜單與排程</a>
         </div>
         <div class="home-main">
-          <% homePlans.forEach(function(p){ %>
-            <div class="menu-row" data-t="<%= p.key %>">
+          <% homePlans.forEach(function(p, i){ %>
+            <div class="menu-row rv" data-t="<%= p.key %>" style="--d:<%= i %>">
               <div class="menu-top">
                 <svg class="fl" width="22" height="22" aria-hidden="true"><use href="#flw"/></svg>
                 <span class="menu-nm"><%= p.name %></span>
@@ -39,14 +41,14 @@
       }).slice(0, theme.recent_count || 6);
     %>
     <section class="home-sec">
-      <div class="home-side">
+      <div class="home-side rv">
         <h2>最近寫下的字</h2>
         <p>轉蛋的短篇與企劃的連載，不定期更新。</p>
       </div>
       <div class="home-main">
         <div class="diary">
-          <% recentPosts.forEach(function(post){ %>
-            <a class="diary-item" href="<%- url_for(post.path) %>">
+          <% recentPosts.forEach(function(post, i){ %>
+            <a class="diary-item rv" href="<%- url_for(post.path) %>" style="--d:<%= i %>">
               <div class="diary-date">
                 <%= date(post.date, 'MM.DD' ) %>
               </div>

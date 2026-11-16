@@ -18,15 +18,35 @@ collections:
         label: 首頁小狀態
         file: source/_data/site.yml
         fields:
-          - label: 首頁大標題
-            name: hero_title
+          - label: 英文標語（首頁大標）
+            name: hero_tagline
             widget: text
-            required: false
-            hint: 首頁最上方的大字，可以換行。留空會用預設文字。
-          - label: 首頁介紹
-            name: homepage_intro
+            hint: 品牌核心標語。換行就是換行，最後一個英文字會有粉色手繪底線。
+          - label: 中文標語
+            name: hero_tagline_zh
+            widget: string
+          - label: 小標籤
+            name: hero_eyebrow
+            widget: string
+            hint: 標語下方的英文小標籤（WELCOME TO MY LITTLE STORY SHOP）。
+          - label: 首頁短文
+            name: hero_text
             widget: text
-            hint: 簡單的介紹文字
+            hint: 一行一句，載入時會依序浮現。
+          - label: 結尾小句
+            name: hero_sign
+            widget: string
+            hint: 花符號請直接輸入「✿」，網站會換成會轉動的小花。
+          - label: 自我介紹標題
+            name: intro_title
+            widget: string
+          - label: 自我介紹內文
+            name: intro_text
+            widget: text
+            hint: 一行一段，捲動到時會依序浮現。
+          - label: 自我介紹結尾問句
+            name: intro_closing
+            widget: string
           - label: 近況小狀態
             name: status_line
             widget: string
