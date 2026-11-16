@@ -12,26 +12,26 @@ recent_count: 6
 # badge -> 選填，星星旁邊的小標籤（例如「開放中」）
 nav:
   - key: home
-    name: 主頁
+    name: 序章
     slug: ''
-    desc: 關於芙婭
+    desc: 關於芙婭，以及這間小小故事工作室
   - key: gacha
-    name: 作品展示
+    name: 故事收藏室
     slug: works
-    desc: 寫過的故事都在這裡
+    desc: 文字紀錄、個人創作 / 收藏那些來自生活與想像的故事，每一篇都是值得留下的片刻。
   - key: proj
-    name: 企劃主題
+    name: 故事企劃
     slug: projects
-    desc: 正在發生的故事
+    desc: 正在發生的故事 / 有些故事不只存在於文字裡，也正在慢慢展開。
   - key: comm
-    name: 委託
+    name: 訂製故事
     slug: commission
-    desc: 訂製一段專屬故事
+    desc: 文字委託 / 如果你也有想被好好記錄的故事，歡迎帶著它來找我。
     badge: 開放中
   - key: misc
-    name: 雜談
+    name: 店長手札
     slug: misc
-    desc: 隨手寫下的文字
+    desc: 日常隨筆、靈感碎片 / 偶爾記錄一些創作以外的小事。
 
 # 分類 slug -> 中文顯示名稱
 categoryLabels:
@@ -123,7 +123,7 @@ project_groups:
     motif: calendar
     name: 冷門節日企劃
     theme: moon
-    badge: 進行中
+    badge: 暫停中
     intro: 行事曆上不起眼，卻仍然有很多故事在發生。
     status: ''
     visual: desk
@@ -131,6 +131,6 @@ project_groups:
     motif: tarot
     name: 拾光籤
     theme: moon
-    badge: 進行中
+    badge: 暫停中
     intro: 物件、記憶、時光。
     status: ''
