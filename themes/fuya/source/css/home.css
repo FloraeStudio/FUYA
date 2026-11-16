@@ -135,7 +135,7 @@
   z-index: -1;
   inset: -12% -9% -4% -9%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 250, 247, .94) 0%, rgba(255, 250, 247, .78) 52%, rgba(255, 250, 247, 0) 100%);
+  background: radial-gradient(closest-side, rgba(255, 250, 247, .4) 0%, rgba(255, 250, 247, .3) 52%, rgba(255, 250, 247, 0) 100%);
   pointer-events: none;
 }
 
@@ -224,7 +224,6 @@
 }
 
 @media (max-width: 640px) {
-  .hero-art::before { inset: -8% -4% -2% -4%; }
   .shop .hero-text .hero-tagline-zh { margin-top: 20px; font-size: 15px; letter-spacing: .06em; text-wrap: balance; }
   .shop .hero-text .hero-label { margin-top: 34px; gap: 10px; letter-spacing: .14em; font-size: 11px; }
   .hero-label::before { width: 22px; }
@@ -302,9 +301,9 @@
     0%, 100% { transform: scaleX(1); opacity: 1; }
     50% { transform: scaleX(.94); opacity: .75; }
   }
-  .hero-art::after {
+  /* .hero-art::after {
     animation: hl-shadow 8s ease-in-out 1.4s infinite;
-  }
+  } */
 
   /* 結尾的兩朵小花慢慢轉 */
   .hero-sign .fl {
