@@ -1,5 +1,7 @@
 <%
   // 作品展示：轉蛋、企劃、委託的文章合在一起，每篇一列：日期與來源、標題與標籤、開頭三行預覽。
+  var navOf = function (k) { return (theme.nav || []).filter(function (n) { return n.key === k; })[0] || {}; };
+  var navItem = navOf('gacha');
   var posts = page.posts.toArray();
   var catClass = { '轉蛋': 'c-egg', '企劃': 'c-proj', '委託': 'c-comm' };
   function catOf(p){
@@ -12,8 +14,8 @@
     return t.length > 150 ? t.slice(0, 150) : t;
   }
 %>
-<h1 class="page-title">故事收藏室</h1>
-<p class="page-intro">文字紀錄、個人創作 / 收藏那些來自生活與想像的故事，每一篇都是值得留下的片刻。</p>
+<h1 class="page-title"><%= navItem.name || '故事典藏' %></h1>
+<% if (navItem.desc) { %><p class="page-intro"><%= navItem.desc %></p><% } %>
 
 <div class="works-list">
   <% posts.forEach(function(p){
@@ -38,7 +40,7 @@
       </span>
     </a>
   <% }) %>
-  <% if (!posts.length) { %><p class="empty-note">故事，未完待續。</p><% } %>
+  <% if (!posts.length) { %><p class="empty-note">目前還沒有收錄作品，期待很快與你分享第一篇。</p><% } %>
 </div>
 
 <div class="works-foot">

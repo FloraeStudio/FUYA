@@ -11,9 +11,9 @@
             <% if (homePlans.length) { %>
               <section class="home-sec">
                 <div class="home-side rv">
-                  <h2>訂製一份故事 —</h2>
-                  <p>Commission 文字委託</p>
-                  <a class="btn-text" href="<%- url_for('/commission/') %>">看完整菜單與排程</a>
+                  <h2>想為你記錄一份專屬故事</h2>
+                  <p>原創、夢向與二創皆可委託，讓我替你把想留下的故事寫下來。</p>
+                  <a class="btn-text" href="<%- url_for('/commission/') %>">查看委託項目與排程</a>
                 </div>
                 <div class="home-main">
                   <% homePlans.forEach(function(p, i){ %>
@@ -47,8 +47,8 @@
                   theme.recent_count || 6); %>
                   <section class="home-sec">
                     <div class="home-side rv">
-                      <h2>今日櫥窗 —</h2>
-                      <p>Featured Stories 近期作品展示</p>
+                      <h2>今日櫥窗</h2>
+                      <p>最近完成的作品，挑幾篇與你分享。</p>
                     </div>
                     <div class="home-main">
                       <div class="diary">
@@ -79,7 +79,7 @@
                           </a>
                           <% }) %>
                             <% if (site.posts.length===0) { %>
-                              <p class="empty-note">故事，未完待續。</p>
+                              <p class="empty-note">櫥窗暫時空著，等新作品上架。</p>
                               <% } %>
                       </div>
                     </div>

@@ -6,7 +6,7 @@
 <%- partial('partial/head') %>
   <%- partial('partial/header') %>
 
-    <div class="archive-page<%= slug === 'commission' ? ' wide' : '' %><%= slug === 'projects' ? ' themes-page' : '' %>">
+    <div class="archive-page<%= slug === 'commission' ? ' wide' : '' %><%= slug === 'projects' ? ' themes-page' : '' %><%= slug === 'misc' ? ' misc-page' : '' %>">
       <% if (slug === 'gacha') { %>
         <%- partial('partial/archive-gacha') %>
       <% } else if (slug === 'commission') { %>
@@ -37,7 +37,7 @@
             </a>
           <% }) %>
           <% if (sorted.length === 0) { %>
-            <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
+            <p style="color:var(--mist-dim); font-size:13px;">目前還沒有收錄作品，期待很快與你分享第一篇。</p>
           <% } %>
         </div>
       <% } %>

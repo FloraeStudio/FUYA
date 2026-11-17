@@ -3,39 +3,46 @@
   var sorted = page.posts.sort('-date').toArray().sort(function(a, b){
     return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
   });
-  var groups=[]; var lastKey=null; sorted.forEach(function(post){ var
-  key=date(post.date, 'YYYY.MM' ); if (key !==lastKey) { groups.push({ key: key, posts: [] }); lastKey=key; }
-  groups[groups.length - 1].posts.push(post); }); %>
+  var groups = [];
+  var lastKey = null;
+  sorted.forEach(function(post){
+    var key = date(post.date, 'YYYY.MM');
+    if (key !== lastKey) { groups.push({ key: key, posts: [] }); lastKey = key; }
+    groups[groups.length - 1].posts.push(post);
+  });
+  // 標題與說明跟導覽用同一份設定（_config.yml 的 nav），改一處就好。
+  var navItem = (theme.nav || []).filter(function(n){ return n.key === 'misc'; })[0] || {};
+  function previewOf(p){
+    if (p.description) return p.description;
+    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
+    return t.length > 60 ? t.slice(0, 60) + '…' : t;
+  }
+%>
+<h1 class="page-title"><%= navItem.name || '店長手札' %></h1>
+<% if (navItem.desc) { %><p class="page-intro"><%= navItem.desc %></p><% } %>
 
-  <div style="margin-top:40px;">
-    <% if (groups.length===0) { %>
-      <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
-      <% } %>
-        <% groups.forEach(function(g){ %>
-          <div class="misc-month-label">
-            <%= g.key %>
+<div class="misc-wrap">
+  <% if (groups.length === 0) { %>
+    <p class="empty-note">手札暫時留白，等下一個值得記錄的日常。</p>
+  <% } %>
+  <% groups.forEach(function(g){ %>
+    <section class="misc-month">
+      <h2 class="misc-month-label"><svg width="16" height="16" aria-hidden="true"><use href="#flw"/></svg><span><%= g.key %></span></h2>
+      <% g.posts.forEach(function(post){ var pv = previewOf(post); %>
+        <a class="misc-item" href="<%- url_for(post.path) %>">
+          <span class="misc-date"><%= date(post.date, 'MM.DD') %></span>
+          <div class="misc-body">
+            <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
+            <h3><%= post.title %></h3>
+            <% if (pv) { %><p><%= pv %></p><% } %>
           </div>
-          <% g.posts.forEach(function(post){ %>
-            <a class="misc-item" href="<%- url_for(post.path) %>">
-              <div class="misc-date">
-                <%= date(post.date, 'MM.DD' ) %>
-              </div>
-              <div>
-                <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
-                <h3>
-                  <%= post.title %>
-                </h3>
-                <% if (post.description) { %>
-                  <p>
-                    <%= post.description %>
-                  </p>
-                  <% } else { %>
-                    <p><%- strip_html(post.excerpt || post.content).substring(0, 60) %>…</p>
-                    <% } %>
-              </div>
-            </a>
-            <% }) %>
-              <% }) %>
-  </div>
+        </a>
+      <% }) %>
+    </section>
+  <% }) %>
+</div>
 
+<div class="works-foot">
+  <span class="works-count">共 <%= page.total_posts %> 篇<% if (page.total > 1) { %>，第 <%= page.current %> / <%= page.total %> 頁<% } %></span>
   <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
+</div>

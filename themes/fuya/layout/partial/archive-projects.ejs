@@ -1,6 +1,8 @@
 <%
   // 企劃主題：每個企劃是一個主題，一張卡片。
   // 卡片上的小插圖由 _config.yml 裡各企劃的 motif 決定：calendar = 日曆　ring = 十二朵花圍成一圈　tarot = 疊開的牌　（沒填 = 一朵花）
+  var navOf = function (k) { return (theme.nav || []).filter(function (n) { return n.key === k; })[0] || {}; };
+  var navItem = navOf('proj');
   var groups = theme.project_groups || [];
   function countOf(key){
     return site.posts.filter(function(p){
@@ -9,8 +11,8 @@
   }
   var tints = { calendar: '#F8E6E4', ring: '#F4EBD9', tarot: '#E8E3F3', flower: '#F4EBD9' };
 %>
-<h1 class="page-title">故事企劃</h1>
-<p class="page-intro">正在發生的故事 / 有些故事不只存在於文字裡，也正在慢慢展開。</p>
+<h1 class="page-title"><%= navItem.name || '主題企劃' %></h1>
+<% if (navItem.desc) { %><p class="page-intro"><%= navItem.desc %></p><% } %>
 
 <div class="theme-grid">
   <% groups.forEach(function(group){
@@ -38,5 +40,5 @@
     <h2>想要一篇有主題的故事？</h2>
     <p>委託時可以直接選這些主題當靈感，也可以在表單裡寫「tag：主題名」。</p>
   </div>
-  <a class="theme-link" href="<%- url_for('/commission/') %>">看委託菜單</a>
+  <a class="theme-link" href="<%- url_for('/commission/') %>">查看委託項目</a>
 </div>

@@ -26,7 +26,7 @@
   // 回到上一層總覽
   var backHref = '/';
   var backLabel = '回到首頁';
-  if (isWork) { backHref = '/works/'; backLabel = '作品展示'; }
+  if (isWork) { backHref = '/works/'; backLabel = '故事典藏'; }
   else if (catName && theme.nav) {
     var navEntry = theme.nav.find(function(n){ return n.name === catName; });
     if (navEntry && navEntry.slug) { backHref = '/' + navEntry.slug + '/'; backLabel = catName; }
@@ -86,10 +86,10 @@
       <% if (isWork) { %>
         <div class="post-cta">
           <div>
-            <h2>想要一篇屬於你的故事？</h2>
-            <p>原創、夢向、二創都可以委託。</p>
+            <h2>也想委託一篇專屬故事嗎？</h2>
+            <p>原創、夢向與二創皆可委託，歡迎先查看服務項目與委託流程。</p>
           </div>
-          <a class="cta-btn" href="<%- url_for('/commission/') %>">看委託菜單</a>
+          <a class="cta-btn" href="<%- url_for('/commission/') %>">看看委託方式</a>
         </div>
       <% } %>
     </article>

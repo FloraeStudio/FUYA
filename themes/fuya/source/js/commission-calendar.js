@@ -162,7 +162,7 @@
     list.innerHTML = listHtml || '<p class="cm-none">這個月沒有排程。</p>';
     if (foot) {
       foot.textContent = hasAny
-        ? (monthHasEvent ? '花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。' : '這個月沒有預計交稿的委託')
+        ? (monthHasEvent ? '小花代表預計交稿日，已公開的完成作品可以點開閱讀。' : '這個月沒有預計交稿的委託')
         : '目前沒有排程中的委託';
     }
     applyFilter();
@@ -241,12 +241,12 @@
       text = esc(work.text) + (ev.showcase === 'masked' ? '<span class="cm-pop-note">文中的姓名已經打碼。</span>' : '');
       go = '閱讀這篇作品'; href = work.path;
     } else if (shown) {
-      title = '作品整理中';
-      text = '這篇已經同意公開，文章整理好之後會放在作品展示。';
+      title = '這篇故事還在整理中';
+      text = '晚一點再來看看吧。';
       go = '看看其他作品'; href = worksUrl;
     } else {
       title = '這篇沒有公開展示';
-      text = '完稿已經交給委託人。委託人沒有同意公開的話，這裡不會顯示內容。想看類似的故事，可以到作品展示逛逛。';
+      text = '完稿已經交給委託人。委託人沒有同意公開的話，這裡不會顯示內容。想看類似的故事，可以到故事典藏逛逛。';
       go = '看看其他作品'; href = worksUrl;
     }
     pop = document.createElement('div');

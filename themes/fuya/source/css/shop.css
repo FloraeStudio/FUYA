@@ -560,55 +560,115 @@ body.shop::after {
   }
 }
 
-/* 雜談 */
+/* 雜談（店長手札）：按月分組，日期像蓋在手帳上的小圓章 */
+.shop .misc-wrap { margin-top: 24px; }
+
+.shop .misc-month { margin-top: 40px; }
+
 .shop .misc-month-label {
-  margin: 40px 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
   font-family: var(--font-serif);
-  font-size: 18px;
-  letter-spacing: .06em;
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: .08em;
   text-transform: none;
-  color: var(--text-dim);
+  color: var(--text);
+}
+
+.shop .misc-month-label svg { flex: none; color: var(--accent); }
+
+.shop .misc-month-label::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dotted var(--line-strong);
 }
 
 .shop .misc-item {
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 22px;
   margin: 0;
-  padding: 16px 0;
+  padding: 20px 12px;
   border: 0;
-  border-top: 1px solid var(--line);
-  border-radius: 0;
+  border-bottom: 1px dotted var(--line);
+  border-radius: 16px;
   background: none;
   transform: none;
 }
 
+.shop .misc-month .misc-item:last-child { border-bottom: 0; }
+
 .shop .misc-item .misc-date {
-  width: 48px;
+  width: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 50%;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 13.5px;
+  letter-spacing: .02em;
   color: var(--text-dim);
 }
 
 .shop .misc-item h3 {
+  margin: 0;
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: .03em;
   color: var(--text);
 }
 
 .shop .misc-item p {
-  font-size: 14px;
+  margin: 6px 0 0;
+  font-size: 14.5px;
+  line-height: 1.95;
   color: var(--text-soft);
+  -webkit-line-clamp: 2;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .shop .misc-item:hover {
     border-color: var(--line);
-    background: none;
+    background: var(--surface);
     transform: none;
   }
 
-  .shop .misc-item:hover h3 {
+  .shop .misc-item:hover h3 { color: var(--accent); }
+
+  .shop .misc-item:hover .misc-date {
+    border-color: var(--accent);
     color: var(--accent);
+    transform: rotate(-8deg);
   }
+}
+
+@media (hover: none) {
+  .shop .misc-item:active {
+    border-color: var(--line);
+    background: var(--surface);
+  }
+
+  .shop .misc-item:active h3 { color: var(--accent); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shop .misc-item { transition: background .25s; }
+  .shop .misc-item .misc-date { transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), border-color .2s, color .2s; }
+}
+
+@media (max-width: 620px) {
+  .shop .misc-item { grid-template-columns: 46px minmax(0, 1fr); gap: 4px 14px; padding: 18px 4px; }
+  .shop .misc-item .misc-date { width: 46px; height: 46px; font-size: 12px; }
 }
 
 /* 分頁 */
@@ -930,13 +990,15 @@ html.lenis body {
 .shop .c-proj { --c: var(--accent);   --cb: var(--t-medium-bg); }
 .shop .c-comm { --c: #936313;         --cb: var(--t-long-bg); }
 
-.shop .archive-page.works-page {
+.shop .archive-page.works-page,
+.shop .archive-page.misc-page {
   max-width: none;
   margin-top: 0;
   padding-top: 64px;
 }
 
-.shop .works-page .page-title {
+.shop .works-page .page-title,
+.shop .misc-page .page-title {
   margin: 0;
   font-family: var(--font-serif);
   font-weight: 400;
@@ -946,7 +1008,8 @@ html.lenis body {
   color: var(--text);
 }
 
-.shop .works-page .page-intro {
+.shop .works-page .page-intro,
+.shop .misc-page .page-intro {
   max-width: 32em;
   margin: 16px 0 0;
   font-size: 16px;
@@ -1282,7 +1345,8 @@ html.lenis body {
 @media (max-width: 620px) {
   .work-row { grid-template-columns: minmax(0, 1fr); padding: 22px 0; }
   .work-meta { flex-direction: row; align-items: center; gap: 14px; padding-top: 0; }
-  .shop .archive-page.works-page { padding-top: 40px; }
+  .shop .archive-page.works-page,
+  .shop .archive-page.misc-page { padding-top: 40px; }
   .shop .post-detail { padding-top: 32px; }
   .shop .post-content { font-size: 16.5px; }
   .shop .post-cta { padding: 24px; }

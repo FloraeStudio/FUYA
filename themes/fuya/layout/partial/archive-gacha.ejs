@@ -4,7 +4,7 @@
     return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
   });
   var intro=theme.gacha_intro; var ctaUrl=theme.gacha_cta_url; var
-  ctaLabel=theme.gacha_cta_label || '想丟提示給芙婭 →' ; %>
+  ctaLabel=theme.gacha_cta_label || '投一顆故事轉蛋' ; %>
 
   <% if (intro) { %>
     <p class="archive-intro">
@@ -41,7 +41,7 @@
               </a>
               <% }) %>
                 <% if (sorted.length===0) { %>
-                  <p style="color:var(--mist-dim); font-size:13px;">故事，未完待續。</p>
+                  <p style="color:var(--mist-dim); font-size:13px;">今天的故事還沒準備好，再等等我吧。</p>
                   <% } %>
           </div>
           <%- partial('partial/pager', { pager: page, light: 'moon' }) %>

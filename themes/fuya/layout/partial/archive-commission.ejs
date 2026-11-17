@@ -63,8 +63,9 @@
 <link rel="stylesheet" href="<%- url_for('/css/commission.css') %>">
 
 <section class="cm-hero">
-  <h1 class="page-title">訂製故事</h1>
+  <h1 class="page-title"><%= ((theme.nav || []).filter(function (n) { return n.key === 'comm'; })[0] || {}).name || '故事訂製' %></h1>
   <% if (theme.commission_intro) { %><p class="page-lede"><%= theme.commission_intro %></p><% } %>
+  <% if (theme.commission_note) { %><p class="page-lede page-lede-sub"><%= theme.commission_note %></p><% } %>
 </section>
 
 <%- partial('partial/commission-status') %>
@@ -109,7 +110,7 @@
       <div class="cm-grid" id="cm-grid"></div>
     </div>
     <div class="cm-list" id="cm-list"></div>
-    <p class="cm-foot" id="cm-foot">花朵標在預計交稿日，只顯示單號或代稱。已完成的標記可以點開看看。</p>
+    <p class="cm-foot" id="cm-foot">小花代表預計交稿日，已公開的完成作品可以點開閱讀。</p>
   </div>
 </section>
 <script type="application/json" id="cm-data"><%- payload %></script>
@@ -147,7 +148,7 @@
   <section class="cm-sec">
     <div class="cm-cta">
       <div>
-        <h2><%= contact.title || '想委託的話' %></h2>
+        <h2><%= contact.title || '想請我寫一篇故事嗎？' %></h2>
         <% if (contact.text) { %><p><%= contact.text %></p><% } %>
       </div>
       <a class="cta-btn" href="<%= contact.url %>" target="_blank" rel="noopener"><%= contact.label || '來信預約' %></a>
@@ -157,8 +158,8 @@
 
 <section class="cm-sec cm-two">
   <div class="cm-side">
-    <h2>作品</h2>
-    <p>委託完成後，經同意公開的作品。</p>
+    <h2>委託作品</h2>
+    <p>收錄已完成，並經委託人同意公開的作品。</p>
   </div>
   <div class="diary">
     <% sorted.forEach(function(post){ %>
@@ -175,7 +176,7 @@
         </div>
       </a>
     <% }) %>
-    <% if (sorted.length===0) { %><p class="empty-note">故事，未完待續。</p><% } %>
+    <% if (sorted.length===0) { %><p class="empty-note">目前還沒有公開的委託作品，期待下一次與你分享。</p><% } %>
   </div>
 </section>
 
