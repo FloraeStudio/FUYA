@@ -44,12 +44,19 @@
     if (!types.some(function(t){ return t.key === k; })) types.push({ key: k, name: extraTypes[k] });
   });
   // 已完成的委託點開後，可以連到作品展示裡對應的文章：這裡把可連結的作品（標題、網址、開頭預覽）一起帶進頁面。
-  var workCats = ['轉蛋', '企劃', '委託'];
+  // 後台「對應作品」可以選任何分類（含雜談），所以這裡四個分類都帶進來。
+  var workCats = ['轉蛋', '企劃', '委託', '雜談'];
   var works = site.posts.filter(function(p){
     return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
   }).map(function(p){
-    var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
-    return { title: p.title, path: url_for(p.path), text: t.slice(0, 90) };
+    // 有填「摘要」就用摘要；沒有才取內文開頭（超過 90 字加「…」）。
+    var desc = strip_html(p.description || '').replace(/\s+/g, ' ').trim();
+    var t = desc;
+    if (!t) {
+      t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
+      if (t.length > 90) t = t.slice(0, 90) + '…';
+    }
+    return { title: p.title, path: url_for(p.path), text: t };
   });
   var payload = JSON.stringify({ deliveries: deliveries, marks: marks, types: types, works: works, worksUrl: url_for('/works/') }).replace(/</g, '\\u003c');
 %>

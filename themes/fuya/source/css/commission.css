@@ -617,48 +617,104 @@ button.cm-li {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(58, 38, 48, .30);
+  background: rgba(58, 38, 48, .34);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 }
 
+/* 像一張壓了框線的小卡片：外層是紙，內側一圈細虛線 */
 .cm-pop-card {
+  position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
   box-sizing: border-box;
-  padding: 28px 28px 26px;
-  border-radius: 22px;
+  padding: 34px 32px 30px;
+  border-radius: 26px;
   background: var(--surface);
-  box-shadow: 0 24px 48px -24px rgba(58, 38, 48, .55);
+  box-shadow: 0 30px 60px -28px rgba(58, 38, 48, .6), 0 2px 0 rgba(255, 255, 255, .8) inset;
 }
+
+.cm-pop-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--line);
+  border-radius: 19px;
+  pointer-events: none;
+}
+
+.cm-pop-card > * { position: relative; }
 
 .cm-pop-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
+  gap: 8px 10px;
+  font-size: 13.5px;
   color: var(--text-dim);
 }
 
 .cm-pop-meta svg {
   flex: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: var(--c);
 }
 
+.cm-pop-tag {
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: var(--cb, var(--bg-sunk));
+  color: var(--text);
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+
+.cm-pop-date { letter-spacing: .04em; }
+
 .cm-pop-card h3 {
-  margin: 14px 0 0;
+  margin: 18px 0 0;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: .03em;
+  font-size: 21px;
+  line-height: 1.55;
+  letter-spacing: .04em;
   color: var(--text);
 }
 
+.cm-pop-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 14px;
+  color: var(--c);
+}
+
+.cm-pop-rule::before,
+.cm-pop-rule::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dotted var(--line-strong);
+}
+
+.cm-pop-rule svg {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  opacity: .8;
+}
+
 .cm-pop-card p {
-  margin: 10px 0 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  margin: 0;
   font-size: 15px;
-  line-height: 1.95;
+  line-height: 2;
+  letter-spacing: .02em;
   color: var(--text-soft);
 }
 
@@ -673,7 +729,12 @@ button.cm-li {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 22px;
+  margin-top: 24px;
+}
+
+@media (max-width: 480px) {
+  .cm-pop-card { padding: 30px 24px 26px; }
+  .cm-pop-card h3 { font-size: 19px; }
 }
 
 .cm-pop-go,
@@ -690,6 +751,7 @@ button.cm-li {
 }
 
 .cm-pop-go {
+  text-decoration: none;
   background: var(--green);
   color: #FFFCFA;
 }
@@ -707,6 +769,8 @@ button.cm-li {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cm-pop-card { animation: cm-pop-in .3s cubic-bezier(.3, 1.4, .5, 1); }
-  @keyframes cm-pop-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+  .cm-pop { animation: cm-pop-fade .25s ease-out; }
+  .cm-pop-card { animation: cm-pop-in .35s cubic-bezier(.3, 1.3, .5, 1); }
+  @keyframes cm-pop-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes cm-pop-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
 }

@@ -233,7 +233,8 @@
     lastFocus = trigger;
     var shown = ev.showcase === 'public' || ev.showcase === 'masked';
     var work = shown ? findWork(ev.post) : null;
-    var meta = (ev.id ? esc(ev.id) + '　' : '') + esc(typeName[ev.type] || '') + '　' + md(ev.n).replace('/', ' 月 ') + ' 日完稿';
+    var tag = esc(typeName[ev.type] || '');
+    var meta = (ev.id ? esc(ev.id) + '　' : '') + md(ev.n).replace('/', ' 月 ') + ' 日完稿';
     var title, text, go, href;
     if (work) {
       title = esc(work.title);
@@ -253,8 +254,9 @@
     pop.setAttribute('data-t', ev.type);
     pop.innerHTML =
       '<div class="cm-pop-card" role="dialog" aria-modal="true" aria-labelledby="cm-pop-t">' +
-        '<div class="cm-pop-meta">' + FLOWER + '<span>' + meta + '</span></div>' +
+        '<div class="cm-pop-meta">' + FLOWER + (tag ? '<span class="cm-pop-tag">' + tag + '</span>' : '') + '<span class="cm-pop-date">' + meta + '</span></div>' +
         '<h3 id="cm-pop-t">' + title + '</h3>' +
+        '<div class="cm-pop-rule" aria-hidden="true">' + FLOWER + '</div>' +
         '<p>' + text + '</p>' +
         '<div class="cm-pop-act"><a class="cm-pop-go" href="' + esc(href) + '">' + go + '</a>' +
         '<button type="button" class="cm-pop-x">關閉</button></div>' +
