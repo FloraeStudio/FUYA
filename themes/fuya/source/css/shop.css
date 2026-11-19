@@ -560,16 +560,16 @@ body.shop::after {
   }
 }
 
-/* 雜談（店長手札）：按月分組，日期像蓋在手帳上的小圓章 */
-.shop .misc-wrap { margin-top: 24px; }
+/* 雜談（店長手札）：按月分組，每一列沿用「故事典藏」的作品列 */
+.shop .misc-wrap { margin-top: 40px; }
 
-.shop .misc-month { margin-top: 40px; }
+.shop .misc-month + .misc-month { margin-top: 48px; }
 
 .shop .misc-month-label {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 19px;
@@ -586,90 +586,7 @@ body.shop::after {
   border-top: 1px dotted var(--line-strong);
 }
 
-.shop .misc-item {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  align-items: start;
-  gap: 4px 22px;
-  margin: 0;
-  padding: 20px 12px;
-  border: 0;
-  border-bottom: 1px dotted var(--line);
-  border-radius: 16px;
-  background: none;
-  transform: none;
-}
-
-.shop .misc-month .misc-item:last-child { border-bottom: 0; }
-
-.shop .misc-item .misc-date {
-  width: 56px;
-  height: 56px;
-  box-sizing: border-box;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px dashed var(--line-strong);
-  border-radius: 50%;
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  letter-spacing: .02em;
-  color: var(--text-dim);
-}
-
-.shop .misc-item h3 {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1.5;
-  letter-spacing: .03em;
-  color: var(--text);
-}
-
-.shop .misc-item p {
-  margin: 6px 0 0;
-  font-size: 14.5px;
-  line-height: 1.95;
-  color: var(--text-soft);
-  -webkit-line-clamp: 2;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .shop .misc-item:hover {
-    border-color: var(--line);
-    background: var(--surface);
-    transform: none;
-  }
-
-  .shop .misc-item:hover h3 { color: var(--accent); }
-
-  .shop .misc-item:hover .misc-date {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: rotate(-8deg);
-  }
-}
-
-@media (hover: none) {
-  .shop .misc-item:active {
-    border-color: var(--line);
-    background: var(--surface);
-  }
-
-  .shop .misc-item:active h3 { color: var(--accent); }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .shop .misc-item { transition: background .25s; }
-  .shop .misc-item .misc-date { transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), border-color .2s, color .2s; }
-}
-
-@media (max-width: 620px) {
-  .shop .misc-item { grid-template-columns: 46px minmax(0, 1fr); gap: 4px 14px; padding: 18px 4px; }
-  .shop .misc-item .misc-date { width: 46px; height: 46px; font-size: 12px; }
-}
+.shop .misc-month .works-list { margin-top: 0; }
 
 /* 分頁 */
 .shop .site-pager {

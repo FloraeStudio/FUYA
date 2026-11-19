@@ -27,12 +27,6 @@
   color: var(--text-soft);
 }
 
-.shop .cm-hero .page-lede-sub {
-  margin-top: 4px;
-  font-size: 15px;
-  color: var(--text-dim);
-}
-
 /* ---------- 區塊 ---------- */
 .cm-sec {
   margin-top: 96px;

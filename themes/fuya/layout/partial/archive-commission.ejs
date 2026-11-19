@@ -65,7 +65,6 @@
 <section class="cm-hero">
   <h1 class="page-title"><%= ((theme.nav || []).filter(function (n) { return n.key === 'comm'; })[0] || {}).name || '故事訂製' %></h1>
   <% if (theme.commission_intro) { %><p class="page-lede"><%= theme.commission_intro %></p><% } %>
-  <% if (theme.commission_note) { %><p class="page-lede page-lede-sub"><%= theme.commission_note %></p><% } %>
 </section>
 
 <%- partial('partial/commission-status') %>

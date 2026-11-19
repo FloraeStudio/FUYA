@@ -15,8 +15,11 @@
   function previewOf(p){
     if (p.description) return p.description;
     var t = strip_html(p.excerpt || p.content || '').replace(/\s+/g, ' ').trim();
-    return t.length > 60 ? t.slice(0, 60) + '…' : t;
+    return t.length > 150 ? t.slice(0, 150) : t;
   }
+  // 總篇數：分類頁沒有 page.total_posts，直接數「雜談」分類。
+  var miscCat = site.categories.findOne({ name: '雜談' });
+  var totalPosts = miscCat ? miscCat.length : page.posts.length;
 %>
 <h1 class="page-title"><%= navItem.name || '店長手札' %></h1>
 <% if (navItem.desc) { %><p class="page-intro"><%= navItem.desc %></p><% } %>
@@ -28,21 +31,27 @@
   <% groups.forEach(function(g){ %>
     <section class="misc-month">
       <h2 class="misc-month-label"><svg width="16" height="16" aria-hidden="true"><use href="#flw"/></svg><span><%= g.key %></span></h2>
-      <% g.posts.forEach(function(post){ var pv = previewOf(post); %>
-        <a class="misc-item" href="<%- url_for(post.path) %>">
-          <span class="misc-date"><%= date(post.date, 'MM.DD') %></span>
-          <div class="misc-body">
-            <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
-            <h3><%= post.title %></h3>
-            <% if (pv) { %><p><%= pv %></p><% } %>
-          </div>
-        </a>
-      <% }) %>
+      <div class="works-list">
+        <% g.posts.forEach(function(post){ var pv = previewOf(post); %>
+          <a class="work-row" href="<%- url_for(post.path) %>">
+            <span class="work-meta">
+              <span class="work-date"><%= date(post.date, 'YYYY.MM.DD') %></span>
+            </span>
+            <span class="work-main">
+              <span class="work-head">
+                <% if (post.pin) { %><span class="pin-badge"><span class="dot"></span>置頂</span><% } %>
+                <span class="work-title"><%= post.title %></span>
+              </span>
+              <% if (pv) { %><span class="work-preview"><%= pv %></span><% } %>
+            </span>
+          </a>
+        <% }) %>
+      </div>
     </section>
   <% }) %>
 </div>
 
 <div class="works-foot">
-  <span class="works-count">共 <%= page.total_posts %> 篇<% if (page.total > 1) { %>，第 <%= page.current %> / <%= page.total %> 頁<% } %></span>
+  <span class="works-count">共 <%= totalPosts %> 篇<% if (page.total > 1) { %>，第 <%= page.current %> / <%= page.total %> 頁<% } %></span>
   <%- partial('partial/pager', { pager: page, light: 'lamp' }) %>
 </div>

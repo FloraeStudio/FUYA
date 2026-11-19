@@ -18,7 +18,7 @@ nav:
   - key: gacha
     name: 故事典藏
     slug: works
-    desc: 收錄個人創作、文字紀錄，以及每一篇值得留下的作品。
+    desc: 收錄個人創作與文字紀錄。
   - key: proj
     name: 主題企劃
     slug: projects
@@ -68,9 +68,6 @@ commission_plans:
 
 # 委託頁標題下方的一句話
 commission_intro: 原創、夢向與二創皆可委託。附上角色設定與故事背景，讓我更了解你想記錄的內容。
-
-# 委託頁介紹下方的補充一句（不想顯示就留空）
-commission_note: 角色的個性、彼此的關係，以及希望出現在故事裡的細節，都可以一併告訴我。
 
 # 委託頁底部的預約按鈕（url 留空就不顯示這一區）
 commission_contact:
