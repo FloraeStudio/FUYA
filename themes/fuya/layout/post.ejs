@@ -28,8 +28,10 @@
   var backLabel = '回到首頁';
   if (isWork) { backHref = '/works/'; backLabel = '故事典藏'; }
   else if (catName && theme.nav) {
-    var navEntry = theme.nav.find(function(n){ return n.name === catName; });
-    if (navEntry && navEntry.slug) { backHref = '/' + navEntry.slug + '/'; backLabel = catName; }
+    // 分類名（雜談）和導覽名稱（店長手札）不同，用 key 對照
+    var catKey = { '雜談': 'misc' }[catName];
+    var navEntry = theme.nav.find(function(n){ return n.name === catName || (catKey && n.key === catKey); });
+    if (navEntry && navEntry.slug) { backHref = '/' + navEntry.slug + '/'; backLabel = navEntry.name; }
   }
 %>
 <%- partial('partial/head') %>
