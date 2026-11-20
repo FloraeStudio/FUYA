@@ -140,26 +140,19 @@
 }
 
 /* 落在地上的影子：讓櫥窗「站」在頁面上，而不是飄著 */
+/* 現在的插畫是去背的桌面小物（沒有櫥窗站在地上），先不放地面影子 */
 .hero-art::after {
-  content: "";
-  position: absolute;
-  left: 14%;
-  right: 8%;
-  bottom: 1.5%;
-  height: 5.5%;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(122, 70, 84, .24), rgba(122, 70, 84, 0));
-  filter: blur(5px);
-  pointer-events: none;
-  z-index: -1;
+  content: none;
 }
 
 .shopfront-img {
   display: block;
-  width: 100%;
+  /* 欄寬不動（動了標語的換行會跑掉），只讓圖在欄裡縮小一點、置中 */
+  width: 86%;
   height: auto;
-  /* 色調收一點：飽和度降低、帶一點暖，貼近頁面的玫瑰色與奶油色 */
-  filter: saturate(.86) sepia(.05) drop-shadow(0 10px 14px rgba(122, 70, 84, .12));
+  margin: 0 auto;
+  /* 色調收一點：飽和度降低、帶一點暖，貼近頁面的玫瑰色與奶油色；陰影放輕 */
+  filter: saturate(.86) sepia(.05) drop-shadow(0 4px 8px rgba(122, 70, 84, .07));
 }
 
 /* 吊燈的暖光：圖片上方一層很淡的光暈 */
@@ -224,41 +217,121 @@
 }
 
 @media (max-width: 640px) {
-  .shop .hero-text .hero-tagline-zh { margin-top: 20px; font-size: 15px; letter-spacing: .06em; text-wrap: balance; }
-  .shop .hero-text .hero-label { margin-top: 34px; gap: 10px; letter-spacing: .14em; font-size: 11px; }
-  .hero-label::before { width: 22px; }
-  .shop .hero-text .hero-poem { font-size: 16px; }
-  .shop .hero-text .hero-sign { letter-spacing: .12em; font-size: 11px; gap: 6px 10px; }
-  .home-intro { margin-bottom: 48px; }
-  .home-intro .home-side h2 { font-size: 24px; }
-  .intro-body p { font-size: 16px; }
-  .intro-body .intro-closing { font-size: 18px; }
+  .shop .hero-text .hero-tagline-zh {
+    margin-top: 20px;
+    font-size: 15px;
+    letter-spacing: .06em;
+    text-wrap: balance;
+  }
+
+  .shop .hero-text .hero-label {
+    margin-top: 34px;
+    gap: 10px;
+    letter-spacing: .14em;
+    font-size: 11px;
+  }
+
+  .hero-label::before {
+    width: 22px;
+  }
+
+  .shop .hero-text .hero-poem {
+    font-size: 16px;
+  }
+
+  .shop .hero-text .hero-sign {
+    letter-spacing: .12em;
+    font-size: 11px;
+    gap: 6px 10px;
+  }
+
+  .home-intro {
+    margin-bottom: 48px;
+  }
+
+  .home-intro .home-side h2 {
+    font-size: 24px;
+  }
+
+  .intro-body p {
+    font-size: 16px;
+  }
+
+  .intro-body .intro-closing {
+    font-size: 18px;
+  }
 }
 
 /* ---------- 動畫（只在沒有開啟「減少動態效果」時） ---------- */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes hl-rise {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
+
   @keyframes hl-art {
-    from { opacity: 0; transform: translateY(22px) scale(.985); }
-    to { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(22px) scale(.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
+
   @keyframes hl-draw {
-    from { stroke-dashoffset: 1; }
-    to { stroke-dashoffset: 0; }
+    from {
+      stroke-dashoffset: 1;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
   }
+
   @keyframes hl-line {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(1); }
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
   }
-  @keyframes hl-spin-a { to { transform: rotate(360deg); } }
-  @keyframes hl-spin-b { to { transform: rotate(-360deg); } }
+
+  @keyframes hl-spin-a {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes hl-spin-b {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
   @keyframes hl-bloom {
-    0% { transform: scale(0) rotate(-60deg); }
-    70% { transform: scale(1.22) rotate(8deg); }
-    100% { transform: scale(1) rotate(0); }
+    0% {
+      transform: scale(0) rotate(-60deg);
+    }
+
+    70% {
+      transform: scale(1.22) rotate(8deg);
+    }
+
+    100% {
+      transform: scale(1) rotate(0);
+    }
   }
 
   /* 首頁載入：由上而下依序浮現 */
@@ -284,23 +357,53 @@
 
   /* 插畫：像放在窗邊一樣，非常輕地上下浮動；吊燈光暈慢慢呼吸 */
   @keyframes hl-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-7px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-7px);
+    }
   }
+
   @keyframes hl-glow {
-    0%, 100% { opacity: .5; transform: scale(1); }
-    50% { opacity: .95; transform: scale(1.1); }
+
+    0%,
+    100% {
+      opacity: .5;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: .95;
+      transform: scale(1.1);
+    }
   }
+
   .stage {
     animation: hl-float 8s ease-in-out 1.4s infinite;
   }
+
   .stage-glow {
     animation: hl-glow 5.5s ease-in-out infinite;
   }
+
   @keyframes hl-shadow {
-    0%, 100% { transform: scaleX(1); opacity: 1; }
-    50% { transform: scaleX(.94); opacity: .75; }
+
+    0%,
+    100% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+
+    50% {
+      transform: scaleX(.94);
+      opacity: .75;
+    }
   }
+
   /* .hero-art::after {
     animation: hl-shadow 8s ease-in-out 1.4s infinite;
   } */
@@ -309,6 +412,7 @@
   .hero-sign .fl {
     animation: hl-spin-a 26s linear infinite;
   }
+
   .hero-sign .fl:last-of-type {
     animation-name: hl-spin-b;
   }
@@ -318,13 +422,16 @@
     opacity: 0;
     transform: translateY(18px);
   }
+
   .rv.in {
     animation: hl-rise .85s cubic-bezier(.2, .7, .2, 1) backwards;
     animation-delay: calc(var(--d, 0) * 90ms);
   }
+
   .intro-closing.in .fl {
     animation: hl-bloom .8s cubic-bezier(.3, 1.4, .5, 1) calc(var(--d, 0) * 90ms + 350ms) backwards;
   }
+
   .home-side.in .intro-fl {
     animation: hl-bloom .8s cubic-bezier(.3, 1.4, .5, 1) .2s backwards;
   }

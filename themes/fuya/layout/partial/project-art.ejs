@@ -1,31 +1,15 @@
 <%
-  // 企劃的小插圖。motif：calendar（日曆）、ring（花圈）、tarot（牌）、其他 = 一朵花。
-  // 呼叫時傳入 motif。
+  // 企劃的小插圖。motif：calendar（日曆）、ring（花圈）、tarot（票券）、其他 = 一朵花。
+  // 前三種用手繪插圖（themes/fuya/source/img/proj-*.webp），其他維持 SVG。呼叫時傳入 motif。
+  var artImgs = {
+    ring:     { src: 'proj-ring.webp',     w: 190, h: 176 },
+    calendar: { src: 'proj-calendar.webp', w: 190, h: 183 },
+    tarot:    { src: 'proj-tarot.webp',    w: 190, h: 165 }
+  };
+  var artImg = artImgs[motif];
 %>
-<% if (motif === 'calendar') { %>
-  <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
-    <rect x="38" y="26" width="114" height="122" rx="14" fill="#FFFCFA"/>
-    <path d="M38 40 a14 14 0 0 1 14 -14 h86 a14 14 0 0 1 14 14 v22 h-114z" fill="#E8A5B3"/>
-    <rect x="62" y="16" width="9" height="24" rx="4.5" fill="#4E7E68"/><rect x="119" y="16" width="9" height="24" rx="4.5" fill="#4E7E68"/>
-    <g fill="#F0D9D4"><circle cx="62" cy="86" r="5"/><circle cx="82" cy="86" r="5"/><circle cx="102" cy="86" r="5"/><circle cx="122" cy="86" r="5"/><circle cx="62" cy="108" r="5"/><circle cx="82" cy="108" r="5"/><circle cx="122" cy="108" r="5"/><circle cx="62" cy="130" r="5"/><circle cx="82" cy="130" r="5"/></g>
-    <circle cx="102" cy="108" r="12" fill="#F8D983"/><use href="#flw" x="92" y="98" width="20" height="20" style="color:#E5586F"/>
-    <circle cx="122" cy="130" r="5" fill="#CDBFEA"/>
-  </svg>
-<% } else if (motif === 'ring') { %>
-  <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
-    <circle cx="95" cy="85" r="46" fill="#FFFCFA"/>
-    <use href="#flw" x="148.0" y="76.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="139.7" y="107.0" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="117.0" y="129.7" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="86.0" y="138.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="55.0" y="129.7" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="32.3" y="107.0" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="24.0" y="76.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="32.3" y="45.0" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="55.0" y="22.3" width="18" height="18" style="color:#F8D983"/><use href="#flw" x="86.0" y="14.0" width="18" height="18" style="color:#E8A5B3"/><use href="#flw" x="117.0" y="22.3" width="18" height="18" style="color:#CDBFEA"/><use href="#flw" x="139.7" y="45.0" width="18" height="18" style="color:#F8D983"/>
-    <use href="#flw" x="77" y="67" width="36" height="36" style="color:#E5586F"/>
-  </svg>
-<% } else if (motif === 'tarot') { %>
-  <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
-    <g transform="rotate(-14 95 150)"><rect x="56" y="22" width="68" height="112" rx="12" fill="#CDBFEA"/></g>
-    <g transform="rotate(14 95 150)"><rect x="66" y="22" width="68" height="112" rx="12" fill="#F4C7CF"/></g>
-    <rect x="61" y="18" width="68" height="116" rx="12" fill="#FFFCFA"/>
-    <rect x="68" y="25" width="54" height="102" rx="8" fill="none" stroke="#E5B8C0" stroke-width="2" stroke-dasharray="3 5"/>
-    <path d="M104 52 a22 22 0 1 0 0 44 a17 17 0 0 1 0 -44z" fill="#F8D983"/>
-    <use href="#flw" x="84" y="98" width="22" height="22" style="color:#E8A5B3"/>
-  </svg>
+<% if (artImg) { %>
+  <img class="tart" src="<%- url_for('/img/' + artImg.src) %>" width="<%= artImg.w %>" height="<%= artImg.h %>" loading="lazy" decoding="async" alt="" aria-hidden="true">
 <% } else { %>
   <svg class="tart" width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
     <circle cx="95" cy="85" r="46" fill="#FFFCFA"/>

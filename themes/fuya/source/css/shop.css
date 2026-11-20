@@ -1404,6 +1404,13 @@ html.lenis body {
   height: 200px;
 }
 
+/* 企劃的手繪小插圖（img 版）：寬度跟著容器縮，比例不變 */
+img.tart {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 .theme-body {
   display: flex;
   flex: 1;
