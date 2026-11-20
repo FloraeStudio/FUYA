@@ -14,11 +14,14 @@
   // 上一篇、下一篇：只在作品之間走（依日期，上一篇是比較早寫的）
   var prevPost = null, nextPost = null;
   if (isWork) {
+    // 「同時顯示在」的副本不列入，避免上一篇／下一篇出現同一篇兩次；
+    // 目前這頁就算是副本，也用 slug 對到主分類那份來找位置
     var ordered = site.posts.filter(function(p){
+      if (p.also_copy) return false;
       return (p.categories || []).some(function(c){ return workCats.indexOf(c.name) !== -1; });
     }).sort('date').toArray();
     var idx = -1;
-    ordered.forEach(function(p, i){ if (p.path === page.path) idx = i; });
+    ordered.forEach(function(p, i){ if (p.slug === page.slug) idx = i; });
     if (idx > 0) prevPost = ordered[idx - 1];
     if (idx > -1 && idx < ordered.length - 1) nextPost = ordered[idx + 1];
   }

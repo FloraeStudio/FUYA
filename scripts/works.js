@@ -10,6 +10,8 @@ var PER_PAGE = 12;
 
 hexo.extend.generator.register('works', function (locals) {
   var posts = locals.posts.filter(function (p) {
+    // 「同時顯示在」產生的副本不列入，同一篇只出現一次（留主分類那份）
+    if (p.also_copy) return false;
     return (p.categories || []).some(function (c) { return WORK_CATS.indexOf(c.name) !== -1; });
   }).sort('-date');
 
